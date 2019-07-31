@@ -1,3 +1,5 @@
+# File retrived from file://pnl/projects/JGCRI_YONK/JGCRI/DJ_Share/R%20code/ on July 31, 2019 
+
 library(yaml)
 options(stringsAsFactors = FALSE)
 rm(list=ls())
