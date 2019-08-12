@@ -1,12 +1,18 @@
 # Modified code originally created by DJ Watson
-# File retrived from file://pnl/projects/JGCRI_YONK/JGCRI/DJ_Share/R%20code/ on July 31, 2019 
+# File retrieved from file://pnl/projects/JGCRI_YONK/JGCRI/DJ_Share/R%20code/ on July 31, 2019 
 
-# The purpose of the code is to calculate ...
+# The purpose of the code is to calculate water availability by water regions 
 
 # Input files: wellParams.yml, GCAM_Electrical_Rates.yml, inputs.csv
 # Output file: ***_WellResults.csv (as in original code)
 
+# Set the working directory to the source file location 
+
+# -----
+# Load libraries
 library(yaml)
+library (dplyr)
+
 options(stringsAsFactors = FALSE)
 
 # Clean Global Environment 
@@ -36,11 +42,12 @@ calcWells <- function(t, rw){
   result<-list(s=s, t=t, W=W)
   return(result)
 }
+
 # -----
 #Variables
 # -----
 
-#Declare our variables.  in the Excel workbook, these are cells in the "Pumping only" sheet
+#Comment by DJ: Declare our variables. In the Excel workbook, these are cells in the "Pumping only" sheet 
 
 #the well specific parameters (e.g., costs, etc.) are in "wellParams.yml" which is in yaml format
 wp = yaml.load_file("wellParams.yml")
@@ -63,17 +70,18 @@ fileName<-paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
 
 con <- file(fileName, "w")
 
+# -----
 #write the headers for the output file
 #cat("Continent,ObjID,Country,t,Drawdown,ObservedDrawdown,Volume,ElementArea,ArealExtent,TotalHead,Power,ElectricEnergy,EnergyCostRate,CostOfEnergy,UnitCost,CostPerAcFt,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number of Wells, Total Time,BasinId,BasinName,\n",file=con)
 
-# new format from folder R code\MENA_Results_161216\updatedformat\5
-# Input.csv contains only data on MEHA countries 
+# new format from folder "R code\MENA_Results_161216\updatedformat\5"
+# Input.csv in this folder contains only data on MEHA countries 
 cat("Iteration,t,Unit_Cost,Hydraulic_Conductivity,Radial_Extent,Wells,Volume_Produced,Total_Volume_Produced,Total_Volume_Available,Continent,ObjId,Country,GCAMid,Basin_Name,\n",file=con)
 
 # -----
 # Calclations 
 # -----
-#each row in df is a different grid node in the model domain
+# each row in df is a different grid node in the model domain
 for(i in 1:(nrow(df))){
 	#calculate total progress
 	#prog<-percent(c(i/nrow(df)))
@@ -81,7 +89,7 @@ for(i in 1:(nrow(df))){
 	#print(paste(i,"/",nrow(df),prog,df[i,"CNTRY_NAME"]))
 
 	#Calculate and store other node specific attributes
-	wp[["Well_Yield"]]<-wp$Initial_Well_Yield
+	wp[["Well_Yield"]]<- wp$Initial_Well_Yield
 	if ( is.null(ec[[df[i,"CNTRY_NAME"]]]) == FALSE ) {
 		wp[["Energy_cost_rate"]] <- ec[[df[i,"CNTRY_NAME"]]] 
 	} else {
@@ -109,11 +117,11 @@ for(i in 1:(nrow(df))){
 	}
 	wp[["Exploitable_GW"]] <- 0
 	wp[["Total_Volume_Produced"]] <- 0
-	wp[["Total_Head"]]<-0
-	wp[["Drawdown"]]<-0
+	wp[["Total_Head"]] <- 0
+	wp[["Drawdown"]] <- 0
 	TotTime=0
 	#wp[["Areal_Extent"]] <- df[i, "Area"]
-	outputList<-list()
+	outputList <- list()
 
   wp$Max_Drawdown = 0.66 *  wp$Orig_Aqfr_Sat_Thickness
 	WT <- wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown  
@@ -137,9 +145,9 @@ for(i in 1:(nrow(df))){
 			W <- calcResults$W
 			#Second: Iterate on Q.
 			#initialize Q loop
-			inRange<-TRUE
+			inRange <- TRUE
 
-			while(inRange == TRUE){
+			while(inRange == TRUE) {
 				inRange = (abs(sadj - s) > errFactor)
 				wp[["Well_Yield"]] <- wp$Well_Yield * (abs(sadj / s))
 				s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)    	  
@@ -149,7 +157,7 @@ for(i in 1:(nrow(df))){
 				roi <- (wp$Well_Yield * t * wp$Annual_Operation_time / (3.14159 * wp$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
 				sroi <- wp$roi_boundary + errFactor + 1#
 				inRange <- TRUE
-				while(inRange == TRUE){
+				while(inRange == TRUE) {
 				  inRange = (abs(sroi-wp$roi_boundary) > errFactor)
 					if (sroi < 0){
 						roi = roi * 0.75
@@ -163,8 +171,8 @@ for(i in 1:(nrow(df))){
 
 				wp[["radial_extent"]] <- roi
 				wp[["Drawdown_roi"]] <- sroi
-				wp[["Areal_Extent"]] <- 3.14159*(wp$radial_extent^2)                                                                                                                                         #m3
-				if(wp$Areal_Extent>(df[i,"Area"]+errFactor)){
+				wp[["Areal_Extent"]] <- 3.14159 * (wp$radial_extent^2)                                                                                                                                         #m3
+				if(wp$Areal_Extent>(df[i,"Area"] + errFactor)){
 					wp[["Max_Drawdown"]] <- wp$Max_Drawdown  * (abs(df[i,"Area"] / wp$Areal_Extent))
 					WT = wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown
 					break
@@ -212,9 +220,9 @@ for(i in 1:(nrow(df))){
 				  sobs <- root2
 				}
 				#Output (one row per year)
-				wp[["Drawdown"]] <- s                                                                              #m
+				wp[["Drawdown"]] <- s                                                                               #m
 				wp[["Total_Head"]] <- sobs+wp$Depth_to_Piezometric_Surface
-				wp[["Volume_Produced"]] <- t * wp$Annual_Operation_time * wp$Well_Yield                           #m^3
+				wp[["Volume_Produced"]] <- t * wp$Annual_Operation_time * wp$Well_Yield                             #m^3
 				wp[["Power"]] <- (wp$Specific_weight*wp$Total_Head*wp$Well_Yield/wp$Pump_Efficiency)/1000           #KW
 				wp[["Electric_Energy"]] <- wp$Power*(wp$Annual_Operation_time/3600) #(CONVERT(1,"hr","sec")))       #KWh/year
 				wp[["Annual_Capital_Cost"]] <- wp$Well_Installation_cost*(1+wp$Interest_Rate)^wp$Max_Lifetime_in_Years*wp$Interest_Rate/((1+wp$Interest_Rate)^wp$Max_Lifetime_in_Years-1)
@@ -224,10 +232,10 @@ for(i in 1:(nrow(df))){
 				wp[["Unit_cost"]] <- (wp$Total_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time) 
 				wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / 0.000810714                                                #$/acFt
 				#Add the year's output to a list for export to file later
-				NumWells<- df[i,"Area"]/wp$Areal_Extent
+				NumWells <- df[i,"Area"]/wp$Areal_Extent
 				TotTime = NumIterations * 2 * t
 				if (t == 1) { outputList <- list() }
-				outputList[[paste("line",as.character(t))]]<-paste(df[i,"Continent"],",",df[i,"OBJECTID"],",",df[i,"CNTRY_NAME"],",",t,",",wp$Drawdown,",",sobs,",",wp$Volume_Produced,",",df[i,"Area"],",",wp$Areal_Extent,",",wp$Total_Head,",",wp$Power,",",wp$Electric_Energy,",",wp$Energy_cost_rate,",",wp$Cost_of_Energy,",",wp$Unit_cost,",",wp$Cost_per_ac_ft,",",wp$Interest_Rate,",",wp$Max_Lifetime_in_Years,",",wp$Maintenance_factor,",",wp$Well_Yield,",",wp$Annual_Operation_time,",",wp$Total_Well_Length,",",trunc(df[i,"WHYClass"]/10*10),",",wp$Available_volume,",",NumWells,",",TotTime,",",df[i,"GCAM_ID"],",",df[i,"Basin_Name"],"\n")
+				outputList[[paste("line",as.character(t))]] <- paste(df[i,"Continent"],",",df[i,"OBJECTID"],",",df[i,"CNTRY_NAME"],",",t,",",wp$Drawdown,",",sobs,",",wp$Volume_Produced,",",df[i,"Area"],",",wp$Areal_Extent,",",wp$Total_Head,",",wp$Power,",",wp$Electric_Energy,",",wp$Energy_cost_rate,",",wp$Cost_of_Energy,",",wp$Unit_cost,",",wp$Cost_per_ac_ft,",",wp$Interest_Rate,",",wp$Max_Lifetime_in_Years,",",wp$Maintenance_factor,",",wp$Well_Yield,",",wp$Annual_Operation_time,",",wp$Total_Well_Length,",",trunc(df[i,"WHYClass"]/10*10),",",wp$Available_volume,",",NumWells,",",TotTime,",",df[i,"GCAM_ID"],",",df[i,"Basin_Name"],"\n")
 			#loop back to next year
 			}
 			#initialize next 20 years
@@ -237,7 +245,7 @@ for(i in 1:(nrow(df))){
 			wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Total_Volume_Produced / (3.14159 * wp$radial_extent ^ 2 * wp$Storativity)
 			wp[["Depth_to_Piezometric_Surface"]] <- wp$Total_Thickness - wp$Aqfr_Sat_Thickness
 			wp[["Max_Drawdown"]]<- wp$Aqfr_Sat_Thickness-WT
-			wp[["Total_Head"]]<- sobs+wp$Depth_to_Piezometric_Surface
+			wp[["Total_Head"]] <- sobs+wp$Depth_to_Piezometric_Surface
 			NumIterations <- NumIterations + 1
 			TotTime = NumIterations * 2 * t
 	    #loop back to expl gw 
