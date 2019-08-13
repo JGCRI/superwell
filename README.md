@@ -8,7 +8,7 @@ The `superwell` code requires three input files:
 - GCAM_Electrical_Rates.yml
 - Inputs.csv
 
-File *wellParams.yml* contains 14 variables: 
+File *wellParams.yml* contains values of the following parameters: 
 - Annual operation time 
 - Depletion Limit 
 - Energy cost rate
