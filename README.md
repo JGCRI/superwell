@@ -24,6 +24,8 @@ File *wellParams.yml* contains 14 variables:
 - Well Install 30
 - Initial Well Yield
 
+File *GCAM_Electrical_Rates.yml* contains assumptions on the cost of electricity in 172 countries
+
 File *Inputs.csv* contains data on permeability, porosity, depth, thickness, area and WHY class of 235 water basins 
 
 ### Output 
