@@ -9,20 +9,21 @@ The `superwell` code requires three input files:
 - Inputs.csv
 
 File *wellParams.yml* contains values of the following parameters: 
-- Annual operation time 
-- Depletion Limit 
-- Energy cost rate
-- Interest Rate
-- Maintenance factor
-- Max lifetime in years
-- Pump efficiency
-- Specific weight
-- Static head
-- Well diameter
-- Well Install 10
-- Well Install 20
-- Well Install 30
-- Initial Well Yield.
+- Depletion limit - 5%, 25% and 40% from the initial volume in storage (the only parameter we change in this file)
+
+- Annual operation time (s/year)
+- Energy cost ($/KWh)
+- Interest rate ($/year)
+- Maintenance factor 
+- Max lifetime (years)
+- Pump efficiency (%)
+- Specific weight ((kg/m3 * m/s^2))
+- Static head (m)
+- Well diameter (m)
+- Well install 10 ($/m)
+- Well install 20 ($/m)
+- Well install 30 ($/m)
+- Initial well yield (m^3/s).
 
 File *GCAM_Electrical_Rates.yml* contains assumptions on the cost of electricity in 172 countries.
 
@@ -38,7 +39,7 @@ The output file contains the following:
 - Number of wells	
 - Volume of water produced	
 - Total volume of water produced	
-- Total volume of water Available	
+- Total volume of water available	
 - Continent	
 - Object ID	
 - Country	GCAM ID	
