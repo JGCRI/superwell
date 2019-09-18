@@ -48,32 +48,31 @@ ec <- yaml.load_file(el_cost_file)
 
 # Parameters in wellParams.yml 
 
-# Parameters we likely may change
-# Depletion_Limit <- 0.05 
-# Energy_cost_rate <- 0.074
-# Interest_Rate <- 0.1
-# Maintenance_factor <- 0.07
-# Max_lifetime_in_Years <- 20
-# Pump_efficiency <- 0.5
+# Parameters we likely may change:
+# @param Depletion_Limit <- 0.05 
+# @param Energy_cost_rate <- 0.074
+# @param Interest_Rate <- 0.1
+# @paramMaintenance_factor <- 0.07
+# @param Max_lifetime_in_Years <- 20
+# @param Pump_efficiency <- 0.5
 
 # Other parameters in wellParams.yml
-# Annual_Operation_time <- 31536000
-# Specific_weight <- 9800
-# Static_head <- 0
-# Well_Diameter <- 0.28
-# Well_Install_10 <- 82
-# Well_Install_10 <- 164
-# Well_Install_10 <- 50
-# Initial_Well_Yield <- Well_Yield <- 5e-05
+# @param Annual_Operation_time <- 31536000
+# @param Specific_weight <- 9800
+# @param Static_head <- 0
+# @param Well_Diameter <- 0.28
+# @param Well_Install_10 <- 82
+# @param Well_Install_10 <- 164
+# @param Well_Install_10 <- 50
+# @param Initial_Well_Yield <- Well_Yield <- 5e-05
 
 # Other parameters in the script 
-# Max_Drawdown <- 0.66 (commented out in the script)
-# Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
-# WHYClass - 10, 20 or 30
-# errFactor <- 0.1
-# Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
-# radius of influence of Q <- 0.75
-
+# @param Max_Drawdown <- 0.66 (commented out in the script)
+# @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
+# @param WHYClass - 10, 20 or 30
+# @param errFactor <- 0.1
+# @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
+# @param radius of influence of Q <- 0.75
 
 # ----- 
 # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"  
