@@ -48,32 +48,31 @@ ec <- yaml.load_file(el_cost_file)
 
 # Parameters in wellParams.yml 
 
-# Parameters we likely may change
-# Depletion_Limit <- 0.05 
-# Energy_cost_rate <- 0.074
-# Interest_Rate <- 0.1
-# Maintenance_factor <- 0.07
-# Max_lifetime_in_Years <- 20
-# Pump_efficiency <- 0.5
+# Parameters we likely may change:
+# @param Depletion_Limit <- 0.05 
+# @param Energy_cost_rate <- 0.074
+# @param Interest_Rate <- 0.1
+# @param Maintenance_factor <- 0.07
+# @param Max_lifetime_in_Years <- 20
+# @param Pump_efficiency <- 0.5
 
 # Other parameters in wellParams.yml
-# Annual_Operation_time <- 31536000
-# Specific_weight <- 9800
-# Static_head <- 0
-# Well_Diameter <- 0.28
-# Well_Install_10 <- 82
-# Well_Install_10 <- 164
-# Well_Install_10 <- 50
-# Initial_Well_Yield <- Well_Yield <- 5e-05
+# @param Annual_Operation_time <- 31536000
+# @param Specific_weight <- 9800
+# @param Static_head <- 0
+# @param Well_Diameter <- 0.28
+# @param Well_Install_10 <- 82
+# @param Well_Install_10 <- 164
+# @param Well_Install_10 <- 50
+# @param Initial_Well_Yield <- Well_Yield <- 5e-05
 
 # Other parameters in the script 
-# Max_Drawdown <- 0.66 (commented out in the script)
-# Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
-# WHYClass - 10, 20 or 30
-# errFactor <- 0.1
-# Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
-# radius of influence of Q <- 0.75
-
+# @param Max_Drawdown <- 0.66 (commented out in the script)
+# @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
+# @param WHYClass - 10, 20 or 30
+# @param errFactor <- 0.1
+# @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
+# @param radius of influence of Q <- 0.75
 
 # ----- 
 # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"  
@@ -116,12 +115,7 @@ file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
 con <- file(file_name, "w")
 
 # Write the headers for the output file
-# The original header was cat("Continent,ObjID,Country,t,Drawdown,ObservedDrawdown,Volume,ElementArea,ArealExtent,TotalHead,Power,
-# ElectricEnergy,EnergyCostRate,CostOfEnergy,UnitCost,CostPerAcFt,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,
-# Well_Yield,Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number of Wells, Total Time,BasinId,BasinName,\n",file=con)
-
-# The new format is from folder "R code/MENA_Results_161216/updatedformat/5/superwell.R
-cat("Iteration,t,Unit_Cost,Hydraulic_Conductivity,Radial_Extent,Wells,Volume_Produced,Total_Volume_Produced,Total_Volume_Available,Continent,ObjId,Country,GCAMid,Basin_Name,\n", file = con)
+cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
 
 # -----
 # Calculations 
@@ -140,13 +134,13 @@ for(i in 1:(nrow(df))) {
 	wp[["Depth_to_Piezometric_Surface"]] <- df[i,"Depth"]
 	wp[["Aqfr_Sat_Thickness"]] <- df[i,"Thickness"]                                                                                     # m
 	wp[["Orig_Aqfr_Sat_Thickness"]] <- df[i,"Thickness"]                                                                                # m
-	wp[["Screen_length"]] <- wp$Orig_Aqfr_Sat_Thickness * 0.3                                                                             # m
-	wp[["Casing_length"]] <- wp$Orig_Aqfr_Sat_Thickness + wp$Depth_to_Piezometric_Surface - wp$Screen_length                              # m
+	wp[["Screen_length"]] <- wp$Orig_Aqfr_Sat_Thickness * 0.3                                                                           # m
+	wp[["Casing_length"]] <- wp$Orig_Aqfr_Sat_Thickness + wp$Depth_to_Piezometric_Surface - wp$Screen_length                            # m
 #	wp[["Max_Drawdown"]] <- 0.66 * wp$Aqfr_Sat_Thickness                                                                                # m
 	wp[["Total_Well_Length"]] <- wp$Casing_length + wp$Screen_length                                                                    # m
 	wp[["Hydraulic_Conductivity"]] <- (10 ^ df[i,"Permeability"]) * 1e7
 	wp[["roi_boundary"]] <- 1
-	wp[["Transmissivity"]] <- wp$Hydraulic_Conductivity * wp$Screen_length     ###this changed. Is it right?                            # m2/s
+	wp[["Transmissivity"]] <- wp$Hydraulic_Conductivity * wp$Screen_length                                                              # m2/s
 	if (df[i,"WHYClass"] == 10) {
 		wp[["Well_Installation_cost"]] <- wp$Well_Install_10 * wp$Total_Well_Length
 	} else {
