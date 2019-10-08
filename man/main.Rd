@@ -4,7 +4,7 @@
 \alias{main}
 \title{Main <function to be completely replaced !!!>}
 \usage{
-main(well_param_file, elec_cost_file, config_file)
+main(well_param_file, elec_cost_file, config_file, output_csv)
 }
 \arguments{
 \item{well_param_file}{Full path with file name and extension to the input well parameters YAML file}
@@ -12,6 +12,8 @@ main(well_param_file, elec_cost_file, config_file)
 \item{elec_cost_file}{Full path with file name and extension to the input GCAM electrical rates YAML file}
 
 \item{config_file}{Full path with file name and extension to the input configuration CSV file}
+
+\item{output_csv}{Full path with file name and extension to the output CSV file}
 }
 \value{
 Data frame of well parameters
