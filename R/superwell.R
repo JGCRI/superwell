@@ -18,7 +18,7 @@ options(stringsAsFactors = FALSE)
 #'
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
 #' @return Data frame of well parameters
-#' @import yaml
+#' @import  yaml
 #' @author <name>; <email>
 #' @export
 load_well_data <- function(well_param_file) {
@@ -48,7 +48,7 @@ load_well_data <- function(well_param_file) {
 load_elec_data <- function(el_cost_file) {
 
   # el_cost_file = "GCAM_Electrical_Rates.yml"
-  ec <- load_file(el_cost_file)
+  ec <- yaml.load_file(el_cost_file)
 
   return(ec)
 }
@@ -61,13 +61,15 @@ load_elec_data <- function(el_cost_file) {
 #' @param config_file Full path with file name and extension to the input configuration CSV file
 #' @return <fill in>
 #' @author <name>; <email>
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
 #' @export
 load_config <- function(config_file, country = 'Iran') {
   # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"
   ## check for one country (Iran)
   #config_file <- 'inputs.csv'
   df <- read.csv(config_file) %>%
-      filter(CNTRY_NAME %in% country)
+      filter(CNTRY_NAME %in% (country))
 
   return (df)
 }
@@ -115,7 +117,7 @@ load_config <- function(config_file, country = 'Iran') {
 # @param radius of influence of Q <- 0.75
 
 
-calc_wells <- function(t, rw) {
+calc_wells <- function(t, rw, wp) {
 
 # Pumping well drawdown <-2.3Q/4*pi*T*log(2.25Tt/r2S)
     # transient Theis solution
@@ -128,12 +130,15 @@ calc_wells <- function(t, rw) {
   j <- 1
   term <- -u
   W <- -0.5772156649 - log(u) - term
+
   while (abs(term) > 0.00000001 && term != Inf) {
     term <- -u * j / (j + 1) ^ 2 * term
     W <- W - term
     j <- j + 1
   }
+
   s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)
+
   result <- list(s = s, t = t, W = W)
 
   return(result)
@@ -146,10 +151,11 @@ calc_wells <- function(t, rw) {
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
 #' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
 #' @param config_file Full path with file name and extension to the input configuration CSV file
+#' @param output_csv Full path with file name and extension to the output CSV file
 #' @return Data frame of well parameters
 #' @author <name>; <email>
 #' @export
-main <- function(well_param_file, elec_cost_file, config_file) {
+main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
 
   wp <- load_well_data(well_param_file)
 
@@ -162,9 +168,9 @@ main <- function(well_param_file, elec_cost_file, config_file) {
   # ------
   # Set up the output file. This file will be written to after the completion of every node so the output may be copied
   # and used at any point during the run
-  file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
+  #file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
 
-  con <- file(file_name, "w")
+  con <- file(output_csv, "w")
 
   # Write the headers for the output file
   cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
@@ -226,7 +232,7 @@ main <- function(well_param_file, elec_cost_file, config_file) {
   			sadj <- wp$Max_Drawdown - ((wp$Max_Drawdown ^ 2) / (2 * wp$Aqfr_Sat_Thickness))
   			#First compute drawdown with initial Q guess
   			rw <- wp$Well_Diameter * 0.5
-  			calcResults <- calc_wells(t, rw)
+  			calcResults <- calc_wells(t, rw, wp)
   			t <- calcResults$t
   			s <- calcResults$s
   			W <- calcResults$W
@@ -251,7 +257,7 @@ main <- function(well_param_file, elec_cost_file, config_file) {
   					} else {
   						roi = roi * (sroi / wp$roi_boundary) ^ 0.033
   					}
-  					calcResults <- calc_wells(t, roi)
+  					calcResults <- calc_wells(t, roi, wp)
   					t <- calcResults$t
   					sroi <- calcResults$s
   				}
@@ -275,7 +281,7 @@ main <- function(well_param_file, elec_cost_file, config_file) {
   		#iterate through each year of pumping up to the max life time in years
   			while ((t < wp$Max_Lifetime_in_Years) && (wp$Well_Yield > 0)) {
   				t <- t + 1
-  				calcResults <- calc_wells(t,rw)
+  				calcResults <- calc_wells(t, rw, wp)
   				t <- calcResults$t
   				s <- calcResults$s
   				w <- calcResults$W
