@@ -346,16 +346,16 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
   	    #loop back to expl gw
   			#append results to output file
   			for (name in names(outputList)) {
-  			  cat(print(outputList[[name]]), file = con)
+  			  cat(outputList[[name]], file = con)
   			}
   			}
     	  run <- 1
     	  if (wp$Max_Drawdown <= 1) {
-    	    cat("Warning: maxDradown less than 1 meter")
+    	    #cat("Warning: maxDradown less than 1 meter")
     	  }
     }
   }
 
-  close (con)
+  close(con)
 }
 
