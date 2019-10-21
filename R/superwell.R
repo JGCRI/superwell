@@ -83,9 +83,9 @@ load_config <- function(config_file, country = 'Iran') {
 # ---
 
 # Constants
-# Euler_constant <- 0.5772156649
-# pi <- 3.14159
-# conversion_factor <- 0.000810714
+Euler_constant <- 0.5772156649
+pi <- 3.14159
+conversion_factor <- 0.000810714
 # ------
 
 # Parameters in wellParams.yml
@@ -129,7 +129,7 @@ calc_wells <- function(t, rw, wp) {
   u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time)
   j <- 1
   term <- -u
-  W <- -0.5772156649 - log(u) - term
+  W <- -Euler_constant - log(u) - term
 
   while (abs(term) > 0.00000001 && term != Inf) {
     term <- -u * j / (j + 1) ^ 2 * term
@@ -137,7 +137,7 @@ calc_wells <- function(t, rw, wp) {
     j <- j + 1
   }
 
-  s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)
+  s <- (wp$Well_Yield / (4.0 * pi * wp$Transmissivity) * W)
 
   result <- list(s = s, t = t, W = W)
 
@@ -243,11 +243,11 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
   			while(inRange == TRUE) {
   				inRange = (abs(sadj - s) > errFactor)
   				wp[["Well_Yield"]] <- wp$Well_Yield * (abs(sadj / s))
-  				s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)
+  				s <- (wp$Well_Yield / (4.0 * pi * wp$Transmissivity) * W)
   			}
   				# Guess the radius of influence of Q
   			if (NumIterations < 2) {
-  				roi <- (wp$Well_Yield * t * wp$Annual_Operation_time / (3.14159 * wp$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
+  				roi <- (wp$Well_Yield * t * wp$Annual_Operation_time / (pi * wp$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
   				sroi <- wp$roi_boundary + errFactor + 1
   				inRange <- TRUE
   				while(inRange == TRUE) {
@@ -264,7 +264,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
 
   				wp[["radial_extent"]] <- roi
   				wp[["Drawdown_roi"]] <- sroi
-  				wp[["Areal_Extent"]] <- 3.14159 * (wp$radial_extent ^ 2)                                                                                                                                         #m3
+  				wp[["Areal_Extent"]] <- pi * (wp$radial_extent ^ 2)                                                                                                                                         #m3
   				if(wp$Areal_Extent > (df[i,"Area"] + errFactor)) {
   					wp[["Max_Drawdown"]] <- wp$Max_Drawdown * (abs(df[i,"Area"] / wp$Areal_Extent))
   					WT = wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown
@@ -325,7 +325,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
   				wp[["Total_Cost"]] <- wp$Annual_Capital_Cost + wp$Maintenance_Cost                                     # $
   				wp[["Cost_of_Energy"]] <- (wp$Electric_Energy * wp$Energy_cost_rate)                                   # $
   				wp[["Unit_cost"]] <- (wp$Total_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
-  				wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / 0.000810714                                                   # $/acFt
+  				wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / conversion_factor                                                   # $/acFt
   				#Add the year's output to a list for export to file later
   				NumWells <- df[i,"Area"] / wp$Areal_Extent
   				TotTime = NumIterations * 2 * t
@@ -337,7 +337,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv) {
   			wp[["Available_volume"]] <- wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity
   			wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + wp$Well_Yield * wp$Max_Lifetime_in_Years * wp$Annual_Operation_time
   			wp[["Exploitable_GW"]] <- wp$Total_Volume_Produced / wp$Available_volume
-  			wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Total_Volume_Produced / (3.14159 * wp$radial_extent ^ 2 * wp$Storativity)
+  			wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Total_Volume_Produced / (pi * wp$radial_extent ^ 2 * wp$Storativity)
   			wp[["Depth_to_Piezometric_Surface"]] <- wp$Total_Thickness - wp$Aqfr_Sat_Thickness
   			wp[["Max_Drawdown"]] <- wp$Aqfr_Sat_Thickness - WT
   			wp[["Total_Head"]] <- sobs + wp$Depth_to_Piezometric_Surface
