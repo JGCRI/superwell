@@ -226,10 +226,10 @@ calculate_drawdown <- function(wp, well_data, rw, df, i, num_iterations)
       (1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years * wp$Interest_Rate /
       ((1+wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years - 1)
     well_data[["Maintenance_Cost"]] <- wp$Maintenance_factor * wp$Well_Installation_cost                          # $
-    well_data[["Total_Cost"]] <- wp$Annual_Capital_Cost + wp$Maintenance_Cost                                     # $
-    well_data[["Cost_of_Energy"]] <- (wp$Electric_Energy * well_data$Energy_cost_rate)                                   # $
-    well_data[["Unit_cost"]] <- (wp$Total_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
-    well_data[["Cost_per_ac_ft"]] <- wp$Unit_cost / conversion_factor                                                   # $/acFt
+    well_data[["Total_Cost"]] <- well_data$Annual_Capital_Cost + well_data$Maintenance_Cost                                     # $
+    well_data[["Cost_of_Energy"]] <- (well_data$Electric_Energy * well_data$Energy_cost_rate)                                   # $
+    well_data[["Unit_cost"]] <- (well_data$Total_Cost + well_data$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
+    well_data[["Cost_per_ac_ft"]] <- well_data$Unit_cost / conversion_factor                                                   # $/acFt
     #Add the year's output to a list for export to file later
     NumWells <- df[i,"Area"] / wp$Areal_Extent
     TotTime = num_iterations * 2 * t
@@ -237,16 +237,15 @@ calculate_drawdown <- function(wp, well_data, rw, df, i, num_iterations)
     {
       outputList <- list()
     }
-    outputList[[paste("line",as.character(t))]] <- paste(df[i,"Continent"], ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t, ",",
-                                                         well_data$Drawdown, ",", sobs, ",", wp$Volume_Produced, ",", df[i,"Area"], ",", wp$Areal_Extent,
-                                                         ",", well_data$Total_Head, ",", wp$Power, ",", wp$Electric_Energy, ",", well_data$Energy_cost_rate,
-                                                         ",", wp$Cost_of_Energy, ",", wp$Unit_cost, ",", wp$Cost_per_ac_ft, ",", wp$Interest_Rate,
+    outputList[[paste("line",as.character(t))]] <- paste(df[i,"Continent"],  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t, ",",
+                                                         well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"], ",", wp$Areal_Extent,
+                                                         ",", well_data$Total_Head, ",", well_data$Power, ",", well_data$Electric_Energy, ",", wp$Energy_cost_rate,
+                                                         ",", well_data$Cost_of_Energy, ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", wp$Interest_Rate,
                                                          ",", wp$Max_Lifetime_in_Years, ",", wp$Maintenance_factor, ",", wp$Well_Yield, ",",
                                                          wp$Annual_Operation_time, ",", well_data$Total_Well_Length, ",", trunc(df[i,"WHYClass"] / 10 * 10),
-                                                         ",", wp$Available_volume, ",", NumWells, ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
+                                                         ",", well_data$Available_volume, ",", NumWells, ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
     #loop back to next year
-    # print(paste(well_data$Exploitable_GW,  wp$Depletion_Limit, well_data$Max_Drawdown, run, TotTime))
-    # print(paste((well_data$Exploitable_GW < wp$Depletion_Limit), (well_data$Max_Drawdown >= 1),(run == 0),TotTime <= 200))
+
   }
   #--- WHILE 5 END
 }
@@ -341,13 +340,13 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   		}
   	}
 
-  	TotTime = 0
+  	TotTime <- 0
   	#wp[["Areal_Extent"]] <- df[i, "Area"]
   	outputList <- list()
 
-    well_data$Max_Drawdown = 0.66 * well_data$Orig_Aqfr_Sat_Thickness
+    well_data$Max_Drawdown <- 0.66 * well_data$Orig_Aqfr_Sat_Thickness
     WT <- well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
-    well_data$Total_Thickness = well_data$Depth_to_Piezometric_Surface + well_data$Orig_Aqfr_Sat_Thickness
+    well_data$Total_Thickness <- well_data$Depth_to_Piezometric_Surface + well_data$Orig_Aqfr_Sat_Thickness
     run <- 0
 
 #--- WHILE 1 START
@@ -429,18 +428,18 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 
   		# Run code while drawdown in pumping well is gt max possible drawdown
   		# iterate through each year of pumping up to the max life time in years
-
+      sobs <- 0
       #--- Previously 'while #5'
   			calculate_drawdown(wp, well_data, rw, df, i, num_iterations)
   		#--- End old 'while 5'
-
+  			print(sobs)
   			#initialize next 20 years
-  			wp[["Available_volume"]] <- wp$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
+  			well_data[["Available_volume"]] <- wp$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
   			well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + wp$Well_Yield * wp$Max_Lifetime_in_Years * wp$Annual_Operation_time
-  			well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / wp$Available_volume
-  			wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - well_data$Total_Volume_Produced / (pi * wp$radial_extent ^ 2 * wp$Storativity)
-  			wp[["Depth_to_Piezometric_Surface"]] <- wp$Total_Thickness - well_data$Aqfr_Sat_Thickness
-  			well_data[["Max_Drawdown"]] <- wp$Aqfr_Sat_Thickness - WT
+  			well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
+  			well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * wp$radial_extent ^ 2 * well_data$Storativity)
+  			well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
+  			well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
   			well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
   			num_iterations <- num_iterations + 1
   			TotTime = num_iterations * 2 * t
@@ -450,6 +449,8 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			{
   			  cat(outputList[[name]], file = con)
   			}
+  			print(paste(well_data$Exploitable_GW,  wp$Depletion_Limit, well_data$Max_Drawdown, run, TotTime))
+  			print(paste((well_data$Exploitable_GW < wp$Depletion_Limit), (well_data$Max_Drawdown >= 1),(run == 0),TotTime <= 200))
   		}
     #--- WHILE 2 END
 
