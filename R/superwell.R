@@ -158,6 +158,21 @@ calc_wells <- function(time, well_radius, well_params, well_data)
   return(result)
 }
 
+
+#' Calculate well drawdown data
+#'
+#' This function replaces the while loop located near the end of the main function in previous code
+#'
+#' @param well_parameters Passing through the previously loaded well_parameters data
+#' @param well_data Passing through the previously loaded well_data object
+#' @param rw initial Q guess
+#' @param df Passing through the previously dataframe object
+#' @param i Passing through i from the main loop
+#' @return <fill in>
+#' @author <name>; <email>
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
+#' @export
 calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterations)
 {
 
@@ -171,10 +186,10 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
   {
 
     t_time <<- t_time + 1
-    print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
+   #S print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
     t_time <<- well_calculations$t
-    print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
+   # print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     s <- well_calculations$s
     w <- well_calculations$W
 
@@ -214,7 +229,6 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
       sobs <<- root2
     }
 
-    # Not sure why it's failing now after I've moved it to a function, attempting to compensate
     #Output (one row per year)
     well_data[["Drawdown"]] <- s
     well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
@@ -231,7 +245,7 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
     well_data[["Cost_per_ac_ft"]] <- well_data$Unit_cost / conversion_factor                                                   # $/acFt
     #Add the year's output to a list for export to file later
     NumWells <- df[i,"Area"] / well_parameters$Areal_Extent
-    TotTime = num_iterations * 2 * t_time
+    TotTime <<- num_iterations * 2 * t_time
     if (t_time == 1)
     {
       outputList <- list()
@@ -239,7 +253,7 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
     outputList[[paste("line",as.character(t_time))]] <- paste(df[i,"Continent"],  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t_time, ",",
                                                          well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"],
                                                          ",", well_parameters$Areal_Extent, ",", well_data$Total_Head, ",", well_data$Power, ",",
-                                                         well_data$Electric_Energy, ",", well_parameters$Energy_cost_rate, ",", well_data$Cost_of_Energy,
+                                                         well_data$Electric_Energy, ",", well_data$Energy_cost_rate, ",", well_data$Cost_of_Energy,
                                                          ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", well_parameters$Interest_Rate,
                                                          ",", well_parameters$Max_Lifetime_in_Years, ",", well_parameters$Maintenance_factor, ",", well_parameters$Well_Yield, ",",
                                                          well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length, ",",
@@ -293,15 +307,18 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   # Each row in df is a different grid node in the model domain
   for(i in 1:(nrow(df)))
   {
-    print(paste("loop ", i))
+    #print(paste("loop ", i))
   	# Calculate and store other node specific attributes
   	if (is.null(ec[[df[i,"CNTRY_NAME"]]]) == FALSE )
   	{
   	  well_data[["Energy_cost_rate"]] <- ec[[df[i,"CNTRY_NAME"]]]
+  	  print(ec[[df[i,"CNTRY_NAME"]]])
   	}
   	else
   	{
   	  well_data[["Energy_cost_rate"]] <- well_parameters$global_energy_cost_rate
+  	  print("here 2")
+  	  print( well_parameters$global_energy_cost_rate)
   	}
 
     # Initalize empty node dependant parameters here. I believe these should be here for reinitialization for each node. Hard to follow.
@@ -447,7 +464,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
   			well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
   			num_iterations <- num_iterations + 1
-  			TotTime = num_iterations * 2 * t_time
+  			TotTime <- num_iterations * 2 * t_time
   	    #loop back to expl gw
   			#append results to output file
   			for (name in names(outputList))
