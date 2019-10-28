@@ -16,7 +16,7 @@ main(well_param_file, elec_cost_file, config_file, output_csv)
 \item{output_csv}{Full path with file name and extension to the output CSV file}
 }
 \value{
-Data frame of well parameters
+There is no return value. A csv file is created as the output
 }
 \description{
 Function to be completely replaced
