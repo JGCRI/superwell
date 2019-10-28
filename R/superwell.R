@@ -9,7 +9,6 @@
 
 options(stringsAsFactors = FALSE)
 
-
 # -----
 #Variables
 # -----
@@ -27,8 +26,6 @@ conversion_factor <- 0.000810714
 errFactor <- 0.1
 
 # ------
-
-
 
 #' Load well parameters
 #'
@@ -161,22 +158,23 @@ calc_wells <- function(time, well_radius, well_params, well_data)
   return(result)
 }
 
-calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterations, sobs)
+calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterations)
 {
 
   #Calculate drawdown at the well over time with costs
   #Initialize drawdown from pumping well and image wells and time
   s <- 0
-  t_time <- 0
+  t_time <<- 0
 
   #--- WHILE 5 START
   while ((t_time < well_parameters$Max_Lifetime_in_Years) && (well_parameters$Well_Yield > 0))
   {
 
-    t_time <- t_time + 1
+    t_time <<- t_time + 1
     print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
-    t_time <- well_calculations$t
+    t_time <<- well_calculations$t
+    print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     s <- well_calculations$s
     w <- well_calculations$W
 
@@ -247,9 +245,10 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
                                                          well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length, ",",
                                                          trunc(df[i,"WHYClass"] / 10 * 10), ",", well_data$Available_volume, ",", NumWells,
                                                          ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
-    #loop back to next year
-    return(outputList)
+
   }
+  #loop back to next year
+  return(outputList)
   #--- WHILE 5 END
 }
 
@@ -364,7 +363,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   		  #print(paste("while2 ", i))
   			#initialize
   			s <- 0
-  			t <- well_parameters$Max_Lifetime_in_Years
+  			t_time <- well_parameters$Max_Lifetime_in_Years
   			errFactor <- 0.1
   			#k <- 0
   			#Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
@@ -372,9 +371,9 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			#First compute drawdown with initial Q guess
   			rw <- well_parameters$Well_Diameter * 0.5
 
-  		  well_calculations <- calc_wells(t, rw, well_parameters, well_data)
+  		  well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
 
-  			t <- well_calculations$t
+  		  t_time <- well_calculations$t
   			s <- well_calculations$s
   			W <- well_calculations$W
   			#Second: Iterate on Q.
@@ -395,7 +394,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			# Guess the radius of influence of Q
   			if (num_iterations < 2)
   			{
-  				return_on_investment <- (well_parameters$Well_Yield * t * well_parameters$Annual_Operation_time / (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
+  				return_on_investment <- (well_parameters$Well_Yield * t_time * well_parameters$Annual_Operation_time / (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
   				social_roi <- well_data$roi_boundary + errFactor + 1
   				inRange <- TRUE
 
@@ -412,8 +411,8 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   				  {
   						return_on_investment = return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
   					}
-  					well_calculations <- calc_wells(t, return_on_investment, well_parameters, well_data)
-  					t <- well_calculations$t
+  					well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
+  					t_time <- well_calculations$t
   					social_roi <- well_calculations$s
   				}
       #--- WHILE 4 END
@@ -429,13 +428,15 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   				}
   			}
 
-  		# Run code while drawdown in pumping well is gt max possible drawdown
-  		# iterate through each year of pumping up to the max life time in years
+  	  	# Run code while drawdown in pumping well is gt max possible drawdown
+  		  # iterate through each year of pumping up to the max life time in years
   			# Added this code because sobs == error is causing problems in the line below setting total_head
-      sobs <- 0
+        sobs <<- 0
+
       #--- Previously 'while #5'
-  			outputList <- calculate_drawdown(well_parameters, well_data, rw, df, i, num_iterations, sobs)
+  			outputList <- calculate_drawdown(well_parameters, well_data, rw, df, i, num_iterations)
   		#--- End old 'while 5'
+
   			#print(paste("sobs" , sobs))
   			#initialize next 20 years
   			well_data[["Available_volume"]] <- well_parameters$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
@@ -446,7 +447,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
   			well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
   			num_iterations <- num_iterations + 1
-  			TotTime = num_iterations * 2 * t
+  			TotTime = num_iterations * 2 * t_time
   	    #loop back to expl gw
   			#append results to output file
   			for (name in names(outputList))
