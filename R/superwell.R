@@ -153,11 +153,10 @@ calc_wells <- function(time, well_radius, well_params, well_data)
   }
 
   s <- (well_params$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
-  result <- list(s = s, t = time, W = W)
+  result <- list(drawdown = s, t_years = time, W = W)
 
   return(result)
 }
-
 
 #' Calculate well drawdown data
 #'
@@ -187,9 +186,9 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
     t_time <<- t_time + 1
    #S print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
-    t_time <<- well_calculations$t
+    t_time <<- well_calculations$t_years
    # print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
-    s <- well_calculations$s
+    s <- well_calculations$drawdown
     w <- well_calculations$W
 
     #Solve quadratic of jacob correction for observed drawdown in well
@@ -389,8 +388,8 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 
   		  well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
 
-  		  t_time <- well_calculations$t
-  			s <- well_calculations$s
+  		  t_time <- well_calculations$t_years
+  			s <- well_calculations$drawdown
   			W <- well_calculations$W
   			#Second: Iterate on Q.
   			#initialize Q loop
@@ -428,8 +427,8 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   						return_on_investment = return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
   					}
   					well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
-  					t_time <- well_calculations$t
-  					social_roi <- well_calculations$s
+  					t_time <- well_calculations$t_years
+  					social_roi <- well_calculations$drawdown
   				}
       #--- WHILE 4 END
 
