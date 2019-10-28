@@ -9,18 +9,13 @@
 
 options(stringsAsFactors = FALSE)
 
-# -----
-#Variables
-# -----
-
 # Hard-coded variables:
-# ---
+# ------
 
 # Constants
 Euler_constant <- 0.5772156649
 pi <- 3.14159
 conversion_factor <- 0.000810714
-# ------
 
 # Other Variables
 errFactor <- 0.1
@@ -38,9 +33,7 @@ errFactor <- 0.1
 #' @export
 load_well_parameters <- function(well_param_file)
 {
-  # Parameters in wellParams.yml
   # @param Initial_Well_Yield <- Well_Yield <- 5e-05
-  #well_param_file = "wellParams.yml"
 
   tryCatch(
     {
@@ -59,20 +52,28 @@ load_well_parameters <- function(well_param_file)
   well_parameters[["global_energy_cost_rate"]] <- well_parameters$Energy_cost_rate
 
   # Variables from test yml
-  # well_parameters[["Annual_Operation_time"]] <- well_parameters$Annual_Operation_time  #s/year
-  # well_parameters[["Depletion_Limit"]]       <- well_parameters$Depletion_Limit  #$/KWh
-  # well_parameters[["Energy_cost_rate"]]      <- well_parameters$Energy_cost_rate  #$/year
-  # well_parameters[["Interest_Rate"]]         <- well_parameters$Interest_Rate  #n/a
-  # well_parameters[["Maintenance_factor"]]    <- well_parameters$Maintenance_factor  #years
-  # well_parameters[["Max_Lifetime_in_Years"]] <- well_parameters$Max_Lifetime_in_Years #n/a
-  # well_parameters[["Pump_Efficiency"]]       <- well_parameters$Pump_Efficiency   #(kg/m3*m/s2)
-  # well_parameters[["Specific_weight"]]       <- well_parameters$Specific_weight   #m
-  # well_parameters[["Static_head"]]           <- well_parameters$Static_head   #m
-  # well_parameters[["Well_Diameter"]]         <- well_parameters$Well_Diameter  #$/m
-  # well_parameters[["Well_Install_10"]]       <- well_parameters$Well_Install_10  #$/m
-  # well_parameters[["Well_Install_20"]]       <- well_parameters$Well_Install_20  #$/m
-  # well_parameters[["Well_Install_30"]]       <- well_parameters$Well_Install_30   #$/m
-  # well_parameters[["Well_Yield"]]            <- well_parameters$Well_Yield   #m3/s
+  # well_parameters[["Annual_Operation_time"]] s/year
+  # well_parameters[["Depletion_Limit"]]       $/KWh
+  # well_parameters[["Energy_cost_rate"]]      $/year
+  # well_parameters[["Interest_Rate"]]         n/a
+  # well_parameters[["Maintenance_factor"]]    years
+  # well_parameters[["Max_Lifetime_in_Years"]] n/a
+  # well_parameters[["Pump_Efficiency"]]       (kg/m3*m/s2)
+  # well_parameters[["Specific_weight"]]       m
+  # well_parameters[["Static_head"]]           m
+  # well_parameters[["Well_Diameter"]]         $/m
+  # well_parameters[["Well_Install_10"]]       $/m
+  # well_parameters[["Well_Install_20"]]       $/m
+  # well_parameters[["Well_Install_30"]]       $/m
+  # well_parameters[["Well_Yield"]]            m3/s
+
+  # Other parameters in the script
+  # @param Max_Drawdown <- 0.66 (commented out in the script)
+  # @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
+  # @param WHYClass - 10, 20 or 30
+  # @param errFactor <- 0.1
+  # @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
+  # @param radius of influence of Q <- 0.75
 
   return(well_parameters)
 }
@@ -118,18 +119,17 @@ load_config <- function(config_file, country = 'Iran')
   return (df)
 }
 
-
-
-
-# Other parameters in the script
-# @param Max_Drawdown <- 0.66 (commented out in the script)
-# @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
-# @param WHYClass - 10, 20 or 30
-# @param errFactor <- 0.1
-# @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
-# @param radius of influence of Q <- 0.75
-
-
+#' Need description
+#'
+#' Need long description
+#'
+#' @param time Passing through the previously loaded well_parameters data
+#' @param well_radius Passing through the previously loaded well_data object
+#' @param well_params initial Q guess
+#' @param well_data Passing through the main dataframe object
+#' @return result - need return info
+#' @author ?; ?@pnnl.gov
+#' @export
 calc_wells <- function(time, well_radius, well_params, well_data)
 {
 # Pumping well drawdown <-2.3Q/4*pi*T*log(2.25Tt/r2S)
@@ -166,12 +166,11 @@ calc_wells <- function(time, well_radius, well_params, well_data)
 #' @param well_parameters Passing through the previously loaded well_parameters data
 #' @param well_data Passing through the previously loaded well_data object
 #' @param rw initial Q guess
-#' @param df Passing through the previously dataframe object
+#' @param df Passing through the main dataframe object
 #' @param i Passing through i from the main loop
-#' @return <fill in>
-#' @author <name>; <email>
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
+#' @param num_iterations Passing through num_iterations from the main loop
+#' @return outputList - returns the formatted list of output variables for writing to excel
+#' @author Jason Evanoff; jason.evanoff@pnnl.gov
 #' @export
 calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterations)
 {
@@ -274,7 +273,7 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
 #' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
 #' @param config_file Full path with file name and extension to the input configuration CSV file
 #' @param output_csv Full path with file name and extension to the output CSV file
-#' @return Data frame of well parameters
+#' @return There is no return value. A csv file is created as the output
 #' @author <name>; <email>
 #' @export
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
