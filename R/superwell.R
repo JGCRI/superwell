@@ -176,7 +176,7 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
 
   #Calculate drawdown at the well over time with costs
   #Initialize drawdown from pumping well and image wells and time
-  s <- 0
+  drawdown <- 0
   t_time <<- 0
 
   #--- WHILE 5 START
@@ -184,18 +184,18 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
   {
 
     t_time <<- t_time + 1
-   #S print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
+   # drawdown print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
     t_time <<- well_calculations$t_years
    # print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
-    s <- well_calculations$drawdown
+    drawdown <- well_calculations$drawdown
     w <- well_calculations$W
 
     #Solve quadratic of jacob correction for observed drawdown in well
     #(s_obs^2)/(2h)-s_obs+s=0
     a <- 1 / (2 * well_data$Aqfr_Sat_Thickness)
     b <- -1
-    c <- s
+    c <- drawdown
     det <- (b ^ 2) - (4 * a * c)
     if (det > 0)
     {
@@ -228,7 +228,7 @@ calculate_drawdown <- function(well_parameters, well_data, rw, df, i, num_iterat
     }
 
     #Output (one row per year)
-    well_data[["Drawdown"]] <- s
+    well_data[["Drawdown"]] <- drawdown
     well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
     well_data[["Volume_Produced"]] <- t_time * well_parameters$Annual_Operation_time * well_parameters$Well_Yield                                # m^3
     well_data[["Power"]] <- (well_parameters$Specific_weight * well_data$Total_Head * well_parameters$Well_Yield / well_parameters$Pump_Efficiency) / 1000      # KW
@@ -377,7 +377,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   		{
   		  #print(paste("while2 ", i))
   			#initialize
-  			s <- 0
+  			drawdown <- 0
   			t_time <- well_parameters$Max_Lifetime_in_Years
   			errFactor <- 0.1
   			#k <- 0
@@ -389,7 +389,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   		  well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
 
   		  t_time <- well_calculations$t_years
-  			s <- well_calculations$drawdown
+  			drawdown <- well_calculations$drawdown
   			W <- well_calculations$W
   			#Second: Iterate on Q.
   			#initialize Q loop
@@ -399,9 +399,9 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
   			while(inRange == TRUE)
   			{
   			 # print(paste("while3 ", i))
-  				inRange = (abs(sadj - s) > errFactor)
-  				well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / s))
-  				s <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
+  				inRange = (abs(sadj - drawdown) > errFactor)
+  				well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
+  				drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
   			}
 
   	#--- WHILE 3 END
