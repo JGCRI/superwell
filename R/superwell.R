@@ -251,22 +251,48 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     TotTime <<- num_iterations * 2 * t_time
     if (t_time == 1)
     {
-      outputList <- list()
+      well_data$Available_volume <- ""
+      outputList <- data.frame()
     }
-    outputList[[paste("line",as.character(t_time))]] <- paste(df[i,"Continent"],  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t_time, ",",
-                                                         well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"],
-                                                         ",", well_parameters$Areal_Extent, ",", well_data$Total_Head, ",", well_data$Power, ",",
-                                                         well_data$Electric_Energy, ",", well_data$Energy_cost_rate, ",", well_data$Cost_of_Energy,
-                                                         ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", well_parameters$Interest_Rate,
-                                                         ",", well_parameters$Max_Lifetime_in_Years, ",", well_parameters$Maintenance_factor, ",",
-                                                         well_parameters$Well_Yield, ",", well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length,
-                                                         ",", trunc(df[i,"WHYClass"] / 10 * 10), ",", well_data$Available_volume, ",", NumWells,
-                                                         ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
+   # browser()
+    # cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,
+    #     Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,
+    #     Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n"
+    outputList <- dplyr::bind_rows(outputList,
+
+                             c(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
+                             Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_parameters$Areal_Extent,
+                             Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
+                             Energy_Cost_Rate = well_data$Energy_cost_rate, Cost_of_Energy = well_data$Cost_of_Energy, Unit_Cost = well_data$Unit_cost,
+                             Cost_Per_Ac_Ft = well_data$Cost_per_ac_ft, Interest_Rate = well_parameters$Interest_Rate,
+                             Max_Lifetime_in_Years = well_parameters$Max_Lifetime_in_Years, Maintenance_factor = well_parameters$Maintenance_factor,
+                             Well_Yield = well_parameters$Well_Yield, Annual_Operation_time = well_parameters$Annual_Operation_time,
+                             Total_Well_Length = well_data$Total_Well_Length, WHYClass =  trunc(df[i,"WHYClass"] / 10 * 10), Available_Volume = well_data$Available_volume,
+                             Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
+    # outputList <- paste(,  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t_time, ",",
+    #                                                      well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"],
+    #                                                      ",", well_parameters$Areal_Extent, ",", well_data$Total_Head, ",", well_data$Power, ",",
+    #                                                      well_data$Electric_Energy, ",", well_data$Energy_cost_rate, ",", well_data$Cost_of_Energy,
+    #                                                      ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", well_parameters$Interest_Rate,
+    #                                                      ",", well_parameters$Max_Lifetime_in_Years, ",", well_parameters$Maintenance_factor, ",",
+    #                                                      well_parameters$Well_Yield, ",", well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length,
+    #                                                      ",", trunc(df[i,"WHYClass"] / 10 * 10), ",", well_data$Available_volume, ",", NumWells,
+    #                                                      ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
   }
   #loop back to next year
   return(outputList)
 }
 
+#' Process the well data input data frame
+#'
+#' This function calculates well specific data and delivers the output for writing to csv file
+#'
+#' @param df Passing through the previously loaded data frame
+#' @param well_parameters Passing through the previously loaded well_parameters object
+#' @param ec Passing through the main dataframe object
+#' @return return_df - returns the row binded dataframe
+#' @author Jason Evanoff; jason.evanoff@pnnl.gov
+#' @export
 process_data <- function(df, well_parameters, ec)
 {
 
@@ -429,13 +455,12 @@ process_data <- function(df, well_parameters, ec)
       well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
       num_iterations <- num_iterations + 1
       TotTime <- num_iterations * 2 * t_time
-
+#browser()
       #append results to output file
-      for (name in names(outputList))
-      {
-        return_df <- rbind(return_df, outputList[[name]])
-
-      }
+      # for (i in 1:length(outputList))
+      # {
+        return_df <- rbind(return_df, outputList)
+      # }
     #  browser()
     }
     #--- WHILE 2 END
@@ -444,9 +469,7 @@ process_data <- function(df, well_parameters, ec)
   #--- FOR END
 }
 
-#' Main <function to be completely replaced !!!>
-#'
-#' Function to be completely replaced
+#' Main
 #'
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
 #' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
@@ -457,7 +480,7 @@ process_data <- function(df, well_parameters, ec)
 #' @export
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 {
-  profvis::profvis({
+   profvis::profvis({
 
     well_parameters <- load_well_parameters(well_param_file)
     ec <- load_elec_data(elec_cost_file)
@@ -471,15 +494,17 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
     #file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
     con <- file(output_csv, "w")
-
+    #browser()
     # Write the headers for the output file
-    cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,
-        Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,
-        Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
-    write.csv(write_df, file = con)
+    # cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,
+    #     Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,
+    #     Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
+    #dplyr::mutate(write_df, -select )
+    write.csv(write_df, file = con,row.names = FALSE)
+    #lapply(write_df, function(x) write.table( data.frame(x), file  , append= T, sep=',', row.names = F  ))
     #cat(write_df, file = con)
     close(con)
 
-  })
+   })
 }
 
