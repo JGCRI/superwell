@@ -14,7 +14,8 @@ Roxygen: list(markdown = TRUE)
 Imports: 
     magrittr,
     yaml,
-    dplyr
+    dplyr,
+    profvis
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
