@@ -39,6 +39,7 @@ load_well_parameters <- function(well_param_file)
     error = function(err)
     {
       # Log or display error in this block
+      print(err)
     }
   )
 
@@ -145,7 +146,6 @@ calc_wells <- function(time, well_radius, well_params, well_data)
     # t - time (years)
     # rw - well radius
 
-  # See no point to this line(?):
   W <- 0.0   # W(u) - the Well Function (exponential integral)
   u <- well_radius ^ 2 * well_data$Storativity / (4 * well_data$Transmissivity * time * well_params$Annual_Operation_time)
   j <- 1
@@ -189,10 +189,8 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
   while ((t_time < well_parameters$Max_Lifetime_in_Years) && (well_parameters$Well_Yield > 0))
   {
     t_time <<- t_time + 1
-   # drawdown print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
     t_time <<- well_calculations$t_years
-   # print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     drawdown <- well_calculations$drawdown
     w <- well_calculations$W
 
@@ -249,17 +247,13 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     #Add the year's output to a list for export to file later
     NumWells <- df[i,"Area"] / well_parameters$Areal_Extent
     TotTime <<- num_iterations * 2 * t_time
+
     if (t_time == 1)
     {
-      well_data$Available_volume <- ""
       outputList <- data.frame()
     }
-   # browser()
-    # cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,
-    #     Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,
-    #     Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n"
-    outputList <- dplyr::bind_rows(outputList,
 
+    outputList <- dplyr::bind_rows(outputList,
                              c(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
                              Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_parameters$Areal_Extent,
                              Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
@@ -269,15 +263,6 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
                              Well_Yield = well_parameters$Well_Yield, Annual_Operation_time = well_parameters$Annual_Operation_time,
                              Total_Well_Length = well_data$Total_Well_Length, WHYClass =  trunc(df[i,"WHYClass"] / 10 * 10), Available_Volume = well_data$Available_volume,
                              Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
-    # outputList <- paste(,  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t_time, ",",
-    #                                                      well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"],
-    #                                                      ",", well_parameters$Areal_Extent, ",", well_data$Total_Head, ",", well_data$Power, ",",
-    #                                                      well_data$Electric_Energy, ",", well_data$Energy_cost_rate, ",", well_data$Cost_of_Energy,
-    #                                                      ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", well_parameters$Interest_Rate,
-    #                                                      ",", well_parameters$Max_Lifetime_in_Years, ",", well_parameters$Maintenance_factor, ",",
-    #                                                      well_parameters$Well_Yield, ",", well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length,
-    #                                                      ",", trunc(df[i,"WHYClass"] / 10 * 10), ",", well_data$Available_volume, ",", NumWells,
-    #                                                      ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
   }
   #loop back to next year
   return(outputList)
@@ -298,6 +283,8 @@ process_data <- function(df, well_parameters, ec)
 
   # New variable to store well data/parameters that are not read in and are calculated/changed
   well_data <- list()
+
+  well_data[["Available_volume"]] <- 0
 
   # Dataframe to collect all the write operations and perform at once
   return_df <- data.frame()
@@ -366,7 +353,6 @@ process_data <- function(df, well_parameters, ec)
       }
     }
 
-    #--- WHILE 2 START
     while ((well_data$Exploitable_GW < well_parameters$Depletion_Limit) && (well_data$Max_Drawdown >= 1) && TotTime <= 200)
     {
       #initialize
@@ -388,18 +374,15 @@ process_data <- function(df, well_parameters, ec)
       #initialize Q loop
       inRange <- TRUE
 
-      # Added so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
+      # Added this so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
       well_data[["Well_Yield"]] <- well_parameters$Well_Yield
 
-      #--- WHILE 3 START
       while(inRange == TRUE)
       {
-        # print(paste("while3 ", i))
         inRange <- (abs(sadj - drawdown) > errFactor)
         well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
         drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
       }
-      #--- WHILE 3 END
 
       # Guess the radius of influence of Q
       if (num_iterations < 2)
@@ -409,10 +392,8 @@ process_data <- function(df, well_parameters, ec)
         social_roi <- well_data$roi_boundary + errFactor + 1
         inRange <- TRUE
 
-        #--- WHILE 4 START
         while(inRange == TRUE)
         {
-          # print(paste("while4 ", i))
           inRange <- (abs(social_roi - well_data$roi_boundary) > errFactor)
           if (social_roi < 0)
           {
@@ -426,7 +407,6 @@ process_data <- function(df, well_parameters, ec)
           t_time <- well_calculations$t_years
           social_roi <- well_calculations$drawdown
         }
-        #--- WHILE 4 END
 
         well_parameters[["radial_extent"]] <- return_on_investment
         well_parameters[["Drawdown_roi"]] <- social_roi
@@ -455,18 +435,12 @@ process_data <- function(df, well_parameters, ec)
       well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
       num_iterations <- num_iterations + 1
       TotTime <- num_iterations * 2 * t_time
-#browser()
-      #append results to output file
-      # for (i in 1:length(outputList))
-      # {
-        return_df <- rbind(return_df, outputList)
-      # }
-    #  browser()
+
+      return_df <- rbind(return_df, outputList)
+
     }
-    #--- WHILE 2 END
   }
   return(return_df)
-  #--- FOR END
 }
 
 #' Main
@@ -487,22 +461,15 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     df <- load_config(config_file)
 
     write_df <- process_data(df, well_parameters, ec)
-   # browser()
+
     # -----
     # Output
     # ------
     # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
-    #file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
     con <- file(output_csv, "w")
-    #browser()
-    # Write the headers for the output file
-    # cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,
-    #     Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,
-    #     Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
-    #dplyr::mutate(write_df, -select )
+
     write.csv(write_df, file = con,row.names = FALSE)
-    #lapply(write_df, function(x) write.table( data.frame(x), file  , append= T, sep=',', row.names = F  ))
-    #cat(write_df, file = con)
+
     close(con)
 
    })
