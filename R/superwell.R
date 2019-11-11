@@ -385,39 +385,7 @@ process_data <- function(df, well_parameters, ec)
       }
 
       # Guess the radius of influence of Q
-      if (num_iterations < 2)
-      {
-        return_on_investment <- (well_parameters$Well_Yield * t_time * well_parameters$Annual_Operation_time /
-                                   (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
-        social_roi <- well_data$roi_boundary + errFactor + 1
-        inRange <- TRUE
-
-        while(inRange == TRUE)
-        {
-          inRange <- (abs(social_roi - well_data$roi_boundary) > errFactor)
-          if (social_roi < 0)
-          {
-            return_on_investment <- return_on_investment * 0.75
-          }
-          else
-          {
-            return_on_investment <- return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
-          }
-          well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
-          t_time <- well_calculations$t_years
-          social_roi <- well_calculations$drawdown
-        }
-
-        well_parameters[["radial_extent"]] <- return_on_investment
-        well_parameters[["Drawdown_roi"]] <- social_roi
-        well_parameters[["Areal_Extent"]] <- pi * (well_parameters$radial_extent ^ 2)                                                                                                                                         #m3
-        if(well_parameters$Areal_Extent > (df[i,"Area"] + errFactor))
-        {
-          well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_parameters$Areal_Extent))
-          WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
-          break
-        }
-      }
+      guess_Q(num_iterations, well_parameters, well_data, df, inRange, WT)
 
       # Run code while drawdown in pumping well is gt max possible drawdown
       # iterate through each year of pumping up to the max life time in years
@@ -443,6 +411,57 @@ process_data <- function(df, well_parameters, ec)
   return(return_df)
 }
 
+#' Title
+#'
+#' @param num_iterations
+#' @param well_parameters
+#' @param well_data
+#' @param df
+#' @param inRange
+#' @param WT
+#'
+#' @return
+#' @export
+#'
+#' @examples
+guess_Q <- function(num_iterations, well_parameters, well_data, df, inRange, WT)
+{
+  # Guess the radius of influence of Q
+  if (num_iterations < 2)
+  {
+    return_on_investment <- (well_parameters$Well_Yield * t_time * well_parameters$Annual_Operation_time /
+                               (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
+    social_roi <- well_data$roi_boundary + errFactor + 1
+    inRange <- TRUE
+
+    while(inRange == TRUE)
+    {
+      inRange <- (abs(social_roi - well_data$roi_boundary) > errFactor)
+      if (social_roi < 0)
+      {
+        return_on_investment <- return_on_investment * 0.75
+      }
+      else
+      {
+        return_on_investment <- return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
+      }
+      well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
+      t_time <- well_calculations$t_years
+      social_roi <- well_calculations$drawdown
+    }
+
+    well_parameters[["radial_extent"]] <- return_on_investment
+    well_parameters[["Drawdown_roi"]] <- social_roi
+    well_parameters[["Areal_Extent"]] <- pi * (well_parameters$radial_extent ^ 2)                                                                                                                                         #m3
+    if(well_parameters$Areal_Extent > (df[i,"Area"] + errFactor))
+    {
+      well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_parameters$Areal_Extent))
+      WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
+      break
+    }
+  }
+}
+
 #' Main
 #'
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
@@ -455,7 +474,9 @@ process_data <- function(df, well_parameters, ec)
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 {
    profvis::profvis({
-
+    # i<-0
+    # while(i < 50)
+    # {
     well_parameters <- load_well_parameters(well_param_file)
     ec <- load_elec_data(elec_cost_file)
     df <- load_config(config_file)
@@ -471,7 +492,8 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     write.csv(write_df, file = con,row.names = FALSE)
 
     close(con)
-
+    i <- i+1
+  # }
    })
 }
 
