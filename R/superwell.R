@@ -245,7 +245,7 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     well_data[["Unit_cost"]] <- (well_data$Total_Cost + well_data$Cost_of_Energy) / (well_parameters$Well_Yield * well_parameters$Annual_Operation_time)
     well_data[["Cost_per_ac_ft"]] <- well_data$Unit_cost / conversion_factor                                                   # $/acFt
     #Add the year's output to a list for export to file later
-    NumWells <- df[i,"Area"] / well_parameters$Areal_Extent
+    NumWells <- df[i,"Area"] / well_parameters$well_data
     TotTime <<- num_iterations * 2 * t_time
 
     if (t_time == 1)
@@ -255,7 +255,7 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
 
     outputList <- dplyr::bind_rows(outputList,
                              c(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
-                             Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_parameters$Areal_Extent,
+                             Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_data$Areal_Extent,
                              Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
                              Energy_Cost_Rate = well_data$Energy_cost_rate, Cost_of_Energy = well_data$Cost_of_Energy, Unit_Cost = well_data$Unit_cost,
                              Cost_Per_Ac_Ft = well_data$Cost_per_ac_ft, Interest_Rate = well_parameters$Interest_Rate,
@@ -333,7 +333,7 @@ process_data <- function(df, well_parameters, ec)
       well_data$Depth_to_Piezometric_Surface - well_data$Screen_length  # m
     well_data[["Total_Well_Length"]] <- well_data$Casing_length + well_data$Screen_length             # m
     well_data[["Transmissivity"]] <- well_data$Hydraulic_Conductivity * well_data$Screen_length       # m2/s
-    #well_parameters[["Areal_Extent"]] <- df[i, "Area"]
+    #well_data[["Areal_Extent"]] <- df[i, "Area"]
     WT <- well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
     well_data$Total_Thickness <- well_data$Depth_to_Piezometric_Surface + well_data$Orig_Aqfr_Sat_Thickness
 
@@ -385,7 +385,7 @@ process_data <- function(df, well_parameters, ec)
       }
 
       # Guess the radius of influence of Q
-      guess_Q(num_iterations, well_parameters, well_data, df, inRange, WT)
+      guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
 
       # Run code while drawdown in pumping well is gt max possible drawdown
       # iterate through each year of pumping up to the max life time in years
@@ -394,10 +394,10 @@ process_data <- function(df, well_parameters, ec)
       outputList <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
 
       #initialize next 20 years
-      well_data[["Available_volume"]] <- well_parameters$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
+      well_data[["Available_volume"]] <- well_data$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
       well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + well_parameters$Well_Yield * well_parameters$Max_Lifetime_in_Years * well_parameters$Annual_Operation_time
       well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
-      well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_parameters$radial_extent ^ 2 * well_data$Storativity)
+      well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_data$radial_extent ^ 2 * well_data$Storativity)
       well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
       well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
       well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
@@ -405,26 +405,28 @@ process_data <- function(df, well_parameters, ec)
       TotTime <- num_iterations * 2 * t_time
 
       return_df <- rbind(return_df, outputList)
-
+browser()
     }
   }
   return(return_df)
 }
 
-#' Title
+#' Guess the radius of influence of Q
 #'
-#' @param num_iterations
-#' @param well_parameters
-#' @param well_data
-#' @param df
-#' @param inRange
-#' @param WT
+#' Long description
+#'
+#' @param num_iterations: passed in from previous function - used as a counter
+#' @param well_parameters: well parameters read in from the well_params file
+#' @param well_data: well data that is calculated during the run, not read in from the file
+#' @param df: main input dataframe
+#' @param inRange: used in the while loop as a tracking mechanism
+#' @param WT: unsure
 #'
 #' @return
+#' @author Jason Evanoff; jason.evanoff@pnnl.gov
 #' @export
 #'
-#' @examples
-guess_Q <- function(num_iterations, well_parameters, well_data, df, inRange, WT)
+guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
 {
   # Guess the radius of influence of Q
   if (num_iterations < 2)
@@ -450,12 +452,12 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, inRange, WT)
       social_roi <- well_calculations$drawdown
     }
 
-    well_parameters[["radial_extent"]] <- return_on_investment
-    well_parameters[["Drawdown_roi"]] <- social_roi
-    well_parameters[["Areal_Extent"]] <- pi * (well_parameters$radial_extent ^ 2)                                                                                                                                         #m3
-    if(well_parameters$Areal_Extent > (df[i,"Area"] + errFactor))
+    well_data[["radial_extent"]] <- return_on_investment
+    well_data[["Drawdown_roi"]] <- social_roi
+    well_data[["Areal_Extent"]] <- pi * (well_data$radial_extent ^ 2)                                                                                                                                         #m3
+    if(well_data$Areal_Extent > (df[i,"Area"] + errFactor))
     {
-      well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_parameters$Areal_Extent))
+      well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_data$Areal_Extent))
       WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
       break
     }
@@ -473,7 +475,7 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, inRange, WT)
 #' @export
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 {
-   profvis::profvis({
+   # profvis::profvis({
     # i<-0
     # while(i < 50)
     # {
@@ -494,6 +496,6 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     close(con)
     i <- i+1
   # }
-   })
+   # })
 }
 
