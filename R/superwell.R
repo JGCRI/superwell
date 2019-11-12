@@ -245,7 +245,8 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     well_data[["Unit_cost"]] <- (well_data$Total_Cost + well_data$Cost_of_Energy) / (well_parameters$Well_Yield * well_parameters$Annual_Operation_time)
     well_data[["Cost_per_ac_ft"]] <- well_data$Unit_cost / conversion_factor                                                   # $/acFt
     #Add the year's output to a list for export to file later
-    NumWells <- df[i,"Area"] / well_parameters$well_data
+    #browser()
+    NumWells <- df[i,"Area"] / well_data$Areal_Extent
     TotTime <<- num_iterations * 2 * t_time
 
     if (t_time == 1)
@@ -265,7 +266,8 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
                              Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
   }
   #loop back to next year
-  return(outputList)
+  # (well_parameters, well_data, rw, df, i, num_iterations)
+  return(list(outputList, well_data))
 }
 
 #' Process the well data input data frame
@@ -383,15 +385,17 @@ process_data <- function(df, well_parameters, ec)
         well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
         drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
       }
-
+     # browser()
       # Guess the radius of influence of Q
-      guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
+      well_data <- guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
 
       # Run code while drawdown in pumping well is gt max possible drawdown
       # iterate through each year of pumping up to the max life time in years
       # Added this line because sobs == error is causing problems in the line below setting total_head
       sobs <<- 0
-      outputList <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
+      return_vals <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
+      output_list <- return_vals[[1]]
+      well_data <- return_vals[[2]]
 
       #initialize next 20 years
       well_data[["Available_volume"]] <- well_data$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
@@ -404,8 +408,8 @@ process_data <- function(df, well_parameters, ec)
       num_iterations <- num_iterations + 1
       TotTime <- num_iterations * 2 * t_time
 
-      return_df <- rbind(return_df, outputList)
-browser()
+      return_df <- rbind(return_df, output_list)
+#browser()
     }
   }
   return(return_df)
@@ -462,6 +466,7 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, 
       break
     }
   }
+  return(well_data)
 }
 
 #' Main
@@ -494,7 +499,7 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     write.csv(write_df, file = con,row.names = FALSE)
 
     close(con)
-    i <- i+1
+  #  i <- i+1
   # }
    # })
 }
