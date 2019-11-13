@@ -266,7 +266,6 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
                              Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
   }
   #loop back to next year
-  # (well_parameters, well_data, rw, df, i, num_iterations)
   return(list(outputList, well_data))
 }
 
@@ -354,65 +353,88 @@ process_data <- function(df, well_parameters, ec)
         well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_30 * well_data$Total_Well_Length
       }
     }
-
-    while ((well_data$Exploitable_GW < well_parameters$Depletion_Limit) && (well_data$Max_Drawdown >= 1) && TotTime <= 200)
-    {
-      #initialize
-      drawdown <- 0
-      t_time <- well_parameters$Max_Lifetime_in_Years
-      errFactor <- 0.1
-      #k <- 0
-      #Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
-      sadj <- well_data$Max_Drawdown - ((well_data$Max_Drawdown ^ 2) / (2 * well_data$Aqfr_Sat_Thickness))
-      #First compute drawdown with initial Q guess
-      rw <- well_parameters$Well_Diameter * 0.5
-
-      well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
-
-      t_time <- well_calculations$t_years
-      drawdown <- well_calculations$drawdown
-      W <- well_calculations$W
-      #Second: Iterate on Q.
-      #initialize Q loop
-      inRange <- TRUE
-
-      # Added this so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
-      well_data[["Well_Yield"]] <- well_parameters$Well_Yield
-
-      while(inRange == TRUE)
-      {
-        inRange <- (abs(sadj - drawdown) > errFactor)
-        well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
-        drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
-      }
-     # browser()
-      # Guess the radius of influence of Q
-      well_data <- guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
-
-      # Run code while drawdown in pumping well is gt max possible drawdown
-      # iterate through each year of pumping up to the max life time in years
-      # Added this line because sobs == error is causing problems in the line below setting total_head
-      sobs <<- 0
-      return_vals <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
-      output_list <- return_vals[[1]]
-      well_data <- return_vals[[2]]
-
-      #initialize next 20 years
-      well_data[["Available_volume"]] <- well_data$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
-      well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + well_parameters$Well_Yield * well_parameters$Max_Lifetime_in_Years * well_parameters$Annual_Operation_time
-      well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
-      well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_data$radial_extent ^ 2 * well_data$Storativity)
-      well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
-      well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
-      well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
-      num_iterations <- num_iterations + 1
-      TotTime <- num_iterations * 2 * t_time
-
-      return_df <- rbind(return_df, output_list)
-#browser()
-    }
+    return_vals <- calculate_drawdown(well_data, well_parameters, WT, num_iterations, df, i, TotTime, t_time)
+    well_data <- return_vals[[2]]
+    return_df <- rbind(return_df, return_vals[[1]])
   }
   return(return_df)
+}
+
+#' Title
+#'
+#' @param well_data
+#' @param well_parameters
+#' @param WT
+#' @param num_iterations
+#' @param df
+#' @param i
+#' @param TotTime
+#' @param t_time
+#'
+#' @return
+#' @export
+calculate_drawdown <- function(well_data, well_parameters, WT, num_iterations, df, i, TotTime, t_time)
+{
+
+  # Dataframe to collect all the write operations and perform at once
+  return_df <- data.frame()
+
+  while ((well_data$Exploitable_GW < well_parameters$Depletion_Limit) && (well_data$Max_Drawdown >= 1) && TotTime <= 200)
+  {
+    #initialize
+    drawdown <- 0
+    t_time <- well_parameters$Max_Lifetime_in_Years
+    errFactor <- 0.1
+    #k <- 0
+    #Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
+    sadj <- well_data$Max_Drawdown - ((well_data$Max_Drawdown ^ 2) / (2 * well_data$Aqfr_Sat_Thickness))
+    #First compute drawdown with initial Q guess
+    rw <- well_parameters$Well_Diameter * 0.5
+
+    well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
+
+    t_time <- well_calculations$t_years
+    drawdown <- well_calculations$drawdown
+    W <- well_calculations$W
+    #Second: Iterate on Q.
+    #initialize Q loop
+    inRange <- TRUE
+
+    # Added this so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
+    well_data[["Well_Yield"]] <- well_parameters$Well_Yield
+
+    while(inRange == TRUE)
+    {
+      inRange <- (abs(sadj - drawdown) > errFactor)
+      well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
+      drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
+    }
+    # browser()
+    # Guess the radius of influence of Q
+    well_data <- guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
+
+    # Run code while drawdown in pumping well is gt max possible drawdown
+    # iterate through each year of pumping up to the max life time in years
+    # Added this line because sobs == error is causing problems in the line below setting total_head
+    sobs <<- 0
+    return_vals <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
+    output_list <- return_vals[[1]]
+    well_data <- return_vals[[2]]
+
+    #initialize next 20 years
+    well_data[["Available_volume"]] <- well_data$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
+    well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + well_parameters$Well_Yield * well_parameters$Max_Lifetime_in_Years * well_parameters$Annual_Operation_time
+    well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
+    well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_data$radial_extent ^ 2 * well_data$Storativity)
+    well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
+    well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
+    well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
+    num_iterations <- num_iterations + 1
+    TotTime <- num_iterations * 2 * t_time
+
+    return_df <- rbind(return_df, output_list)
+  }
+  return(list(return_df, well_data))
 }
 
 #' Guess the radius of influence of Q
@@ -480,10 +502,10 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, 
 #' @export
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 {
-   # profvis::profvis({
-    # i<-0
-    # while(i < 50)
-    # {
+    profvis::profvis({
+   # i<-0
+   # while(i < 50)
+   # {
     well_parameters <- load_well_parameters(well_param_file)
     ec <- load_elec_data(elec_cost_file)
     df <- load_config(config_file)
@@ -501,6 +523,6 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     close(con)
   #  i <- i+1
   # }
-   # })
+   })
 }
 
