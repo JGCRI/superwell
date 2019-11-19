@@ -116,8 +116,9 @@ load_config <- function(config_file, country = 'Iran')
   #config_file <- 'inputs.csv'
   tryCatch(
     {
-      df <- read.csv(config_file) %>%
-        filter(CNTRY_NAME %in% (country))
+      df <- read.csv(config_file)
+      # %>%
+      #   filter(CNTRY_NAME %in% (country))
     },
     error = function(err)
     {
@@ -251,22 +252,23 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
 
     if (t_time == 1)
     {
-      outputList <- data.frame()
+      output_list <- data.frame()
     }
-
-    outputList <- dplyr::bind_rows(outputList,
-                             c(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
-                             Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_data$Areal_Extent,
-                             Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
-                             Energy_Cost_Rate = well_data$Energy_cost_rate, Cost_of_Energy = well_data$Cost_of_Energy, Unit_Cost = well_data$Unit_cost,
-                             Cost_Per_Ac_Ft = well_data$Cost_per_ac_ft, Interest_Rate = well_parameters$Interest_Rate,
-                             Max_Lifetime_in_Years = well_parameters$Max_Lifetime_in_Years, Maintenance_factor = well_parameters$Maintenance_factor,
-                             Well_Yield = well_parameters$Well_Yield, Annual_Operation_time = well_parameters$Annual_Operation_time,
-                             Total_Well_Length = well_data$Total_Well_Length, WHYClass =  trunc(df[i,"WHYClass"] / 10 * 10), Available_Volume = well_data$Available_volume,
-                             Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
+    why_class <-  trunc(df[i,"WHYClass"] / 10 * 10)
+    row_output <- list(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
+                       Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_data$Areal_Extent,
+                       Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
+                       Energy_Cost_Rate = well_data$Energy_cost_rate, Cost_of_Energy = well_data$Cost_of_Energy, Unit_Cost = well_data$Unit_cost,
+                       Cost_Per_Ac_Ft = well_data$Cost_per_ac_ft, Interest_Rate = well_parameters$Interest_Rate,
+                       Max_Lifetime_in_Years = well_parameters$Max_Lifetime_in_Years, Maintenance_factor = well_parameters$Maintenance_factor,
+                       Well_Yield = well_parameters$Well_Yield, Annual_Operation_time = well_parameters$Annual_Operation_time,
+                       Total_Well_Length = well_data$Total_Well_Length, WHYClass =  why_class, Available_Volume = well_data$Available_volume,
+                       Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"])
+    temp_list <- list(output_list, row_output)
+    data.table::rbindlist(temp_list)
   }
   #loop back to next year
-  return(list(outputList, well_data))
+  return(list(output_list, well_data))
 }
 
 #' Process the well data input data frame
@@ -485,7 +487,7 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, 
     {
       well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_data$Areal_Extent))
       WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
-      break
+     # break
     }
   }
   return(well_data)
@@ -502,10 +504,6 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, 
 #' @export
 main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 {
-    profvis::profvis({
-   # i<-0
-   # while(i < 50)
-   # {
     well_parameters <- load_well_parameters(well_param_file)
     ec <- load_elec_data(elec_cost_file)
     df <- load_config(config_file)
@@ -517,12 +515,30 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     # ------
     # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
     con <- file(output_csv, "w")
-
     write.csv(write_df, file = con,row.names = FALSE)
-
     close(con)
-  #  i <- i+1
-  # }
-   })
+
+  profvis::profvis({
+    i<-0
+    while(i < 5)
+    {
+      well_parameters <- load_well_parameters(well_param_file)
+      ec <- load_elec_data(elec_cost_file)
+      df <- load_config(config_file)
+
+      write_df <- process_data(df, well_parameters, ec)
+
+      # -----
+      # Output
+      # ------
+      # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
+      con <- file(output_csv, "w")
+
+      write.csv(write_df, file = con,row.names = FALSE)
+
+      close(con)
+      i <- i+1
+    }
+  })
 }
 
