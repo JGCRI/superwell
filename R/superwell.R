@@ -108,22 +108,9 @@ load_elec_data <- function(el_cost_file)
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @export
-load_config <- function(config_file, country = 'Iran')
-{
-  # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"
-  ## check for one country (Iran)
-  #config_file <- 'inputs.csv'
-  tryCatch(
-    {
-      df <- read.csv(config_file) %>%
-        filter(CNTRY_NAME %in% (country))
-    },
-    error = function(err)
-    {
-      # Log or display error in this block
-    }
-  )
-  return (df)
+load_config <- function(config_file, country = 'Iran') {
+
+  return (fread(config)[CNTRY_NAME %in% (country)])
 }
 
 #' Need description
