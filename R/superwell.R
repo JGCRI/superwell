@@ -105,8 +105,7 @@ load_elec_data <- function(el_cost_file)
 #' @param config_file Full path with file name and extension to the input configuration CSV file
 #' @return <fill in>
 #' @author <name>; <email>
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
+#' @importFrom data.table fread
 #' @export
 load_config <- function(config_file, country = 'Iran') {
 
