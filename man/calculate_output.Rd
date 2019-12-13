@@ -2,7 +2,7 @@
 % Please edit documentation in R/superwell.R
 \name{calculate_output}
 \alias{calculate_output}
-\title{Calculate well output data}
+\title{Calculate well drawdown data}
 \usage{
 calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
 }
@@ -23,7 +23,7 @@ calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
 outputList - returns the formatted list of output variables for writing to excel
 }
 \description{
-This function replaces the while loop located near the end of the main function in previous code
+This function calculates well specific data and delivers the output for writing to csv file
 }
 \author{
 Jason Evanoff; jason.evanoff@pnnl.gov

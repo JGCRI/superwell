@@ -2,7 +2,7 @@
 % Please edit documentation in R/superwell.R
 \name{main}
 \alias{main}
-\title{Main <function to be completely replaced !!!>}
+\title{Main}
 \usage{
 main(well_param_file, elec_cost_file, config_file, output_csv)
 }
@@ -19,7 +19,7 @@ main(well_param_file, elec_cost_file, config_file, output_csv)
 There is no return value. A csv file is created as the output
 }
 \description{
-Function to be completely replaced
+Main
 }
 \author{
 <name>; <email>

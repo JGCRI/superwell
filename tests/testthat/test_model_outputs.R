@@ -32,8 +32,3 @@ test_that("Model outputs are ", {
                     info = paste("Output dataset does not match what is expected."))
 
 })
-#
- well_params <- "E:/Projects/superwell/tests/testthat/data/inputs/well_params_test_data.yml"
- elec_rates <- "E:/Projects/superwell/tests/testthat/data/inputs/elec_rates_test_data.yml"
- config <- "E:/Projects/superwell/tests/testthat/data/inputs/inputs_test_data.csv"
- output_file <- "E:/Projects/superwell/tests/testthat/data/outputs/test_output.csv"

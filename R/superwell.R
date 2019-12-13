@@ -39,6 +39,7 @@ load_well_parameters <- function(well_param_file)
     error = function(err)
     {
       # Log or display error in this block
+      print(err)
     }
   )
 
@@ -105,11 +106,26 @@ load_elec_data <- function(el_cost_file)
 #' @param config_file Full path with file name and extension to the input configuration CSV file
 #' @return <fill in>
 #' @author <name>; <email>
-#' @importFrom data.table fread
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
 #' @export
-load_config <- function(config_file, country = 'Iran') {
-
-  return (fread(config)[CNTRY_NAME %in% (country)])
+load_config <- function(config_file, country = 'Iran')
+{
+  # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"
+  ## check for one country (Iran)
+  #config_file <- 'inputs.csv'
+  tryCatch(
+    {
+      df <- read.csv(config_file)
+      # %>%
+      #   filter(CNTRY_NAME %in% (country))
+    },
+    error = function(err)
+    {
+      # Log or display error in this block
+    }
+  )
+  return (df)
 }
 
 #' Need description
@@ -125,13 +141,12 @@ load_config <- function(config_file, country = 'Iran') {
 #' @export
 calc_wells <- function(time, well_radius, well_params, well_data)
 {
-# Pumping well drawdown <-2.3Q/4*pi*T*log(2.25Tt/r2S)
-    # transient Theis solution
-    # s - the drawdown (m);
-    # t - time (years)
-    # rw - well radius
+  # Pumping well drawdown <-2.3Q/4*pi*T*log(2.25Tt/r2S)
+  # transient Theis solution
+  # s - the drawdown (m);
+  # t - time (years)
+  # rw - well radius
 
-  # See no point to this line(?):
   W <- 0.0   # W(u) - the Well Function (exponential integral)
   u <- well_radius ^ 2 * well_data$Storativity / (4 * well_data$Transmissivity * time * well_params$Annual_Operation_time)
   j <- 1
@@ -175,10 +190,8 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
   while ((t_time < well_parameters$Max_Lifetime_in_Years) && (well_parameters$Well_Yield > 0))
   {
     t_time <<- t_time + 1
-   # drawdown print(paste("while5 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
     t_time <<- well_calculations$t_years
-   # print(paste("while52 ", t_time, well_parameters$Max_Lifetime_in_Years, well_parameters$Well_Yield ))
     drawdown <- well_calculations$drawdown
     w <- well_calculations$W
 
@@ -233,55 +246,51 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     well_data[["Unit_cost"]] <- (well_data$Total_Cost + well_data$Cost_of_Energy) / (well_parameters$Well_Yield * well_parameters$Annual_Operation_time)
     well_data[["Cost_per_ac_ft"]] <- well_data$Unit_cost / conversion_factor                                                   # $/acFt
     #Add the year's output to a list for export to file later
-    NumWells <- df[i,"Area"] / well_parameters$Areal_Extent
+    #browser()
+    NumWells <- df[i,"Area"] / well_data$Areal_Extent
     TotTime <<- num_iterations * 2 * t_time
+
     if (t_time == 1)
     {
-      outputList <- list()
+      outputList <- data.frame()
     }
-    outputList[[paste("line",as.character(t_time))]] <- paste(df[i,"Continent"],  ",", df[i,"OBJECTID"], ",", df[i,"CNTRY_NAME"], ",", t_time, ",",
-                                                         well_data$Drawdown, ",", sobs, ",", well_data$Volume_Produced, ",", df[i,"Area"],
-                                                         ",", well_parameters$Areal_Extent, ",", well_data$Total_Head, ",", well_data$Power, ",",
-                                                         well_data$Electric_Energy, ",", well_data$Energy_cost_rate, ",", well_data$Cost_of_Energy,
-                                                         ",", well_data$Unit_cost, ",", well_data$Cost_per_ac_ft, ",", well_parameters$Interest_Rate,
-                                                         ",", well_parameters$Max_Lifetime_in_Years, ",", well_parameters$Maintenance_factor, ",",
-                                                         well_parameters$Well_Yield, ",", well_parameters$Annual_Operation_time, ",", well_data$Total_Well_Length,
-                                                         ",", trunc(df[i,"WHYClass"] / 10 * 10), ",", well_data$Available_volume, ",", NumWells,
-                                                         ",", TotTime, ",", df[i,"GCAM_ID"], ",", df[i,"Basin_Name"], "\n")
+
+    outputList <- dplyr::bind_rows(outputList,
+                                   c(Continent = df[i,"Continent"], ObjID = df[i,"OBJECTID"], Country = df[i,"CNTRY_NAME"], Time = t_time, Drawdown = well_data$Drawdown,
+                                     Observed_Drawdown = sobs, Volume = well_data$Volume_Produced, Element_Area = df[i,"Area"], Areal_Extent = well_data$Areal_Extent,
+                                     Total_Head = well_data$Total_Head, Power = well_data$Power, Electric_Energy = well_data$Electric_Energy,
+                                     Energy_Cost_Rate = well_data$Energy_cost_rate, Cost_of_Energy = well_data$Cost_of_Energy, Unit_Cost = well_data$Unit_cost,
+                                     Cost_Per_Ac_Ft = well_data$Cost_per_ac_ft, Interest_Rate = well_parameters$Interest_Rate,
+                                     Max_Lifetime_in_Years = well_parameters$Max_Lifetime_in_Years, Maintenance_factor = well_parameters$Maintenance_factor,
+                                     Well_Yield = well_parameters$Well_Yield, Annual_Operation_time = well_parameters$Annual_Operation_time,
+                                     Total_Well_Length = well_data$Total_Well_Length, WHYClass =  trunc(df[i,"WHYClass"] / 10 * 10), Available_Volume = well_data$Available_volume,
+                                     Number_of_Wells = NumWells, Total_Time = TotTime, Basin_ID = df[i,"GCAM_ID"], Basin_Name = df[i,"Basin_Name"]) )
   }
   #loop back to next year
-  return(outputList)
+  # (well_parameters, well_data, rw, df, i, num_iterations)
+  return(list(outputList, well_data))
 }
 
-#' Main <function to be completely replaced !!!>
+#' Process the well data input data frame
 #'
-#' Function to be completely replaced
+#' This function calculates well specific data and delivers the output for writing to csv file
 #'
-#' @param well_param_file Full path with file name and extension to the input well parameters YAML file
-#' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
-#' @param config_file Full path with file name and extension to the input configuration CSV file
-#' @param output_csv Full path with file name and extension to the output CSV file
-#' @return There is no return value. A csv file is created as the output
-#' @author <name>; <email>
+#' @param df Passing through the previously loaded data frame
+#' @param well_parameters Passing through the previously loaded well_parameters object
+#' @param ec Passing through the main dataframe object
+#' @return return_df - returns the row binded dataframe
+#' @author Jason Evanoff; jason.evanoff@pnnl.gov
 #' @export
-main <- function(well_param_file, elec_cost_file, config_file, output_csv)
+process_data <- function(df, well_parameters, ec)
 {
-  well_parameters <- load_well_parameters(well_param_file)
-  ec <- load_elec_data(elec_cost_file)
-  df <- load_config(config_file)
 
   # New variable to store well data/parameters that are not read in and are calculated/changed
   well_data <- list()
 
-  # -----
-  # Output
-  # ------
-  # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
-  #file_name <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
-  con <- file(output_csv, "w")
+  well_data[["Available_volume"]] <- 0
 
-  # Write the headers for the output file
-  cat("Continent,ObjID,Country,time,Drawdown,Observed_Drawdown,Volume,Element_Area,Areal_Extent,Total_Head,Power,Electric_Energy,Energy_Cost_Rate,Cost_of_Energy,Unit_Cost,Cost_Per_Ac_Ft,Interest_Rate,Max_Lifetime_in_Years,Maintenance_factor,Well_Yield,Annual_Operation_time,Total_Well_Length,WHYClass,Available_Volume,Number_of_Wells, Total_Time,Basin_ID,Basin_Name\n", file = con)
+  # Dataframe to collect all the write operations and perform at once
+  return_df <- data.frame()
 
   # -----
   # Calculations
@@ -295,15 +304,15 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
 
     # Output variable
     outputList <- list()
-  	# Calculate and store other node specific attributes
-  	if (is.null(ec[[df[i,"CNTRY_NAME"]]]) == FALSE )
-  	{
-  	  well_data[["Energy_cost_rate"]] <- ec[[df[i,"CNTRY_NAME"]]]
-  	}
-  	else
-  	{
-  	  well_data[["Energy_cost_rate"]] <- well_parameters$global_energy_cost_rate
-  	}
+    # Calculate and store other node specific attributes
+    if (is.null(ec[[df[i,"CNTRY_NAME"]]]) == FALSE )
+    {
+      well_data[["Energy_cost_rate"]] <- ec[[df[i,"CNTRY_NAME"]]]
+    }
+    else
+    {
+      well_data[["Energy_cost_rate"]] <- well_parameters$global_energy_cost_rate
+    }
 
     # Initalize empty node dependant parameters here. I believe these should be here for reinitialization for each node.
     #well_parameters[["Well_Yield"]] <- well_parameters$Initial_Well_Yield
@@ -324,128 +333,186 @@ main <- function(well_param_file, elec_cost_file, config_file, output_csv)
     well_data[["Hydraulic_Conductivity"]] <- (10 ^ df[i,"Permeability"]) * 1e7
     well_data[["Screen_length"]] <- well_data$Orig_Aqfr_Sat_Thickness * 0.3                           # m
     well_data[["Casing_length"]] <- well_data$Orig_Aqfr_Sat_Thickness +
-                                    well_data$Depth_to_Piezometric_Surface - well_data$Screen_length  # m
+      well_data$Depth_to_Piezometric_Surface - well_data$Screen_length  # m
     well_data[["Total_Well_Length"]] <- well_data$Casing_length + well_data$Screen_length             # m
     well_data[["Transmissivity"]] <- well_data$Hydraulic_Conductivity * well_data$Screen_length       # m2/s
-    #well_parameters[["Areal_Extent"]] <- df[i, "Area"]
+    #well_data[["Areal_Extent"]] <- df[i, "Area"]
     WT <- well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
     well_data$Total_Thickness <- well_data$Depth_to_Piezometric_Surface + well_data$Orig_Aqfr_Sat_Thickness
 
-  	if (df[i,"WHYClass"] == 10)
-  	{
-  	  well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_10 * well_data$Total_Well_Length
-  	}
-  	else
-  	{
-  		if (df[i,"WHYClass"] == 20)
-  		{
-  		  well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_20 * well_data$Total_Well_Length
-  		}
-  	  else
-  	  {
-  	    well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_30 * well_data$Total_Well_Length
-  		}
-  	}
-
-  #--- WHILE 2 START
-		while ((well_data$Exploitable_GW < well_parameters$Depletion_Limit) && (well_data$Max_Drawdown >= 1) && TotTime <= 200)
-		{
-			#initialize
-			drawdown <- 0
-			t_time <- well_parameters$Max_Lifetime_in_Years
-			errFactor <- 0.1
-			#k <- 0
-			#Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
-			sadj <- well_data$Max_Drawdown - ((well_data$Max_Drawdown ^ 2) / (2 * well_data$Aqfr_Sat_Thickness))
-			#First compute drawdown with initial Q guess
-			rw <- well_parameters$Well_Diameter * 0.5
-
-		  well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
-
-		  t_time <- well_calculations$t_years
-			drawdown <- well_calculations$drawdown
-			W <- well_calculations$W
-			#Second: Iterate on Q.
-			#initialize Q loop
-			inRange <- TRUE
-
-			# Added so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
-			well_data[["Well_Yield"]] <- well_parameters$Well_Yield
-
-  #--- WHILE 3 START
-			while(inRange == TRUE)
-			{
-			 # print(paste("while3 ", i))
-				inRange <- (abs(sadj - drawdown) > errFactor)
-				well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
-				drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
-			}
-	#--- WHILE 3 END
-
-			# Guess the radius of influence of Q
-			if (num_iterations < 2)
-			{
-				return_on_investment <- (well_parameters$Well_Yield * t_time * well_parameters$Annual_Operation_time /
-				                        (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
-				social_roi <- well_data$roi_boundary + errFactor + 1
-				inRange <- TRUE
-
-    #--- WHILE 4 START
-				while(inRange == TRUE)
-				{
-				 # print(paste("while4 ", i))
-				  inRange <- (abs(social_roi - well_data$roi_boundary) > errFactor)
-					if (social_roi < 0)
-					{
-						return_on_investment <- return_on_investment * 0.75
-					}
-				  else
-				  {
-						return_on_investment <- return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
-					}
-					well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
-					t_time <- well_calculations$t_years
-					social_roi <- well_calculations$drawdown
-				}
-    #--- WHILE 4 END
-
-				well_parameters[["radial_extent"]] <- return_on_investment
-				well_parameters[["Drawdown_roi"]] <- social_roi
-				well_parameters[["Areal_Extent"]] <- pi * (well_parameters$radial_extent ^ 2)                                                                                                                                         #m3
-				if(well_parameters$Areal_Extent > (df[i,"Area"] + errFactor))
-				{
-				  well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_parameters$Areal_Extent))
-					WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
-					break
-				}
-			}
-
-	  	# Run code while drawdown in pumping well is gt max possible drawdown
-		  # iterate through each year of pumping up to the max life time in years
-			# Added this line because sobs == error is causing problems in the line below setting total_head
-      sobs <<- 0
-			outputList <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
-
-			#initialize next 20 years
-			well_data[["Available_volume"]] <- well_parameters$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
-			well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + well_parameters$Well_Yield * well_parameters$Max_Lifetime_in_Years * well_parameters$Annual_Operation_time
-			well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
-			well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_parameters$radial_extent ^ 2 * well_data$Storativity)
-			well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
-			well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
-			well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
-			num_iterations <- num_iterations + 1
-			TotTime <- num_iterations * 2 * t_time
-
-			#append results to output file
-			for (name in names(outputList))
-			{
-			  cat(outputList[[name]], file = con)
-			}
-		}
-    #--- WHILE 2 END
+    if (df[i,"WHYClass"] == 10)
+    {
+      well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_10 * well_data$Total_Well_Length
+    }
+    else
+    {
+      if (df[i,"WHYClass"] == 20)
+      {
+        well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_20 * well_data$Total_Well_Length
+      }
+      else
+      {
+        well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_30 * well_data$Total_Well_Length
+      }
+    }
+    return_vals <- calculate_drawdown(well_data, well_parameters, WT, num_iterations, df, i, TotTime, t_time)
+    well_data <- return_vals[[2]]
+    return_df <- rbind(return_df, return_vals[[1]])
   }
-#--- FOR END
-  close(con)
+  return(return_df)
 }
 
+#' Title
+#'
+#' @param well_data
+#' @param well_parameters
+#' @param WT
+#' @param num_iterations
+#' @param df
+#' @param i
+#' @param TotTime
+#' @param t_time
+#'
+#' @return
+#' @export
+calculate_drawdown <- function(well_data, well_parameters, WT, num_iterations, df, i, TotTime, t_time)
+{
+
+  # Dataframe to collect all the write operations and perform at once
+  return_df <- data.frame()
+
+  while ((well_data$Exploitable_GW < well_parameters$Depletion_Limit) && (well_data$Max_Drawdown >= 1) && TotTime <= 200)
+  {
+    #initialize
+    drawdown <- 0
+    t_time <- well_parameters$Max_Lifetime_in_Years
+    errFactor <- 0.1
+    #k <- 0
+    #Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
+    sadj <- well_data$Max_Drawdown - ((well_data$Max_Drawdown ^ 2) / (2 * well_data$Aqfr_Sat_Thickness))
+    #First compute drawdown with initial Q guess
+    rw <- well_parameters$Well_Diameter * 0.5
+
+    well_calculations <- calc_wells(t_time, rw, well_parameters, well_data)
+
+    t_time <- well_calculations$t_years
+    drawdown <- well_calculations$drawdown
+    W <- well_calculations$W
+    #Second: Iterate on Q.
+    #initialize Q loop
+    inRange <- TRUE
+
+    # Added this so well_data can be used instead of well_parameters for the well_yield. It was recursive so needed to initialize here
+    well_data[["Well_Yield"]] <- well_parameters$Well_Yield
+
+    while(inRange == TRUE)
+    {
+      inRange <- (abs(sadj - drawdown) > errFactor)
+      well_parameters[["Well_Yield"]] <- well_parameters$Well_Yield * (abs(sadj / drawdown))
+      drawdown <- (well_parameters$Well_Yield / (4.0 * pi * well_data$Transmissivity) * W)
+    }
+    # browser()
+    # Guess the radius of influence of Q
+    well_data <- guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
+
+    # Run code while drawdown in pumping well is gt max possible drawdown
+    # iterate through each year of pumping up to the max life time in years
+    # Added this line because sobs == error is causing problems in the line below setting total_head
+    sobs <<- 0
+    return_vals <- calculate_output(well_parameters, well_data, rw, df, i, num_iterations)
+    output_list <- return_vals[[1]]
+    well_data <- return_vals[[2]]
+
+    #initialize next 20 years
+    well_data[["Available_volume"]] <- well_data$Areal_Extent * well_data$Orig_Aqfr_Sat_Thickness * well_data$Storativity
+    well_data[["Total_Volume_Produced"]] <- well_data$Total_Volume_Produced + well_parameters$Well_Yield * well_parameters$Max_Lifetime_in_Years * well_parameters$Annual_Operation_time
+    well_data[["Exploitable_GW"]] <- well_data$Total_Volume_Produced / well_data$Available_volume
+    well_data[["Aqfr_Sat_Thickness"]] <- well_data$Total_Thickness - well_data$Total_Volume_Produced / (pi * well_data$radial_extent ^ 2 * well_data$Storativity)
+    well_data[["Depth_to_Piezometric_Surface"]] <- well_data$Total_Thickness - well_data$Aqfr_Sat_Thickness
+    well_data[["Max_Drawdown"]] <- well_data$Aqfr_Sat_Thickness - WT
+    well_data[["Total_Head"]] <- sobs + well_data$Depth_to_Piezometric_Surface
+    num_iterations <- num_iterations + 1
+    TotTime <- num_iterations * 2 * t_time
+
+    return_df <- rbind(return_df, output_list)
+  }
+  return(list(return_df, well_data))
+}
+
+#' Guess the radius of influence of Q
+#'
+#' Long description
+#'
+#' @param num_iterations: passed in from previous function - used as a counter
+#' @param well_parameters: well parameters read in from the well_params file
+#' @param well_data: well data that is calculated during the run, not read in from the file
+#' @param df: main input dataframe
+#' @param inRange: used in the while loop as a tracking mechanism
+#' @param WT: unsure
+#'
+#' @return
+#' @author Jason Evanoff; jason.evanoff@pnnl.gov
+#' @export
+#'
+guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, WT, t_time)
+{
+  # Guess the radius of influence of Q
+  if (num_iterations < 2)
+  {
+    return_on_investment <- (well_parameters$Well_Yield * t_time * well_parameters$Annual_Operation_time /
+                               (pi * well_data$Orig_Aqfr_Sat_Thickness * df[i,"Porosity"])) ^ 0.5
+    social_roi <- well_data$roi_boundary + errFactor + 1
+    inRange <- TRUE
+
+    while(inRange == TRUE)
+    {
+      inRange <- (abs(social_roi - well_data$roi_boundary) > errFactor)
+      if (social_roi < 0)
+      {
+        return_on_investment <- return_on_investment * 0.75
+      }
+      else
+      {
+        return_on_investment <- return_on_investment * (social_roi / well_data$roi_boundary) ^ 0.033
+      }
+      well_calculations <- calc_wells(t_time, return_on_investment, well_parameters, well_data)
+      t_time <- well_calculations$t_years
+      social_roi <- well_calculations$drawdown
+    }
+
+    well_data[["radial_extent"]] <- return_on_investment
+    well_data[["Drawdown_roi"]] <- social_roi
+    well_data[["Areal_Extent"]] <- pi * (well_data$radial_extent ^ 2)                                                                                                                                         #m3
+    if(well_data$Areal_Extent > (df[i,"Area"] + errFactor))
+    {
+      well_data[["Max_Drawdown"]] <- well_data$Max_Drawdown * (abs(df[i,"Area"] / well_data$Areal_Extent))
+      WT = well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
+      # break
+    }
+  }
+  return(well_data)
+}
+
+#' Main
+#'
+#' @param well_param_file Full path with file name and extension to the input well parameters YAML file
+#' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
+#' @param config_file Full path with file name and extension to the input configuration CSV file
+#' @param output_csv Full path with file name and extension to the output CSV file
+#' @return There is no return value. A csv file is created as the output
+#' @author <name>; <email>
+#' @export
+main <- function(well_param_file, elec_cost_file, config_file, output_csv)
+{
+  well_parameters <- load_well_parameters(well_param_file)
+  ec <- load_elec_data(elec_cost_file)
+  df <- load_config(config_file)
+
+  write_df <- process_data(df, well_parameters, ec)
+
+  # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
+  con <- file(output_csv, "w")
+  write.csv(write_df, file = con,row.names = FALSE)
+  close(con)
+
+}
