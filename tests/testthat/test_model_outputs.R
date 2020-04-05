@@ -16,7 +16,7 @@ test_that("Model outputs are ", {
 
   # run the model and generate results
   superwell::main(well_param_file = well_params,
-                  elec_cost_file = elec_rates,
+                  electric_cost_file = elec_rates,
                   config_file = config,
                   output_csv = output_file)
 

@@ -6,6 +6,28 @@
 
 # Input files: wellParams.yml, GCAM_Electrical_Rates.yml, Inputs.csv
 # Output file: ***_WellResults.csv (as in original code)
+# Variables from test yml
+# well_parameters[["Annual_Operation_time"]] s/year
+# well_parameters[["Depletion_Limit"]]       $/KWh
+# well_parameters[["Energy_cost_rate"]]      $/year
+# well_parameters[["Interest_Rate"]]         n/a
+# well_parameters[["Maintenance_factor"]]    years
+# well_parameters[["Max_Lifetime_in_Years"]] n/a
+# well_parameters[["Pump_Efficiency"]]       (kg/m3*m/s2)
+# well_parameters[["Specific_weight"]]       m
+# well_parameters[["Static_head"]]           m
+# well_parameters[["Well_Diameter"]]         $/m
+# well_parameters[["Well_Install_10"]]       $/m
+# well_parameters[["Well_Install_20"]]       $/m
+# well_parameters[["Well_Install_30"]]       $/m
+# well_parameters[["Well_Yield"]]            m3/s
+
+# Other parameters in the script
+# @param Max_Drawdown <- 0.66 (commented out in the script)
+# @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
+# @param WHYClass - 10, 20 or 30
+# @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
+# @param radius of influence of Q <- 0.75
 
 options(stringsAsFactors = FALSE)
 
@@ -26,51 +48,16 @@ errFactor <- 0.1
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
 #' @return Data frame of well parameters
 #' @import  yaml
-#' @author <name>; <email>
 #' @export
-load_well_parameters <- function(well_param_file)
-{
-  # @param Initial_Well_Yield <- Well_Yield <- 5e-05
+load_well_parameters <- function(well_param_file) {
 
-  tryCatch(
-    {
-      well_parameters <- yaml.load_file(well_param_file)
-    },
-    error = function(err)
-    {
-      # Log or display error in this block
-      print(err)
-    }
-  )
+  well_parameters <- yaml.load_file(well_param_file)
 
   # Store well yield data from the yaml file because we will need to go back to it with every node
   well_parameters[["Initial_Well_Yield"]] <- well_parameters$Well_Yield
 
   # Store a "generic" electricity cost rate in case of an error
   well_parameters[["global_energy_cost_rate"]] <- well_parameters$Energy_cost_rate
-
-  # Variables from test yml
-  # well_parameters[["Annual_Operation_time"]] s/year
-  # well_parameters[["Depletion_Limit"]]       $/KWh
-  # well_parameters[["Energy_cost_rate"]]      $/year
-  # well_parameters[["Interest_Rate"]]         n/a
-  # well_parameters[["Maintenance_factor"]]    years
-  # well_parameters[["Max_Lifetime_in_Years"]] n/a
-  # well_parameters[["Pump_Efficiency"]]       (kg/m3*m/s2)
-  # well_parameters[["Specific_weight"]]       m
-  # well_parameters[["Static_head"]]           m
-  # well_parameters[["Well_Diameter"]]         $/m
-  # well_parameters[["Well_Install_10"]]       $/m
-  # well_parameters[["Well_Install_20"]]       $/m
-  # well_parameters[["Well_Install_30"]]       $/m
-  # well_parameters[["Well_Yield"]]            m3/s
-
-  # Other parameters in the script
-  # @param Max_Drawdown <- 0.66 (commented out in the script)
-  # @param Screen_length_of_original_Aqfr_Sat_Thickness <- 0.3
-  # @param WHYClass - 10, 20 or 30
-  # @param Max_Drawdown_to_Orig_Aqfr_Sat_Thickness <- 0.66 (line 139)
-  # @param radius of influence of Q <- 0.75
 
   return(well_parameters)
 }
@@ -79,24 +66,14 @@ load_well_parameters <- function(well_param_file)
 #'
 #' Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
 #'
-#' @param el_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
-#' @return <fill in>
+#' @param electricity_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
+#' @return loaded file
 #' @import yaml
-#' @author <name>; <email>
 #' @export
-load_elec_data <- function(el_cost_file)
-{
-  tryCatch(
-    {
-      ec <- yaml.load_file(el_cost_file)
-    },
-    error = function(err)
-    {
-      # Log or display error in this block
-    }
-  )
-  # el_cost_file = "GCAM_Electrical_Rates.yml"
-  return(ec)
+load_elec_data <- function(electricity_cost_file) {
+
+  # return(yaml.load_file(electricity_cost_file))
+  return(data.table(melt(yaml.load_file(elec_rates)))[, .('CNTRY_NAME' = L1, 'value' = elec_rate)])
 }
 
 #' Load electricity data by GCAM basin
@@ -104,28 +81,12 @@ load_elec_data <- function(el_cost_file)
 #' Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
 #'
 #' @param config_file Full path with file name and extension to the input configuration CSV file
-#' @return <fill in>
-#' @author <name>; <email>
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
+#' @return data.table Input file data
+#' @importFrom data.table fread
 #' @export
-load_config <- function(config_file, country = 'Iran')
-{
-  # Node-specific input (permeability, prosity, thickness, etc.) are in "Inputs.csv"
-  ## check for one country (Iran)
-  #config_file <- 'inputs.csv'
-  tryCatch(
-    {
-      df <- read.csv(config_file)
-      # %>%
-      #   filter(CNTRY_NAME %in% (country))
-    },
-    error = function(err)
-    {
-      # Log or display error in this block
-    }
-  )
-  return (df)
+load_config <- function(config_file, country = 'Iran') {
+
+  return(fread(config_file)[CNTRY_NAME %in% (country)])
 }
 
 #' Need description
@@ -137,7 +98,6 @@ load_config <- function(config_file, country = 'Iran')
 #' @param well_params initial Q guess
 #' @param well_data Passing through the main dataframe object
 #' @return result - need return info
-#' @author ?; ?@pnnl.gov
 #' @export
 calc_wells <- function(time, well_radius, well_params, well_data)
 {
@@ -200,6 +160,7 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
     a <- 1 / (2 * well_data$Aqfr_Sat_Thickness)
     b <- -1
     c <- drawdown
+
     det <- (b ^ 2) - (4 * a * c)
     if (det > 0)
     {
@@ -216,6 +177,7 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
       root1 <- "error"
       root2 <- "error"
     }
+
     # Problematic above and below
     if (root1 > well_data$Max_Drawdown + errFactor || root1 < 0)
     {
@@ -271,6 +233,78 @@ calculate_output <- function(well_parameters, well_data, rw, df, i, num_iteratio
   return(list(outputList, well_data))
 }
 
+#' Assign the electricity cost to each country in the data frame
+#'
+#' Assign the electricity cost to each country in the data frame.  If a price is not
+#' present, assign a global substitute
+#'
+#' @param df Passing through the previously loaded data frame
+#' @param well_parameters Passing through the previously loaded well_parameters object
+#' @param electricity_cost_data Passing through the main dataframe object
+#' @param country_field field name from the input csv file for country
+#' @param energy_cost_field field name for the energy cost rate field
+#' @return return_df - returns the row binded dataframe
+#' @export
+add_energy_cost_rate <- function(df, well_parameters, electricity_cost_data, country_field = "CNTRY_NAME",
+                                 energy_cost_field = "Energy_cost_rate") {
+
+  # if the country name in the input data row has a lookup value electric price...
+  if (is.null(electricity_cost_data[[df[i, country_field]]]) == FALSE ) {
+
+    df[energy_cost_field] <- ec[[df[i, country_field]]]
+  }
+  else {
+
+    well_data[[energy_cost_field]] <- well_parameters$global_energy_cost_rate
+  }
+}
+
+process_all <- function(df, well_parameters, ec) {
+
+  # set the ON clause as keys of the tables:
+  setkey(ec, CNTRY_NAME)
+  setkey(df, CNTRY_NAME)
+
+  # perform the join, eliminating not matched rows from Right
+  well_data <- df[ec, nomatch=0]
+
+  well_data[["Available_volume"]] <- 0
+
+  well_data[["Available_volume"]] <- 0
+  # Initalize empty node dependant parameters here. I believe these should be here for reinitialization for each node.
+  #well_parameters[["Well_Yield"]] <- well_parameters$Initial_Well_Yield
+  well_data[["Exploitable_GW"]] <- 0
+  well_data[["Total_Volume_Produced"]] <- 0
+  well_data[["Total_Head"]] <- 0
+  well_data[["Drawdown"]] <- 0
+  well_data[["roi_boundary"]] <- 1
+
+  # Set up node dependant variables
+  well_data[["Storativity"]] <- well_data[["Porosity"]]
+  well_data[["Depth_to_Piezometric_Surface"]] <- well_data[["Depth"]]
+  well_data[["Aqfr_Sat_Thickness"]] <- well_data[["Thickness"]]                                          # m
+  well_data[["Orig_Aqfr_Sat_Thickness"]] <- well_data[["Thickness"]]                                     # m
+
+  # Calculated variables
+  well_data[["Max_Drawdown"]] <- 0.66 * well_data$Aqfr_Sat_Thickness                                # m
+  well_data[["Hydraulic_Conductivity"]] <- (10 ^ df[["Permeability"]]) * 1e7
+  well_data[["Screen_length"]] <- well_data$Orig_Aqfr_Sat_Thickness * 0.3                           # m
+  well_data[["Casing_length"]] <- well_data$Orig_Aqfr_Sat_Thickness +
+    well_data$Depth_to_Piezometric_Surface - well_data$Screen_length  # m
+  well_data[["Total_Well_Length"]] <- well_data$Casing_length + well_data$Screen_length             # m
+  well_data[["Transmissivity"]] <- well_data$Hydraulic_Conductivity * well_data$Screen_length       # m2/s
+
+  #well_data[["Areal_Extent"]] <- df[i, "Area"]
+  WT <- well_data$Orig_Aqfr_Sat_Thickness - well_data$Max_Drawdown
+  well_data$Total_Thickness <- well_data$Depth_to_Piezometric_Surface + well_data$Orig_Aqfr_Sat_Thickness
+
+  # TODO:  set to conditional statement similar to np.where
+  well_data[["Well_Installation_cost"]] <- well_parameters$Well_Install_10 * well_data$Total_Well_Length
+
+
+
+}
+
 #' Process the well data input data frame
 #'
 #' This function calculates well specific data and delivers the output for writing to csv file
@@ -305,6 +339,8 @@ process_data <- function(df, well_parameters, ec)
     # Output variable
     outputList <- list()
     # Calculate and store other node specific attributes
+
+    # if the country name in the input data row has a lookup value electric price...
     if (is.null(ec[[df[i,"CNTRY_NAME"]]]) == FALSE )
     {
       well_data[["Energy_cost_rate"]] <- ec[[df[i,"CNTRY_NAME"]]]
@@ -364,16 +400,16 @@ process_data <- function(df, well_parameters, ec)
 
 #' Title
 #'
-#' @param well_data
-#' @param well_parameters
-#' @param WT
-#' @param num_iterations
-#' @param df
-#' @param i
-#' @param TotTime
-#' @param t_time
+#' @param well_data fill
+#' @param well_parameters fill
+#' @param WT fill
+#' @param num_iterations fill
+#' @param df fill
+#' @param i fill
+#' @param TotTime fill
+#' @param t_time fill
 #'
-#' @return
+#' @return fill
 #' @export
 calculate_drawdown <- function(well_data, well_parameters, WT, num_iterations, df, i, TotTime, t_time)
 {
@@ -450,7 +486,7 @@ calculate_drawdown <- function(well_data, well_parameters, WT, num_iterations, d
 #' @param inRange: used in the while loop as a tracking mechanism
 #' @param WT: unsure
 #'
-#' @return
+#' @return  fill
 #' @author Jason Evanoff; jason.evanoff@pnnl.gov
 #' @export
 #'
@@ -496,19 +532,19 @@ guess_Q <- function(num_iterations, well_parameters, well_data, df, i, inRange, 
 #' Main
 #'
 #' @param well_param_file Full path with file name and extension to the input well parameters YAML file
-#' @param elec_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
+#' @param electric_cost_file Full path with file name and extension to the input GCAM electrical rates YAML file
 #' @param config_file Full path with file name and extension to the input configuration CSV file
 #' @param output_csv Full path with file name and extension to the output CSV file
 #' @return There is no return value. A csv file is created as the output
 #' @author <name>; <email>
 #' @export
-main <- function(well_param_file, elec_cost_file, config_file, output_csv)
+main <- function(well_param_file, electric_cost_file, config_file, output_csv)
 {
   well_parameters <- load_well_parameters(well_param_file)
-  ec <- load_elec_data(elec_cost_file)
-  df <- load_config(config_file)
+  electric_price_data <- load_elec_data(electric_cost_file)
+  dt <- load_config(config_file)
 
-  write_df <- process_data(df, well_parameters, ec)
+  write_df <- process_data(df, well_parameters, electric_price_data)
 
   # Set up the output file. This file is written to after the completion of every node so the output may be copied and used throughout
   con <- file(output_csv, "w")

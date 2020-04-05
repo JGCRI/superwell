@@ -4,17 +4,14 @@
 \alias{load_elec_data}
 \title{Load electricity data by GCAM basin}
 \usage{
-load_elec_data(el_cost_file)
+load_elec_data(electricity_cost_file)
 }
 \arguments{
-\item{el_cost_file}{Full path with file name and extension to the input GCAM electrical rates YAML file}
+\item{electricity_cost_file}{Full path with file name and extension to the input GCAM electrical rates YAML file}
 }
 \value{
-<fill in>
+loaded file
 }
 \description{
 Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
-}
-\author{
-<name>; <email>
 }

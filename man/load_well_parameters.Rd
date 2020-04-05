@@ -15,6 +15,3 @@ Data frame of well parameters
 \description{
 Load well-specific parameters (e.g., costs, etc.) from "wellParams.yml" (total 14 well parameters)
 }
-\author{
-<name>; <email>
-}

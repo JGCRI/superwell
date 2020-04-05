@@ -10,11 +10,8 @@ load_config(config_file, country = "Iran")
 \item{config_file}{Full path with file name and extension to the input configuration CSV file}
 }
 \value{
-<fill in>
+data.table Input file data
 }
 \description{
 Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
-}
-\author{
-<name>; <email>
 }

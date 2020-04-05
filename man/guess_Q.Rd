@@ -20,6 +20,9 @@ guess_Q(num_iterations, well_parameters, well_data, df, i, inRange, WT,
 
 \item{WT:}{unsure}
 }
+\value{
+fill
+}
 \description{
 Long description
 }

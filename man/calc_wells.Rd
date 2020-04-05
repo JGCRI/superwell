@@ -21,6 +21,3 @@ result - need return info
 \description{
 Need long description
 }
-\author{
-?; ?@pnnl.gov
-}

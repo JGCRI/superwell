@@ -8,7 +8,24 @@ calculate_drawdown(well_data, well_parameters, WT, num_iterations, df, i,
   TotTime, t_time)
 }
 \arguments{
-\item{t_time}{}
+\item{well_data}{fill}
+
+\item{well_parameters}{fill}
+
+\item{WT}{fill}
+
+\item{num_iterations}{fill}
+
+\item{df}{fill}
+
+\item{i}{fill}
+
+\item{TotTime}{fill}
+
+\item{t_time}{fill}
+}
+\value{
+fill
 }
 \description{
 Title
