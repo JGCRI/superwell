@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/JGCRI/superwell.svg?branch=master)](https://travis-ci.org/JGCRI/superwell)
 
+# IN DEVELOPMENT!
 
 # superwell: A model to estimate groundwater availability and extraction costs
 
