@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/JGCRI/superwell.svg?branch=master)](https://travis-ci.org/JGCRI/superwell)
+[![build](https://github.com/JGCRI/superwell/actions/workflows/build.yml/badge.svg)](https://github.com/JGCRI/superwell/actions/workflows/build.yml)
 
 # IN DEVELOPMENT!
 
@@ -13,7 +13,7 @@ The `superwell` package is used to determine...
 `superwell` can be installed directly from its GitHub repository using the R `devtools` package. From an R prompt, run the command:
 
 ```r
-devtools::install_github('IMMM-SFA/teleconnect')
+devtools::install_github('JGCRI/superwell')
 ```
 
 ### Inputs
