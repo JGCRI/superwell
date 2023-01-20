@@ -2,7 +2,7 @@
 % Please edit documentation in R/superwell.R
 \name{load_elec_data}
 \alias{load_elec_data}
-\title{Load electricity data by GCAM basin}
+\title{Load electricity cost data for each countries}
 \usage{
 load_elec_data(el_cost_file)
 }
@@ -10,11 +10,11 @@ load_elec_data(el_cost_file)
 \item{el_cost_file}{Full path with file name and extension to the input GCAM electrical rates YAML file}
 }
 \value{
-<fill in>
+electricity energy cost for a country
 }
 \description{
 Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
 }
 \author{
-<name>; <email>
+Superwell team; hassan.niazi@pnnl.gov
 }
