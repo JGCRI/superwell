@@ -16,16 +16,19 @@
 # January 2023, Joint Global Climate Research Institute, Pacific Northwest
 # National Laboratory, College Park, MD, USA
 
-
+#TODO: eventually separate superwell into superwell_fun and superwell_run
 
 # load functions to start and run superwell in the last line. See man/ for
 # documentation of all functions
+
+
+devtools::load_all(".")
 
 library(yaml)
 library(dplyr)
 
 options(stringsAsFactors = FALSE)
-rm(list = ls())
+#rm(list = ls())
 
 # Data loading functions ----
 
@@ -69,8 +72,13 @@ load_config <- function(config_file, country) {
   # Node-specific input (permeability, porosity, thickness, etc.) are in "Inputs.csv"
   ## check for one country (Iran)
   #config_file <- 'inputs.csv'
-  df <- read.csv(config_file) %>%
-    filter(CNTRY_NAME %in% (country))
+  if (country == "All") {
+    df <- read.csv(config_file)
+    }
+    else {
+      df <- read.csv(config_file) %>%
+      filter(CNTRY_NAME %in% (country))
+    }
 
   return (df)
 }
@@ -111,7 +119,7 @@ percent <- function(x,
 #'
 #' @details affected by initial yield, annual operational time, and aquifer properties (T and S)
 #' @param t annual operational time, comes from wellParams.yml (currently fixed at 365 days i.e., 31536000 s/yr)
-#' @param rw radius of well. REDFLAG should be radius of influence. CHECK
+#' @param rw radius of well. *TODO REDFLAG should be radius of influence. CHECK*
 #' @param wp well parameters from wellParams.yml
 #'
 #' @return drawdown using Theis solution
@@ -121,7 +129,7 @@ percent <- function(x,
 calcWellsTheis <- function(t, rw, wp) {
   #Pumping well drawdown <-2.3Q/4piT*log(2.25Tt/r2S)
   W <- 0.0
-  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time) #REDFLAG: rw is supposed to be radius of influence (roi) NOT radius of well (dia/2), check if this is only used as initialization
+  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time) #'*TODO REDFLAG : rw is supposed to be radius of influence (roi) NOT radius of well (dia/2), check if this is only used as initialization *
 
   j <- 1
   term <- -u
@@ -154,11 +162,8 @@ calcWellsTheis <- function(t, rw, wp) {
 superwell <- function(well_params,
                  elec_rates,
                  config_file,
+                 resolution,
                  output_dir) {
-  country <- 'Pakistan' #run for one country
-  # probably comment the line above or do something like country <- unique(config_file) for all countries
-
-  print(paste0("Processing:  ", country))
 
   # prep data ----
   #
@@ -174,6 +179,9 @@ superwell <- function(well_params,
   # store a "generic" Electricity cost rate in case of an error. Irrespective of the country being processed
   wp[["global_energy_cost_rate"]] <- wp$Energy_cost_rate
 
+  # specify country name if running for a country, otherwise 'All' will run globally
+  country <- resolution
+  print(paste0("Processing:  ", country))
   # "inputs.csv" contains all the node specific input (permeability, porosity, thickness, etc.)
   df <- load_config(config, country)
 
@@ -184,15 +192,14 @@ superwell <- function(well_params,
   output_filename <- paste0(gsub(" ", "_", tolower(country)), ".csv")
   output_file <- file.path(output_dir, output_filename)
 
-  con <- file(output_file, "w")
+  con <- file(output_file, "w") #open the file to write
 
   # write the headers for the output file
-  cat(
-    "iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity,thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume,continent, well_id, country_name, gcam_basin_id, exploitable_groundwater, well_installation_cost, annual_capital_cost, total_cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
+  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity,thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume,continent, well_id, country_name, gcam_basin_id, exploitable_groundwater, well_installation_cost, annual_capital_cost, total_cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
     file = con
   )
 
-  # sims loop ----
+  # sims per cell loop ----
   #
   # each row in df is a different grid node in the model domain
   for (i in 1:(nrow(df))) {
@@ -251,6 +258,7 @@ superwell <- function(well_params,
     while (run == 0) {
       NumIterations <- 1
 
+      # First: iterate on depth, drawdown, and runtime ----
       while ((wp$Exploitable_GW < wp$Depletion_Limit) &&
              (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 200)) {
         # initialize
@@ -268,7 +276,7 @@ superwell <- function(well_params,
         s <- calcResults$s
         W <- calcResults$W
 
-        # Second: iterate on Q
+        # Second: iterate on Q ----
         # initialize Q loop
         inRange <- TRUE
 
@@ -281,7 +289,7 @@ superwell <- function(well_params,
 
         # roi ----
         #
-        # Guess the radius of influence of Q
+        # Guess the radius of influence of well yield Q
         if (NumIterations < 2) {
           roi <- (wp$Well_Yield * t * wp$Annual_Operation_time / (3.14159 * wp$Orig_Aqfr_Sat_Thickness * df[i, "Porosity"])) ^ 0.5
           sroi <- wp$roi_boundary + errFactor + 1
@@ -290,9 +298,9 @@ superwell <- function(well_params,
           while (inRange == TRUE) {
             inRange = (abs(sroi - wp$roi_boundary) > errFactor)
             if (sroi < 0) {
-              roi = roi * 0.75 #what are these assumptions?
+              roi = roi * 0.75 #TODO: what are these assumptions?
             } else {
-              roi = roi * (sroi / wp$roi_boundary) ^ 0.033 #what are these assumptions?
+              roi = roi * (sroi / wp$roi_boundary) ^ 0.033 #TODO: what are these assumptions?
             }
             calcResults <- calcWellsTheis(t, roi, wp)
             t <- calcResults$t
@@ -471,6 +479,7 @@ superwell <- function(well_params,
         wp[["Depth_to_Piezometric_Surface"]] <- wp$Total_Thickness - wp$Aqfr_Sat_Thickness
         wp[["Max_Drawdown"]] <- wp$Aqfr_Sat_Thickness - WT
         wp[["Total_Head"]] <- sobs + wp$Depth_to_Piezometric_Surface
+
         NumIterations <- NumIterations + 1
         TotTime = NumIterations * 2 * t
 
@@ -493,10 +502,11 @@ superwell <- function(well_params,
 well_params <- "inputs/wellParams.yml"
 elec_rates <- "inputs/GCAM_Electrical_Rates.yml"
 config <- "inputs/inputs.csv"
+cntry_resolution <- "India" #TODO: Make temporal resolution flexible too
 #country_file <- "/Users/grah436/Desktop/superwell/code_superwell_28Apr2020/inputs/countries.csv"
 # output_dir <- "/Users/d3y010/projects/superwell/local_runs/outputs"
 output_dir <- "outputs/"
 
 ## run superwell ----
-system.time(superwell(well_params, elec_rates, config, output_dir))
+system.time(superwell(well_params, elec_rates, config, cntry_resolution, output_dir))
 
