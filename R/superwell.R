@@ -502,10 +502,12 @@ superwell <- function(well_params,
 well_params <- "inputs/wellParams.yml"
 elec_rates <- "inputs/GCAM_Electrical_Rates.yml"
 config <- "inputs/inputs.csv"
-cntry_resolution <- "India" #TODO: Make temporal resolution flexible too
-#country_file <- "/Users/grah436/Desktop/superwell/code_superwell_28Apr2020/inputs/countries.csv"
-# output_dir <- "/Users/d3y010/projects/superwell/local_runs/outputs"
 output_dir <- "outputs/"
+
+# specify country name if running for a country, otherwise 'All' will run globally
+cntry_resolution <- "India"
+
+#TODO: Make temporal resolution flexible too
 
 ## run superwell ----
 system.time(superwell(well_params, elec_rates, config, cntry_resolution, output_dir))
