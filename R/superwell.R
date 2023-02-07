@@ -187,50 +187,58 @@ superwell <- function(well_params,
 
   #Set up the output file. This file will be written to after the completion of
   #every node so the output may be copied and used at any point during the run.
-  #fileName<-paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
-  #fileName<-paste("MENA", "_WellResults.csv")
+  #fileName <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
+  #fileName <- paste("MENA", "_WellResults.csv")
   output_filename <- paste0(gsub(" ", "_", tolower(country)), ".csv")
   output_file <- file.path(output_dir, output_filename)
 
   con <- file(output_file, "w") #open the file to write
 
   # write the headers for the output file
-  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity,thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume,continent, well_id, country_name, gcam_basin_id, exploitable_groundwater, well_installation_cost, annual_capital_cost, total_cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
+  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity,thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume,continent, well_id, country_name, gcam_basin_id, gcam_basin_name, exploitable_groundwater, well_installation_cost, annual_capital_cost, total_cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
     file = con
   )
 
-  # sims per cell loop ----
+  # sims per cell ----
   #
   # each row in df is a different grid node in the model domain
   for (i in 1:(nrow(df))) {
-    #calculate total progress
-    #prog <- percent(c(i/nrow(df)))
-    #Print total progress to the console
-    #print(paste(i,"/",nrow(df),prog,df[i,"CNTRY_NAME"]))
+
+    # calculate and print total progress to the console
+    if (i == nrow(df)) {
+      print(paste("All done! The output file is in folder:",output_dir,"named as:",output_filename))
+    }
+    # else if (i < nrow(df)) {
+    #   prog <- percent(c(i/nrow(df)))
+    #   print(paste("Processing",df[i,"CNTRY_NAME"],"--",i,"/",nrow(df),prog))
+    # }
+
 
     ## grid prep ----
     #
     # Calculate and store other node specific attributes
     wp[["Well_Yield"]] <- wp$Initial_Well_Yield
+
+    # use global electricity cost if country information is missing
     if (is.null(ec[[df[i, "CNTRY_NAME"]]]) == FALSE) {
       wp[["Energy_cost_rate"]] <- ec[[df[i, "CNTRY_NAME"]]]
     } else {
       wp[["Energy_cost_rate"]] <- wp$global_energy_cost_rate
     }
 
-    wp[["Storativity"]] <- df[i, "Porosity"] #assuming storativity is equal to porosity
+    wp[["Storativity"]] <- df[i, "Porosity"] # assuming storativity is equal to porosity
     wp[["Depth_to_Piezometric_Surface"]] <- df[i, "Depth"]
     wp[["Aqfr_Sat_Thickness"]] <- df[i, "Thickness"]                    # m
     wp[["Orig_Aqfr_Sat_Thickness"]] <- df[i, "Thickness"]               # m
-    wp[["Screen_length"]] <- wp$Orig_Aqfr_Sat_Thickness * 0.3           # m assumption
+    wp[["Screen_length"]] <- wp$Orig_Aqfr_Sat_Thickness * 0.3           # m assumption, why 30%?
     wp[["Casing_length"]] <- wp$Orig_Aqfr_Sat_Thickness + wp$Depth_to_Piezometric_Surface - wp$Screen_length # m
-    #	wp[["Max_Drawdown"]]<-0.66 * wp$Aqfr_Sat_Thickness                # m
     wp[["Total_Well_Length"]] <- wp$Casing_length + wp$Screen_length    # m
     wp[["Hydraulic_Conductivity"]] <- (10 ^ df[i, "Permeability"]) * 1e7
     wp[["roi_boundary"]] <- 1
     #wp[["Transmissivity"]]<-wp$Hydraulic_Conductivity*wp$Screen_length     ###this changed. Is it right? # m2/s
     wp[["Transmissivity"]] <- wp$Hydraulic_Conductivity * wp$Aqfr_Sat_Thickness
 
+    # different installation cost based on WHYclasses
     if (df[i, "WHYClass"] == 10) {
       wp[["Well_Installation_cost"]] <- wp$Well_Install_10 * wp$Total_Well_Length
     } else {
@@ -240,6 +248,7 @@ superwell <- function(well_params,
         wp[["Well_Installation_cost"]] <- wp$Well_Install_30 * wp$Total_Well_Length
       }
     }
+
     # Initialization
     wp[["Exploitable_GW"]] <- 0
     wp[["Total_Volume_Produced"]] <- 0
@@ -259,6 +268,7 @@ superwell <- function(well_params,
       NumIterations <- 1
 
       # First: iterate on depth, drawdown, and runtime ----
+      # depth of depletion limit is higher than available groundwater depth
       while ((wp$Exploitable_GW < wp$Depletion_Limit) &&
              (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 200)) {
         # initialize
@@ -270,7 +280,7 @@ superwell <- function(well_params,
         sadj <- wp$Max_Drawdown - ((wp$Max_Drawdown ^ 2) / (2 * wp$Aqfr_Sat_Thickness))
 
         # First: compute drawdown with initial Q guess
-        rw <- wp$Well_Diameter * 0.5 #REDFLAG
+        rw <- wp$Well_Diameter * 0.5 #'*REDFLAG check if this is well dia or roi which goes into Theis solution*
         calcResults <- calcWellsTheis(t, rw, wp)
         t <- calcResults$t
         s <- calcResults$s
@@ -318,6 +328,8 @@ superwell <- function(well_params,
           }
         }
 
+        # drawdown over time with costs ----
+        #
         # Calculate drawdown at the well over time with costs
         # Initialize drawdown from pumping well and image wells and time
         s <- 0
@@ -345,24 +357,30 @@ superwell <- function(well_params,
           if (det > 0) {
             root1 <- (-b + sqrt(det)) / (2 * a)
             root2 <- (-b - sqrt(det)) / (2 * a)
-          } else if (det == 0) {
+          }
+          else if (det == 0) {
             root1 <- (-b) / 2 * a
             root2 <- root1
-          } else {
+          }
+          else {
             root1 <- "error"
             root2 <- "error"
           }
+
           if (root1 > wp$Max_Drawdown + errFactor || root1 < 0) {
             root1 <- 0
           }
+
           if (root2 > wp$Max_Drawdown + errFactor || root2 < 0) {
             root2 <- 0
           }
+
           sobs = root1
           if (sobs < root2) {
             sobs <- root2
           }
 
+          # out list ----
           #Output (one row per year)
           wp[["Drawdown"]] <- s # m
           wp[["Total_Head"]] <- sobs + wp$Depth_to_Piezometric_Surface
@@ -376,8 +394,6 @@ superwell <- function(well_params,
           wp[["Unit_cost"]] <- (wp$Total_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
           wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / 0.000810714
 
-
-          # out list ----
           #Add the year's output to a list for export to file later
           NumWells <- df[i, "Area"] / wp$Areal_Extent
           wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + (wp$Volume_Produced * NumWells)
@@ -390,87 +406,51 @@ superwell <- function(well_params,
           }
 
           outputList[[paste("line", as.character(t))]] <-
-            paste(
-              NumIterations,                  # iteration
-              ",",
-              t,                              # year_number
-              ",",
-              df[i, "Area"],                  # area
-              ",",
-              roi,                            # radius_of_influence
-              ",",
-              sroi,                           # drawdown_roi
-              ",",
-              wp$Areal_Extent,                # areal_extent
-              ",",
-              wp$Total_Head,                  # total_head
-              ",",
-              wp$Aqfr_Sat_Thickness,          # aqfr_sat_thickness
-              ",",
-              wp$Storativity,                 # storativity
-              ",",
-              wp$Total_Thickness,             # thickness
-              ",",
-              wp$Unit_cost,                   # unit_cost
-              ",",
-              wp$Hydraulic_Conductivity,      # hydraulic_conductivity
-              ",",
-              wp$radial_extent,               # radial_extent
-              ",",
-              NumWells,                       # number_of_wells
-              ",",
-              wp$Annual_Operation_time * wp$Well_Yield,                   # volume_produced
-              ",",
-              #(wp$Volume_Produced * NumWells),                           # total_volume_produced
-              (wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced, # total_volume_produced
-              ",",
-              #wp$Areal_Extent*wp$Orig_Aqfr_Sat_Thickness*wp$Storativity, # available_volume
-              df[i, "Area"] *
-                wp$Orig_Aqfr_Sat_Thickness * wp$Storativity,              # available_volume
-              ",",
-              df[i, "Continent"],
-              ",",
-              df[i, "OBJECTID"],              # well_id
-              ",",
-              df[i, "CNTRY_NAME"],            # country_name
-              ",",
-              df[i, "GCAM_ID"],               # gcam_basin_id
-              ",",
-              #df[i,"Basin_Name"], #          # gcam_basin_name
-              #",",
-              ((wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced) /
-                (wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity),
+            paste(       NumIterations,                  # iteration
+              ",",       t,                              # year_number
+              ",",       df[i, "Area"],                  # area
+              ",",       roi,                            # radius_of_influence
+              ",",       sroi,                           # drawdown_roi
+              ",",       wp$Areal_Extent,                # areal_extent
+              ",",       wp$Total_Head,                  # total_head
+              ",",       wp$Aqfr_Sat_Thickness,          # aqfr_sat_thickness
+              ",",       wp$Storativity,                 # storativity
+              ",",       wp$Total_Thickness,             # thickness
+              ",",       wp$Unit_cost,                   # unit_cost
+              ",",       wp$Hydraulic_Conductivity,      # hydraulic_conductivity
+              ",",       wp$radial_extent,               # radial_extent
+              ",",       NumWells,                       # number_of_wells
+              ",",       wp$Annual_Operation_time * wp$Well_Yield,                   # volume_produced
+              ",",       (wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced, # total_volume_produced
+                         #(wp$Volume_Produced * NumWells),                           # total_volume_produced
+              ",",       df[i, "Area"] * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity,              # available_volume
+                         #wp$Areal_Extent*wp$Orig_Aqfr_Sat_Thickness*wp$Storativity, # available_volume
+              ",",       df[i, "Continent"],
+              ",",       df[i, "OBJECTID"],              # well_id
+              ",",       df[i, "CNTRY_NAME"],            # country_name
+              ",",       df[i, "GCAM_ID"],               # gcam_basin_id
+              ",",       df[i, "Basin_Name"],            # gcam_basin_name
+              ",",       ((wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced) /
+                         (wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity),   # exploitable_groundwater
 
-              # exploitable_groundwater
-              ## CHANGE MADE BY NTG
               ## add previous iterations volume produced to current 20 year time period
-              ",",
-              wp$Well_Installation_cost,      # well_installation_cost
-              ",",
-              wp$Annual_Capital_Cost,         # annual_capital_cost
-              ",",
-              wp$Total_Cost,                  #  total_cost
-              ",",
-              wp$Maintenance_Cost,            # maintenance_cost
-              ",",
-              wp$Cost_of_Energy,              # cost_of_energy
-              ",",
-              wp$Energy_cost_rate,            # energy_cost_rate
-              ",",
-              wp$Electric_Energy,             # electric_energy
-              ",",
-              wp$Drawdown,                    #  drawdown (m)
-              ",",
-              wp$Depletion_Limit,             # depletion limit
-              ",",
-              wp$Total_Thickness - wp$Aqfr_Sat_Thickness,   # depth_to_piez_surface (m)
+              ",",       wp$Well_Installation_cost,      # well_installation_cost
+              ",",       wp$Annual_Capital_Cost,         # annual_capital_cost
+              ",",       wp$Total_Cost,                  #  total_cost
+              ",",       wp$Maintenance_Cost,            # maintenance_cost
+              ",",       wp$Cost_of_Energy,              # cost_of_energy
+              ",",       wp$Energy_cost_rate,            # energy_cost_rate
+              ",",       wp$Electric_Energy,             # electric_energy
+              ",",       wp$Drawdown,                    #  drawdown (m)
+              ",",       wp$Depletion_Limit,             # depletion limit
+              ",",       wp$Total_Thickness - wp$Aqfr_Sat_Thickness,   # depth_to_piez_surface (m)
               "\n"
             )
 
           #loop back to next year
         }
 
-        # initialize next 20 years
+        # initialize next 20 years ----
         #wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + wp$Well_Yield * wp$Max_Lifetime_in_Years * wp$Annual_Operation_time
         wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + (wp$Volume_Produced * NumWells)
         wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Total_Volume_Produced / (3.14159 * wp$radial_extent ^ 2 * wp$Storativity)
@@ -505,10 +485,10 @@ config <- "inputs/inputs.csv"
 output_dir <- "outputs/"
 
 # specify country name if running for a country, otherwise 'All' will run globally
-cntry_resolution <- "India"
+resolution <- "India"
 
 #TODO: Make temporal resolution flexible too
 
 ## run superwell ----
-system.time(superwell(well_params, elec_rates, config, cntry_resolution, output_dir))
+system.time(superwell(well_params, elec_rates, config, resolution, output_dir))
 
