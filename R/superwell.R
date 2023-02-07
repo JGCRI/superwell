@@ -30,6 +30,15 @@ library(dplyr)
 options(stringsAsFactors = FALSE)
 #rm(list = ls())
 
+# Hard-coded variables ----
+# Constants
+Euler_constant <- 0.5772156649
+pi <- 3.14159
+conversion_factor <- 0.000810714
+# Other Variables
+errFactor <- 0.1
+
+
 # Data loading functions ----
 
 #' Load well parameters
@@ -107,8 +116,9 @@ load_elec_data <- function(el_cost_file) {
 percent <- function(x,
                     digits = 2,
                     format = "f",
+                    width = 5,
                     ...) {
-  paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
+  paste0(formatC(100 * x, format = format, digits = digits, width = width, ...), "%")
 }
 
 # Groundwater calculation functions ----
@@ -162,7 +172,7 @@ calcWellsTheis <- function(t, rw, wp) {
 superwell <- function(well_params,
                  elec_rates,
                  config_file,
-                 resolution,
+                 runcountry,
                  output_dir) {
 
   # prep data ----
@@ -180,7 +190,7 @@ superwell <- function(well_params,
   wp[["global_energy_cost_rate"]] <- wp$Energy_cost_rate
 
   # specify country name if running for a country, otherwise 'All' will run globally
-  country <- resolution
+  country <- runcountry
   print(paste0("Processing:  ", country))
   # "inputs.csv" contains all the node specific input (permeability, porosity, thickness, etc.)
   df <- load_config(config, country)
@@ -205,14 +215,21 @@ superwell <- function(well_params,
   for (i in 1:(nrow(df))) {
 
     # calculate and print total progress to the console
-    if (i == nrow(df)) {
-      print(paste("All done! The output file is in folder:",output_dir,"named as:",output_filename))
+    if (i < nrow(df) && i %in% seq(1, nrow(df), by=round(nrow(df)/100))) {
+      prog <- percent(c(i/nrow(df)))
+      print(paste(prog,"--",formatC(i,format="G",digits=6),"/",nrow(df),"--","Processing",df[i,"CNTRY_NAME"]))
     }
-    # else if (i < nrow(df)) {
-    #   prog <- percent(c(i/nrow(df)))
-    #   print(paste("Processing",df[i,"CNTRY_NAME"],"--",i,"/",nrow(df),prog))
-    # }
+    else if (i == nrow(df)) {
+      print("ALL DONE!")
+      print(paste("Output file is in folder:",output_dir,"named as:",output_filename))
+      print("Model time in seconds:")
+    }
 
+    # pb <-  seq(1, nrow(df), by=round(nrow(df)/100))
+    # for (pb in seq(1, nrow(df), by=round(nrow(df)/100))) {
+    #   prog <- percent(c(i/nrow(df)))
+    #   print(paste("Processing",df[pb,"CNTRY_NAME"],"--",pb,"/",nrow(df),prog))
+    # }
 
     ## grid prep ----
     #
@@ -485,10 +502,10 @@ config <- "inputs/inputs.csv"
 output_dir <- "outputs/"
 
 # specify country name if running for a country, otherwise 'All' will run globally
-resolution <- "India"
+runcountry <- "All"
 
 #TODO: Make temporal resolution flexible too
 
 ## run superwell ----
-system.time(superwell(well_params, elec_rates, config, resolution, output_dir))
+system.time(superwell(well_params, elec_rates, config, runcountry, output_dir))
 
