@@ -16,7 +16,9 @@
 # January 2023, Joint Global Climate Research Institute, Pacific Northwest
 # National Laboratory, College Park, MD, USA
 
-#TODO: eventually separate superwell into superwell_fun and superwell_run
+# TODO: eventually separate superwell into superwell_fun and superwell_run
+# TODO: make depletion limit a seperate file or dynamic so the code always runs for
+# all depletion limits not just one in wellParams.yml
 
 # load functions to start and run superwell in the last line. See man/ for
 # documentation of all functions
@@ -205,7 +207,7 @@ superwell <- function(well_params,
   con <- file(output_file, "w") #open the file to write
 
   # write the headers for the output file
-  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity,thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume,continent, well_id, country_name, gcam_basin_id, gcam_basin_name, exploitable_groundwater, well_installation_cost, annual_capital_cost, total_cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
+  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity, thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume, continent, well_id, country_name, gcam_basin_id, gcam_basin_name, exploitable_groundwater, well_installation_cost, annual_capital_cost, Total_nonEnergy_Cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
     file = con
   )
 
@@ -224,12 +226,6 @@ superwell <- function(well_params,
       print(paste("Output file is in folder:",output_dir,"named as:",output_filename))
       print("Model time in seconds:")
     }
-
-    # pb <-  seq(1, nrow(df), by=round(nrow(df)/100))
-    # for (pb in seq(1, nrow(df), by=round(nrow(df)/100))) {
-    #   prog <- percent(c(i/nrow(df)))
-    #   print(paste("Processing",df[pb,"CNTRY_NAME"],"--",pb,"/",nrow(df),prog))
-    # }
 
     ## grid prep ----
     #
@@ -406,9 +402,9 @@ superwell <- function(well_params,
           wp[["Electric_Energy"]] <- wp$Power * (wp$Annual_Operation_time / 3600) #(CONVERT(1,"hr","sec"))) #KWh/year
           wp[["Annual_Capital_Cost"]] <- wp$Well_Installation_cost * (1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years * wp$Interest_Rate / ((1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years - 1)
           wp[["Maintenance_Cost"]] <- wp$Maintenance_factor * wp$Well_Installation_cost # $
-          wp[["Total_Cost"]] <- wp$Annual_Capital_Cost + wp$Maintenance_Cost # $
+          wp[["Total_nonEnergy_Cost"]] <- wp$Annual_Capital_Cost + wp$Maintenance_Cost # $
           wp[["Cost_of_Energy"]] <- (wp$Electric_Energy * wp$Energy_cost_rate) # $
-          wp[["Unit_cost"]] <- (wp$Total_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
+          wp[["Unit_cost"]] <- (wp$Total_nonEnergy_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
           wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / 0.000810714
 
           #Add the year's output to a list for export to file later
@@ -453,12 +449,12 @@ superwell <- function(well_params,
               ## add previous iterations volume produced to current 20 year time period
               ",",       wp$Well_Installation_cost,      # well_installation_cost
               ",",       wp$Annual_Capital_Cost,         # annual_capital_cost
-              ",",       wp$Total_Cost,                  #  total_cost
+              ",",       wp$Total_nonEnergy_Cost,        # total_nonEnergy_Cost
               ",",       wp$Maintenance_Cost,            # maintenance_cost
               ",",       wp$Cost_of_Energy,              # cost_of_energy
               ",",       wp$Energy_cost_rate,            # energy_cost_rate
               ",",       wp$Electric_Energy,             # electric_energy
-              ",",       wp$Drawdown,                    #  drawdown (m)
+              ",",       wp$Drawdown,                    # drawdown (m)
               ",",       wp$Depletion_Limit,             # depletion limit
               ",",       wp$Total_Thickness - wp$Aqfr_Sat_Thickness,   # depth_to_piez_surface (m)
               "\n"
