@@ -171,11 +171,7 @@ calcWellsTheis <- function(t, rw, wp) {
 #' @author Superwell team; hassan.niazi@pnnl.gov
 #' @export
 
-superwell <- function(well_params,
-                 elec_rates,
-                 config_file,
-                 runcountry,
-                 output_dir) {
+superwell <- function(well_params, elec_rates, config_file, runcountry, output_dir) {
 
   # prep data ----
   #
