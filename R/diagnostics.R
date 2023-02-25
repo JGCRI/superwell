@@ -19,12 +19,12 @@ library(psych)
 # multi-variable matrix plots (static only)
 
 # load data     ########
-country <- "pakistan"
+country <- "all"
 output_filename <- paste0(gsub(" ", "_", tolower(country)), ".csv")
 output_dir <- "outputs/"
 read.csv(paste0(output_dir, output_filename)) -> outdata
 #read.csv("outputs/pakistan.csv") -> outdata
-#read.csv("outputs/united_states2.csv") -> outdata
+outdata %>% select(!gcam_basin_name) -> outdata
 
 # STATIC PLOTS  ########
 ## plot all headers ########
@@ -40,18 +40,14 @@ for (head in headers_all) {
     geom_point(aes(x = 1:nrow(outdata), y = .data[[head]])) +
     labs(y = head)
 
-  outplots_bars_all[[head]] <- dp +
-    geom_histogram(aes(x = .data[[head]])) +
-    labs(y = head)
-
-  #ggsave(filename = paste0("outplots-diag/", head, ".png"))
+  # uncomment to save all individual plots
+  # ggsave(filename = paste0("outputs/outplots-diag/", tolower(country), "_", head, ".png"))
 }
 
 ggarrange(plotlist = outplots_pts_all, ncol = 8, nrow = 4)
-#ggarrange(plotlist = outplots_bars_all, ncol = 8, nrow = 4) # faulty, some discrete value is preveting
+# ggsave(filename = paste0("outputs/outplots-diag/", tolower(country), "_pts_all.png"), width = 16, height = 9, units = "in")
 
-
-## plot meaningful variables only ########
+ ## plot meaningful variables only ########
 headers <-
   c("iteration",
     "year_number",
@@ -81,7 +77,7 @@ headers <-
     #"well_installation_cost",  # why is it varying? Should be somehow linked to well depth?
     "annual_capital_cost",
     #"maintenance_cost",
-    "total_cost", # TODO: change to Total_nonEnergy_Cost
+    "total_nonenergy_cost", # TODO: change to total_nonenergy_cost
     "cost_of_energy",
     #"energy_cost_rate",
     #"electric_energy",         # useful for energy cost section, but not for diagnostics -> function of total_head and well_yield
@@ -100,23 +96,51 @@ for (head in headers) {
     geom_histogram(aes(x = .data[[head]])) +
     labs(y = head)
 
-  #ggsave(filename = paste0("outplots-diag/", head, ".png"))
+  # uncomment to save all individual histograms
+  # ggsave(filename = paste0("outputs/outplots-diag/", tolower(country), "_hist_", head, ".png"))
   }
 
 ggarrange(plotlist = outplots_pts, ncol = 7, nrow = 3)
+# ggsave(filename = paste0("outputs/outplots-diag/", tolower(country), "_pts.png"), width = 16, height = 9, units = "in")
+
 ggarrange(plotlist = outplots_bars, ncol = 7, nrow = 3)
+# ggsave(filename = paste0("outputs/outplots-diag/", tolower(country), "_bars.png"), width = 16, height = 9, units = "in")
 
 ## matrix of variables pairs ########
 pairs_static <- ggpairs(outdata[headers]) + theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
+png(filename = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel.png"), width = 2133, height = 1200, units = "px")
+#pdf(file = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel.pdf"), width = 16, height = 9)
 pairs.panels(outdata[headers],
-             method = "pearson", # correlation method
-             hist.col = "#00AFBB",
-             density = TRUE,  # show density plots
-             ellipses = TRUE # show correlation ellipses
+             method = "pearson",   # correlation method
+             hist.col = "dodgerblue",
+             rug = FALSE,
+             #show.points= FALSE,
+             #jiggle = TRUE,
+             smooth = TRUE,
+             scale = TRUE,
+             density = TRUE,       # show density plots
+             ellipses = TRUE       # show correlation ellipses
              )
+dev.off()
+
+# pretty pair panel (smoothed), but confusing
+png(filename = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_sm.png"), width = 2133, height = 1200, units = "px")
+#pdf(file = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_sm.pdf"), width = 16, height = 9)
+pairs.panels(outdata[headers],
+             method = "pearson",   # correlation method
+             hist.col = "gold",
+             rug = FALSE,
+             show.points= FALSE,
+             smoother = T,
+             smooth = TRUE,
+             scale = TRUE,
+             density = TRUE,       # show density plots
+             ellipses = TRUE       # show correlation ellipses
+)
+dev.off()
 
 # screened variables for pair plots
 headers_pairs <-
@@ -146,9 +170,9 @@ headers_pairs <-
     #"depletion_limit",
     "depth_to_piez_surface",
     #"well_installation_cost",  # why is it varying? Should be somehow linked to well depth?
-    "annual_capital_cost",
+    #"annual_capital_cost",
     #"maintenance_cost",
-    "total_cost", # TODO: change to Total_nonEnergy_Cost
+    "Total_nonEnergy_Cost",
     "cost_of_energy",
     #"energy_cost_rate",
     #"electric_energy",         # useful for energy cost section, but not for diagnostics -> function of total_head and well_yield
@@ -159,12 +183,36 @@ pairs_static_screened <- ggpairs(outdata[headers_pairs]) + theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
+png(filename = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_scr.png"), width = 2133, height = 1200, units = "px")
+#pdf(file = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_scr.pdf"), width = 16, height = 9)
 pairs.panels(outdata[headers_pairs],
-             method = "pearson", # correlation method
-             hist.col = "#00AFBB",
-             density = TRUE,  # show density plots
-             ellipses = TRUE # show correlation ellipses
-             )
+             method = "pearson",   # correlation method
+             hist.col = "dodgerblue",
+             rug = FALSE,
+             #show.points= FALSE,
+             #jiggle = TRUE,
+             smooth = TRUE,
+             scale = TRUE,
+             density = TRUE,       # show density plots
+             ellipses = TRUE       # show correlation ellipses
+)
+dev.off()
+
+# pretty pair panel (smoothed), but confusing
+png(filename = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_sm_scr.png"), width = 2133, height = 1200, units = "px")
+#pdf(file = paste0("outputs/outplots-diag/", tolower(country), "_pairs_panel_sm_scr.pdf"), width = 16, height = 9)
+pairs.panels(outdata[headers_pairs],
+             method = "pearson",   # correlation method
+             hist.col = "gold",
+             rug = FALSE,
+             show.points= FALSE,
+             smoother = TRUE,
+             smooth = TRUE,
+             scale = TRUE,
+             density = TRUE,       # show density plots
+             ellipses = TRUE       # show correlation ellipses
+)
+dev.off()
 
 # DYNAMIC PLOTS ########
 
@@ -188,10 +236,11 @@ oneVarDynamic <- function(data, var) {
   }
 
 oneVarDynamic(outdata, drawdown)
-oneVarDynamic(outdata, drawdown)
 oneVarDynamic(outdata, volume_produced)
-oneVarDynamic(outdata, volume_produced)
-oneVarDynamic(outdata, volume_produced)
+oneVarDynamic(outdata, radius_of_influence)
+oneVarDynamic(outdata, number_of_wells)
+oneVarDynamic(outdata, total_nonenergy_cost)
+
 
 ## two-variable single plot interactive ########
 
@@ -224,6 +273,7 @@ twoVarDynamic <- function(data, xvar , yvar, colorvar) {
 twoVarDynamic(outdata, radius_of_influence, drawdown)
 twoVarDynamic(outdata, drawdown, depth_to_piez_surface)
 twoVarDynamic(outdata, area, year_number)
+twoVarDynamic(outdata, area, available_volume)
 twoVarDynamic(outdata, year_number, well_id)
 twoVarDynamic(outdata, available_volume, year_number)
 twoVarDynamic(outdata, radius_of_influence, volume_produced)
@@ -237,7 +287,7 @@ for (head in headers_all) {
     add_trace(x = ~1:nrow(outdata),
               y = ~.data[[head]], # or just use the variable name
               type = "scatter",
-              mode = "markers",
+              mode = "markers"
     )
 
 }
@@ -252,12 +302,11 @@ outplots_pts_all_intr <- plot_ly(outdata) %>%
 
 # meaningful variables only: interactive
 
-pairs_dynamic <- ggplotly(pairs_static)
-
+pairs_dynamic <- ggplotly(pairs_static_screened)
 
 
 
 
 # ARCHIVE ######################################################################
 
-#headers <-  c("iteration", "year_number", "area", "radius_of_influence", "drawdown_roi", "areal_extent", "total_head", "aqfr_sat_thickness", "storativity", "thickness", "unit_cost", "hydraulic_conductivity", "radial_extent", "number_of_wells", "volume_produced", "total_volume_produced", "available_volume", "continent", "well_id", "country_name", "gcam_basin_id", "gcam_basin_name", "exploitable_groundwater", "well_installation_cost", "annual_capital_cost", "total_cost", "maintenance_cost", "cost_of_energy", "energy_cost_rate", "electric_energy", "drawdown", "depletion_limit", "depth_to_piez_surface")
+#headers <-  c("iteration", "year_number", "area", "radius_of_influence", "drawdown_roi", "areal_extent", "total_head", "aqfr_sat_thickness", "storativity", "thickness", "unit_cost", "hydraulic_conductivity", "radial_extent", "number_of_wells", "volume_produced", "total_volume_produced", "available_volume", "continent", "well_id", "country_name", "gcam_basin_id", "gcam_basin_name", "exploitable_groundwater", "well_installation_cost", "annual_capital_cost", "total_nonenergy_cost", "maintenance_cost", "cost_of_energy", "energy_cost_rate", "electric_energy", "drawdown", "depletion_limit", "depth_to_piez_surface")
