@@ -131,7 +131,7 @@ percent <- function(x,
 #'
 #' @details affected by initial yield, annual operational time, and aquifer properties (T and S)
 #' @param t annual operational time, comes from wellParams.yml (currently fixed at 365 days i.e., 31536000 s/yr)
-#' @param rw radius of well. *TODO REDFLAG should be radius of influence. CHECK*
+#' @param rw radius of well initially, but radius of influence eventually.
 #' @param wp well parameters from wellParams.yml
 #'
 #' @return drawdown using Theis solution
@@ -141,7 +141,7 @@ percent <- function(x,
 calcWellsTheis <- function(t, rw, wp) {
   #Pumping well drawdown <-2.3Q/4piT*log(2.25Tt/r2S)
   W <- 0.0
-  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time) #'*TODO REDFLAG : rw is supposed to be radius of influence (roi) NOT radius of well (dia/2), check if this is only used as initialization *
+  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time)
 
   j <- 1
   term <- -u
@@ -152,7 +152,9 @@ calcWellsTheis <- function(t, rw, wp) {
     W <- W - term
     j <- j + 1
   }
-  s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)     # drawdown from Theis [m]
+
+  s <- (wp$Well_Yield / (4.0 * pi * wp$Transmissivity) * W)     # drawdown from Theis [m]
+
   result <- list(s = s, t = t, W = W)
   return(result)
 }
@@ -212,7 +214,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
   # each row in df is a different grid node in the model domain
   for (i in 1:(nrow(df))) {
 
-    # calculate and print total progress to the console
+    # print progress to the console
     if (i < nrow(df) && i %in% seq(1, nrow(df), by=round(nrow(df)/100))) {
       prog <- percent(c(i/nrow(df)))
       print(paste(prog,"--",formatC(i,format="G",digits=6),"/",nrow(df),"--","Processing",df[i,"CNTRY_NAME"]))
@@ -268,8 +270,12 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 
     outputList <- list()
 
-    wp$Max_Drawdown = 0.66 *  wp$Orig_Aqfr_Sat_Thickness  # two-thirds depletion limit
+    #TODO: test with multiple ratios, use an array initially e.g. [0.2, 0.8] but later make it probabilistic (Normal + Monte Carlo)
+    maxDepthRatio = 0.66
+    wp$Max_Drawdown = maxDepthRatio * wp$Orig_Aqfr_Sat_Thickness  # two-thirds depletion limit
+
     WT <- wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown    # water table
+
     wp$Total_Thickness = wp$Depth_to_Piezometric_Surface + wp$Orig_Aqfr_Sat_Thickness
 
     run <- 0
@@ -289,16 +295,15 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
         sadj <- wp$Max_Drawdown - ((wp$Max_Drawdown ^ 2) / (2 * wp$Aqfr_Sat_Thickness))
 
         # First: compute drawdown with initial Q guess
-        rw <- wp$Well_Diameter * 0.5 #'*REDFLAG check if this is well dia or roi which goes into Theis solution*
+        rw <- wp$Well_Diameter * 0.5
         calcResults <- calcWellsTheis(t, rw, wp)
         t <- calcResults$t
         s <- calcResults$s
         W <- calcResults$W
 
         # Second: iterate on Q ----
-        # initialize Q loop
-        inRange <- TRUE
 
+        inRange <- TRUE # initialize Q loop
         while (inRange == TRUE) {
           inRange = (abs(sadj - s) > errFactor)
           wp[["Well_Yield"]] <- wp$Well_Yield * (abs(sadj / s))
@@ -357,7 +362,8 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 
           # jacob correction ----
           #
-          #Solve quadratic of Jacob correction for observed drawdown in well
+          # Solve quadratic of Jacob correction for observed drawdown in well
+          #
           #(s_obs^2)/(2h)-s_obs+s=0
           a <- 1 / (2 * wp$Aqfr_Sat_Thickness)
           b <- -1
@@ -494,9 +500,10 @@ config <- "inputs/inputs.csv"
 output_dir <- "outputs/"
 
 # specify country name if running for a country, otherwise 'All' will run globally
-runcountry <- "All"
+runcountry <- "United States"
 
 #TODO: Make temporal resolution flexible too
+#TODO: Give option to choose between running fully global inputs and filtered grid cells
 
 ## run superwell ----
 system.time(superwell(well_params, elec_rates, config, runcountry, output_dir))
