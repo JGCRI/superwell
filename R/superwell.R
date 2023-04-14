@@ -229,6 +229,45 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
     #
     # Calculate and store other node specific attributes
     wp[["Well_Yield"]] <- wp$Initial_Well_Yield
+    ## corrections, constraints and checks ----
+
+    skip <- 0
+
+    # skip grid areas less than 10x10 km
+    # these are on lower tail resulting from abnormal intersections of grid and WHYMAP area class map in GIS
+    if (df[i, "Area"] <= 1e+8){
+      skip = skip + 1
+      next
+    }
+
+    # depth to water table should we at least 5 meters
+    else if (df[i, "Depth"] < 5){
+      #df[i, "Depth"] <- 5
+      skip = skip + 1
+      next
+    }
+
+    # limit low permeability values
+    # which cause low hydraulic conductivity, low transmissivity, low well yield,
+    # small radius of influence, hence large number of wells in a grid cell,
+    # resulting in huge capital and total costs
+    else if (df[i, "Permeability"] < -15 ){
+      #df[i, "Permeability"] <- -15      # limits K to 1e-08
+      skip = skip + 1
+      next
+    }
+
+    # limit porosity to 5% voids at least
+    else if (df[i, "Porosity"] < 0.05){
+      #df[i, "Porosity"] <- 0.05     # limits K to 1e-08
+      next #TODO: cite number of cell skipped overall
+      skip = skip + 1
+    }
+
+    # correct aquifer thickness outliers, replace >1000m thickness with 200m
+    else if (df[i, "Thickness"] > 1000){
+      df[i, "Thickness"] <- 200
+    }
 
     # use global electricity cost if country information is missing
     if (is.null(ec[[df[i, "CNTRY_NAME"]]]) == FALSE) {
