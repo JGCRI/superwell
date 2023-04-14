@@ -221,7 +221,17 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
   con <- file(output_file, "w") # open the file to write
 
   # write the headers for the output file
-  cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity, thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume, continent, well_id, country_name, gcam_basin_id, gcam_basin_name, exploitable_groundwater, well_installation_cost, annual_capital_cost, Total_nonEnergy_Cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
+  cat("iteration, year_number, depletion_limit, continent, well_id, country_name, gcam_basin_id, gcam_basin_name,
+      area, permeability, storativity, depth_to_piez_surface, total_thickness, orig_aqfr_sat_thickness, aqfr_sat_thickness,
+	  hydraulic_conductivity, transmissivity,
+    radius_of_influence, radial_extent, areal_extent, drawdown_roi, max_drawdown, drawdown, total_head,
+    well_yield,
+    volume_produced_perwell, cumulative_vol_produced_perwell, number_of_wells, volume_produced_allwells, cumulative_vol_produced_allwells,
+	  available_volume, depleted_vol_fraction,
+    well_installation_cost, annual_capital_cost, maintenance_cost, nonenergy_cost,
+	  power, energy, energy_cost_rate, energy_cost, total_cost_perwell, total_cost_allwells
+    unit_cost, unit_cost_per_acreft, unit_cost_per_km3,
+	  whyclass, screen_length, casing_length, total_well_length\n",
     file = con
   )
 
@@ -477,42 +487,53 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
           outputList[[paste("line", as.character(t))]] <-
             paste(       NumIterations,                  # iteration
               ",",       t,                              # year_number
-              ",",       df[i, "Area"],                  # area
-              ",",       roi,                            # radius_of_influence
-              ",",       sroi,                           # drawdown_roi
-              ",",       wp$Areal_Extent,                # areal_extent
-              ",",       wp$Total_Head,                  # total_head
-              ",",       wp$Aqfr_Sat_Thickness,          # aqfr_sat_thickness
-              ",",       wp$Storativity,                 # storativity
-              ",",       wp$Total_Thickness,             # thickness
-              ",",       wp$Unit_cost,                   # unit_cost
-              ",",       wp$Hydraulic_Conductivity,      # hydraulic_conductivity
-              ",",       wp$radial_extent,               # radial_extent
-              ",",       NumWells,                       # number_of_wells
-              ",",       wp$Annual_Operation_time * wp$Well_Yield,                   # volume_produced
-              ",",       (wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced, # total_volume_produced
-                         #(wp$Volume_Produced * NumWells),                           # total_volume_produced
-              ",",       df[i, "Area"] * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity,              # available_volume
-                         #wp$Areal_Extent*wp$Orig_Aqfr_Sat_Thickness*wp$Storativity, # available_volume
-              ",",       df[i, "Continent"],
+              ",",       wp$NumWells,                    # depletion_limit
+              ",",       df[i, "Continent"],             # continent
               ",",       df[i, "OBJECTID"],              # well_id
               ",",       df[i, "CNTRY_NAME"],            # country_name
               ",",       df[i, "GCAM_ID"],               # gcam_basin_id
               ",",       df[i, "Basin_Name"],            # gcam_basin_name
-              ",",       ((wp$Volume_Produced * NumWells) + wp$Total_Volume_Produced) /
-                         (wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity),   # exploitable_groundwater
-
-              ## add previous iterations volume produced to current 20 year time period
+              ",",       df[i, "Area"],                  # area (m2)
+              ",",       df[i, "Permeability"],          # permeability
+              ",",       wp$Storativity,                 # storativity (-)
+              ",",       wp$Depth_to_Piezometric_Surface,# depth_to_piez_surface (m)
+              ",",       wp$Total_Thickness,             # total_thickness
+              ",",       wp$Orig_Aqfr_Sat_Thickness,     # orig_aqfr_sat_thickness
+              ",",       wp$Aqfr_Sat_Thickness,          # aqfr_sat_thickness
+              ",",       wp$Hydraulic_Conductivity,      # hydraulic_conductivity
+              ",",       wp$Transmissivity,              # transmissivity
+              ",",       roi,                            # radius_of_influence
+              ",",       wp$radial_extent,               # radial_extent
+              ",",       wp$Areal_Extent,                # areal_extent
+              ",",       sroi,                           # drawdown_roi
+              ",",       wp$Max_Drawdown,                # max_drawdown
+              ",",       wp$Drawdown,                    # drawdown
+              ",",       wp$Total_Head,                  # total_head
+              ",",       wp$Well_Yield,                  # well_yield
+              ",",       wp$Volume_Produced_perWell,     # volume_produced_perwell
+              ",",       wp$Cumulative_Vol_Produced_perWell,  # cumulative_vol_produced_perwell
+              ",",       wp$NumWells,                    # number_of_wells
+              ",",       wp$Volume_Produced_allWells,    # volume_produced_allwells
+              ",",       wp$Cumulative_Vol_Produced_allWells, # cumulative_vol_produced_allwells
+              ",",       wp$Available_Volume,            # available_volume
+              ",",       wp$Depleted_Vol_Fraction,       # depleted_vol_fraction
               ",",       wp$Well_Installation_cost,      # well_installation_cost
-              ",",       wp$Annual_Capital_Cost,         # annual_capital_cost
-              ",",       wp$Total_nonEnergy_Cost,        # total_nonEnergy_Cost
-              ",",       wp$Maintenance_Cost,            # maintenance_cost
-              ",",       wp$Cost_of_Energy,              # cost_of_energy
+              ",",       wp$NumWells,                    # annual_capital_cost
+              ",",       wp$Annual_Capital_Cost,         # maintenance_cost
+              ",",       wp$NonEnergy_Cost,              # nonenergy_cost
+              ",",       wp$Power,                       # power
+              ",",       wp$Energy,                      # energy KW/yr
               ",",       wp$Energy_cost_rate,            # energy_cost_rate
-              ",",       wp$Electric_Energy,             # electric_energy
-              ",",       wp$Drawdown,                    # drawdown (m)
-              ",",       wp$Depletion_Limit,             # depletion limit
-              ",",       wp$Total_Thickness - wp$Aqfr_Sat_Thickness,   # depth_to_piez_surface (m)
+              ",",       wp$Energy_Cost,                 # energy_cost
+              ",",       wp$Total_Cost_perWell,          # total_cost_perwell
+              ",",       wp$Total_Cost_allWells,         # total_cost_allwells
+              ",",       wp$Unit_Cost,                   # unit_cost
+              ",",       wp$Unit_Cost_per_km3,           # unit_cost_per_km3
+              ",",       wp$Unit_Cost_per_AcreFt,        # unit_cost_per_acreft
+              ",",       df[i, "WHYClass"],              # whyclass
+              ",",       wp$Screen_length,               # screen_length
+              ",",       wp$Casing_length,               # casing_length
+              ",",       wp$Total_Well_Length,           # total_well_length
               "\n"
             )
 
