@@ -17,7 +17,7 @@
 # National Laboratory, College Park, MD, USA
 
 # TODO: eventually separate superwell into superwell_fun and superwell_run
-# TODO: make depletion limit a seperate file or dynamic so the code always runs for
+# TODO: make depletion limit a separate file or dynamic so the code always runs for
 # all depletion limits not just one in wellParams.yml
 
 # load functions to start and run superwell in the last line. See man/ for
@@ -81,12 +81,10 @@ load_well_data <- function(well_param_file) {
 #' @importFrom dplyr filter
 #' @author Superwell team; hassan.niazi@pnnl.gov
 #' @export
-#load_config <- function(config_file, country = 'United States') {
+# TODO: setup global 'all' as default. load_config <- function(config_file, country = 'United States') {
 load_config <- function(config_file, country) {
-  #load_config <- function(config_file, country) {
   # Node-specific input (permeability, porosity, thickness, etc.) are in "Inputs.csv"
-  ## check for one country (Iran)
-  #config_file <- 'inputs.csv'
+
   if (country == "All") {
     df <- read.csv(config_file)
     }
@@ -134,22 +132,33 @@ percent <- function(x,
 #' Calculates drawdown using Theis solution
 #'
 #' @details affected by initial yield, annual operational time, and aquifer properties (T and S)
+#' @param wp well parameters from wellParams.yml
 #' @param t annual operational time, comes from wellParams.yml (currently fixed at 365 days i.e., 31536000 s/yr)
 #' @param rw radius of well initially, but radius of influence eventually.
-#' @param wp well parameters from wellParams.yml
 #'
 #' @return drawdown using Theis solution
 #' @author Superwell team; hassan.niazi@pnnl.gov
 #' @export
 
+# To run as a standalone function
+# wp  <- load_well_data(well_params)
+# t   <- wp$Max_Lifetime_in_Years
+# rw  <- wp$Well_Diameter * 0.5      # only to calculate at the edge of the well (actually radius of influence is used)
+# df  <- load_config(config, country)
+# i = 20
+# wp[["Storativity"]]             <- df[i, "Porosity"]
+# wp[["Hydraulic_Conductivity"]]  <- (10 ^ df[i, "Permeability"]) * g / (1.7918 * 1e-6)
+# wp[["Transmissivity"]]          <- wp$Hydraulic_Conductivity * wp$Aqfr_Sat_Thickness
+
+
 calcWellsTheis <- function(t, rw, wp) {
-  #Pumping well drawdown <-2.3Q/4piT*log(2.25Tt/r2S)
+  # Pumping well drawdown <- 2.3Q/4piT*log(2.25Tt/r2S)
   W <- 0.0
-  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time)
+  u <- rw ^ 2 * wp$Storativity / (4 * wp$Transmissivity * t * wp$Annual_Operation_time) # r2S/4Tt (t = lifetime * annualOperationTime)
 
   j <- 1
   term <- -u
-  W <- -0.5772156649 - log(u) - term       # well function
+  W <- -EULER_CONST - log(u) - term       # well function
 
   while (abs(term) > 0.00000001 && term != Inf) {
     term <- -u * j / (j + 1) ^ 2 * term
@@ -190,23 +199,26 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
   # store the well yield from the yaml file because we will need to go back to it with every node
   wp[["Initial_Well_Yield"]] <- wp$Well_Yield
 
-  # store a "generic" Electricity cost rate in case of an error. Irrespective of the country being processed
+  # store a "generic" Electricity cost rate, irrespective of the country being processed, in case a country specific cost estimate is not available. However, country-specific takes precedence if available
   wp[["global_energy_cost_rate"]] <- wp$Energy_cost_rate
 
-  # specify country name if running for a country, otherwise 'All' will run globally
+  # specify country name if running for a country, otherwise 'All' in config will run globally
   country <- runcountry
   print(paste0("Processing:  ", country))
   # "inputs.csv" contains all the node specific input (permeability, porosity, thickness, etc.)
   df <- load_config(config, country)
 
-  #Set up the output file. This file will be written to after the completion of
-  #every node so the output may be copied and used at any point during the run.
+  # Set up the output file.
+  # This file will be written to after the completion of every node so the
+  # output may be copied and used at any point during the run.
+
   #fileName <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
   #fileName <- paste("MENA", "_WellResults.csv")
-  output_filename <- paste0(gsub(" ", "_", tolower(country)), ".csv")
+  output_filename <- paste0(Sys.Date(),"_", gsub(" ", "_", tolower(country)),".csv") #TODO: change to xlsx
+  #output_filename <- paste0(format(Sys.time(), "%Y-%m-%d-t%H.%M"),"_", gsub(" ", "_", tolower(country)),".csv")
   output_file <- file.path(output_dir, output_filename)
 
-  con <- file(output_file, "w") #open the file to write
+  con <- file(output_file, "w") # open the file to write
 
   # write the headers for the output file
   cat("iteration, year_number, area, radius_of_influence, drawdown_roi, areal_extent, total_head, aqfr_sat_thickness, storativity, thickness, unit_cost, hydraulic_conductivity, radial_extent, number_of_wells, volume_produced, total_volume_produced, available_volume, continent, well_id, country_name, gcam_basin_id, gcam_basin_name, exploitable_groundwater, well_installation_cost, annual_capital_cost, Total_nonEnergy_Cost, maintenance_cost, cost_of_energy, energy_cost_rate, electric_energy, drawdown, depletion_limit, depth_to_piez_surface\n",
@@ -222,17 +234,12 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
     if (i < nrow(df) && i %in% seq(1, nrow(df), by=round(nrow(df)/100))) {
       prog <- percent(c(i/nrow(df)))
       print(paste(prog,"--",formatC(i,format="G",digits=6),"/",nrow(df),"--","Processing",df[i,"CNTRY_NAME"]))
-    }
-    else if (i == nrow(df)) {
+    } else if (i == nrow(df)) {
       print("ALL DONE!")
       print(paste("Output file is in folder:",output_dir,"named as:",output_filename))
       print("Model time in seconds:")
     }
 
-    ## grid prep ----
-    #
-    # Calculate and store other node specific attributes
-    wp[["Well_Yield"]] <- wp$Initial_Well_Yield
     ## corrections, constraints and checks ----
 
     skip <- 0
@@ -314,6 +321,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
     outputList <- list()
 
     #TODO: test with multiple ratios, use an array initially e.g. [0.2, 0.8] but later make it probabilistic (Normal + Monte Carlo)
+    #TODO: test with multiple ratios, use an array initially e.g. [0.2, 0.8] but later make it probabilistic (Normal distribution + Monte Carlo)
     maxDepthRatio = 0.66
     wp$Max_Drawdown = maxDepthRatio * wp$Orig_Aqfr_Sat_Thickness  # two-thirds depletion limit
 
@@ -385,42 +393,45 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
           }
         }
 
-        # drawdown over time with costs ----
+        ### drawdown and volume over time with costs ----
         #
         # Calculate drawdown at the well over time with costs
+
         # Initialize drawdown from pumping well and image wells and time
         s <- 0
         t <- 0
 
-        # Run code while drawdown in pumping well is gt max possible drawdown
-        # iterate through each year of pumping up to the max life time in years
-        #while ((t < wp$Max_Lifetime_in_Years) && (wp$Well_Yield > 0)){
-        while ((t < wp$Max_Lifetime_in_Years) &&
-               (wp$Well_Yield > 0) && (wp$Exploitable_GW < wp$Depletion_Limit)) {
-          t <- t + 1
+        # Run code while drawdown in pumping well is at max possible drawdown
+
+        # iterate through each year of pumping up to the max life time and depletion limit
+        while (t < wp$Max_Lifetime_in_Years &&    # time is lower than maximum pumping duration
+               wp$Depleted_Vol_Fraction < wp$Depletion_Limit && # pumped volume fraction is lower than the depletion limit
+               wp$Well_Yield > 0) { # something is pumped
+
+          t <- t + 1      # next year if conditions are met
+
+          # guess initial drawdown based on radius of the well
           calcResults <- calcWellsTheis(t, rw, wp)
-          t <- calcResults$t
           s <- calcResults$s
+          t <- calcResults$t
           w <- calcResults$W
 
-          # jacob correction ----
+          ### jacob correction ----
           #
           # Solve quadratic of Jacob correction for observed drawdown in well
-          #
           #(s_obs^2)/(2h)-s_obs+s=0
           a <- 1 / (2 * wp$Aqfr_Sat_Thickness)
           b <- -1
           c <- s
           det <- (b ^ 2) - (4 * a * c)
+
           if (det > 0) {
             root1 <- (-b + sqrt(det)) / (2 * a)
             root2 <- (-b - sqrt(det)) / (2 * a)
-          }
-          else if (det == 0) {
+          } else if (det == 0) {
             root1 <- (-b) / 2 * a
             root2 <- root1
-          }
-          else {
+          } else {
             root1 <- "error"
             root2 <- "error"
           }
@@ -521,13 +532,15 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
         NumIterations <- NumIterations + 1
         TotTime = NumIterations * 2 * t
 
-        #loop back to exploitable gw
         #append results to output file
         for (name in names(outputList)) {
           cat(outputList[[name]], file = con)
         }
+
+        # loop back to depleted volume fraction and max depletion limit
       }
       run <- 1
+      # break the while run = 0 loop because run = 1
     }
   }
   close(con)
