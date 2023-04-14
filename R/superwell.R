@@ -32,13 +32,17 @@ library(dplyr)
 options(stringsAsFactors = FALSE)
 #rm(list = ls())
 
-# Hard-coded variables ----
-# Constants
-Euler_constant <- 0.5772156649
-pi <- 3.14159
-conversion_factor <- 0.000810714
-# Other Variables
-errFactor <- 0.1
+
+# Constants ----
+{
+  EULER_CONST     <- 0.5772156649   # to be used in Theis solution
+  pi              <- 3.14159
+  CONV_KM3_M3  <- 1e+9
+  CONV_M3_KM3  <- 1/CONV_KM3_M3
+  CONV_M3_AcreFt  <- 0.000810714
+  g               <- 9.80665
+  errFactor       <- 0.1
+}
 
 
 # Data loading functions ----
