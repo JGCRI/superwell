@@ -323,30 +323,45 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
     maxDepthRatio = 0.66
     wp$Max_Drawdown = maxDepthRatio * wp$Orig_Aqfr_Sat_Thickness  # two-thirds depletion limit
 
-    WT <- wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown    # water table
+    # minimum saturated aquifer thickness at the well head (total aquifer depth - max drawdown)
+    drawdownLimit <- wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown
 
-    wp$Total_Thickness = wp$Depth_to_Piezometric_Surface + wp$Orig_Aqfr_Sat_Thickness
+    # # simulation loop ----
 
-    run <- 0
+    # Initializations
+    outputList <- list()
+
+    wp[["Depleted_Vol_Fraction"]] <- 0
+    wp[["Cumulative_Vol_Produced_allWells"]] <- 0
+    wp[["Total_Head"]] <- 0
+    wp[["Drawdown"]]   <- 0
+
+    TotTime       <- 0       # counter that allows maximum iterations
+    run           <- 0
+    NumIterations <- 1
+
     while (run == 0) {
-      NumIterations <- 1
 
-      # First: iterate on depth, drawdown, and runtime ----
+      ### iterate on depth, drawdown, and runtime ----
       # depth of depletion limit is higher than available groundwater depth
-      while ((wp$Exploitable_GW < wp$Depletion_Limit) &&
-             (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 200)) {
+      while ((wp$Depleted_Vol_Fraction < wp$Depletion_Limit) &&
+             (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 800)) { #800 allows at least 20 iterations in year 20
         # initialize
         s <- 0
-        t <- wp$Max_Lifetime_in_Years
-        errFactor <- 0.1
+        t_max <- wp$Max_Lifetime_in_Years
 
         # Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
         sadj <- wp$Max_Drawdown - ((wp$Max_Drawdown ^ 2) / (2 * wp$Aqfr_Sat_Thickness))
 
-        # First: compute drawdown with initial Q guess
+        # first: compute drawdown with initial Q guess at well head ----
+
+        # TODO: we can also simply solve Theis for Q directly rather than
+        # guessing a Q and then adjusting till the Q produces drawdown within
+        # (0.1 m) error factor of the target max drawdown
+
         rw <- wp$Well_Diameter * 0.5
-        calcResults <- calcWellsTheis(t, rw, wp)
-        t <- calcResults$t
+        calcResults <- calcWellsTheis(t_max, rw, wp)
+        t_max <- calcResults$t
         s <- calcResults$s
         W <- calcResults$W
 
@@ -389,18 +404,21 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
             } else {
               roi = roi * (sroi / wp$roi_boundary) ^ 0.033
             }
-            calcResults <- calcWellsTheis(t, roi, wp)
-            t <- calcResults$t
+            calcResults <- calcWellsTheis(t_max, roi, wp)
+            t_max <- calcResults$t
             sroi <- calcResults$s
           }
 
           wp[["radial_extent"]] <- roi
           wp[["Drawdown_roi"]] <- sroi
-          wp[["Areal_Extent"]] <- 3.14159 * (wp$radial_extent ^ 2) # m3
+          wp[["Areal_Extent"]] <- pi * (wp$radial_extent ^ 2) # m3
 
+          # scale down max drawdown if well area is larger than grid area
+          # TODO: do not scale
           if (wp$Areal_Extent > (df[i, "Area"] + errFactor)) {
-            wp[["Max_Drawdown"]] <- wp$Max_Drawdown  * (abs(df[i, "Area"] / wp$Areal_Extent))
-            WT = wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown
+            # scales down max drawdown using well areal extent and grid area ratio
+            wp[["Max_Drawdown"]] <- wp$Max_Drawdown * (abs(df[i, "Area"] / wp$Areal_Extent))
+            drawdownLimit = wp$Orig_Aqfr_Sat_Thickness - wp$Max_Drawdown
             break
           }
         }
