@@ -475,31 +475,44 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
           }
 
           sobs = root1
+
           if (sobs < root2) {
             sobs <- root2
           }
 
-          # out list ----
-          #Output (one row per year)
-          wp[["Drawdown"]] <- s # m
-          wp[["Total_Head"]] <- sobs + wp$Depth_to_Piezometric_Surface
-          wp[["Volume_Produced"]] <- t * wp$Annual_Operation_time * wp$Well_Yield #m^3
-          wp[["Power"]] <- (wp$Specific_weight * wp$Total_Head * wp$Well_Yield / wp$Pump_Efficiency) / 1000 #KW
-          wp[["Electric_Energy"]] <- wp$Power * (wp$Annual_Operation_time / 3600) #(CONVERT(1,"hr","sec"))) #KWh/year
-          wp[["Annual_Capital_Cost"]] <- wp$Well_Installation_cost * (1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years * wp$Interest_Rate / ((1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years - 1)
-          wp[["Maintenance_Cost"]] <- wp$Maintenance_factor * wp$Well_Installation_cost # $
-          wp[["Total_nonEnergy_Cost"]] <- wp$Annual_Capital_Cost + wp$Maintenance_Cost # $
-          wp[["Cost_of_Energy"]] <- (wp$Electric_Energy * wp$Energy_cost_rate) # $
-          wp[["Unit_cost"]] <- (wp$Total_nonEnergy_Cost + wp$Cost_of_Energy) / (wp$Well_Yield * wp$Annual_Operation_time)
-          wp[["Cost_per_ac_ft"]] <- wp$Unit_cost / 0.000810714
 
-          #Add the year's output to a list for export to file later
-          NumWells <- df[i, "Area"] / wp$Areal_Extent
-          wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + (wp$Volume_Produced * NumWells)
-          wp[["Available_volume"]] <- (wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity) # $/acFt
-          wp[["Exploitable_GW"]] <- wp$Total_Volume_Produced / wp$Available_volume
+          ### output calculations ----
+          wp[["Drawdown"]]              <- sobs # m
+          wp[["Total_Head"]]            <- sobs + wp$Depth_to_Piezometric_Surface
+
+          wp[["Volume_Produced_perWell"]] <- wp$Annual_Operation_time * wp$Well_Yield # m^3
+          wp[["Cumulative_Vol_Produced_perWell"]] <- t * wp$Annual_Operation_time * wp$Well_Yield # m^3
+
+          wp[["Power"]]                 <- (wp$Specific_weight * wp$Total_Head * wp$Well_Yield / wp$Pump_Efficiency) / 1000 # KW
+          wp[["Energy"]]                <- wp$Power * (wp$Annual_Operation_time / 3600) # KWh/year (converted from sec to hours)
+
+          wp[["Annual_Capital_Cost"]]   <- wp$Well_Installation_Cost * (1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years * wp$Interest_Rate / (((1 + wp$Interest_Rate) ^ wp$Max_Lifetime_in_Years) - 1)  #
+          wp[["Maintenance_Cost"]]      <- wp$Maintenance_factor * wp$Well_Installation_Cost # $
+          wp[["NonEnergy_Cost"]]        <- wp$Annual_Capital_Cost + wp$Maintenance_Cost # $
+          wp[["Energy_Cost"]]           <- wp$Energy * wp$Energy_cost_rate # $ (electricity cost for now)
+          wp[["Total_Cost_perWell"]]    <- wp$Energy_Cost + wp$NonEnergy_Cost # $
+          wp[["Unit_Cost"]]             <- wp$Total_Cost_perWell / wp$Volume_Produced_perWell # $/m3
+          wp[["Unit_Cost_per_km3"]]     <- wp$Unit_Cost / CONV_M3_KM3 # $/km3
+          wp[["Unit_Cost_per_AcreFt"]]  <- wp$Unit_Cost / CONV_M3_AcreFt # $/acFt
+
+          # Add the year's output to a list for export to file later
+          wp[["NumWells"]] <- df[i, "Area"] / wp$Areal_Extent     # number of wells
+          wp[["Volume_Produced_allWells"]] <- wp$Volume_Produced_perWell * wp$NumWells
+          wp[["Cumulative_Vol_Produced_allWells"]] <- wp$Cumulative_Vol_Produced_allWells + wp$Volume_Produced_allWells
+          wp[["Total_Cost_allWells"]]   <- wp$Total_Cost_perWell * wp$NumWells # $
+
+          wp[["Available_Volume"]]      <- df[i, "Area"] * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity # m3
+          wp[["Depleted_Vol_Fraction"]] <- wp$Cumulative_Vol_Produced_allWells / wp$Available_Volume
+
           TotTime = NumIterations * 2 * t
 
+          # out list ----
+          # initialize the output file in first time step
           if (t == 1) {
             outputList <- list()
           }
