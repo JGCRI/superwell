@@ -287,40 +287,38 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
       wp[["Energy_cost_rate"]] <- wp$global_energy_cost_rate
     }
 
-    wp[["Storativity"]] <- df[i, "Porosity"] # assuming storativity is equal to porosity
-    wp[["Depth_to_Piezometric_Surface"]] <- df[i, "Depth"]
-    wp[["Aqfr_Sat_Thickness"]] <- df[i, "Thickness"]                    # m
-    wp[["Orig_Aqfr_Sat_Thickness"]] <- df[i, "Thickness"]               # m
-    wp[["Screen_length"]] <- wp$Orig_Aqfr_Sat_Thickness * 0.3           # m assumption, why 30%?
-    wp[["Casing_length"]] <- wp$Orig_Aqfr_Sat_Thickness + wp$Depth_to_Piezometric_Surface - wp$Screen_length # m
-    wp[["Total_Well_Length"]] <- wp$Casing_length + wp$Screen_length    # m
-    wp[["Hydraulic_Conductivity"]] <- (10 ^ df[i, "Permeability"]) * 1e7
-    wp[["roi_boundary"]] <- 1
-    #wp[["Transmissivity"]]<-wp$Hydraulic_Conductivity*wp$Screen_length     ###this changed. Is it right? # m2/s
-    wp[["Transmissivity"]] <- wp$Hydraulic_Conductivity * wp$Aqfr_Sat_Thickness
+    # grid prep ----
+    #
+    # Calculate and store grid specific attributes
+    wp[["Well_Yield"]]      <- wp$Initial_Well_Yield
+    wp[["roi_boundary"]]    <- 1
 
-    # different installation cost based on WHYclasses
+    wp[["Total_Thickness"]] <- df[i, "Thickness"]
+    wp[["Depth_to_Piezometric_Surface"]] <- df[i, "Depth"]
+    wp[["Orig_Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Depth_to_Piezometric_Surface # m
+    wp[["Aqfr_Sat_Thickness"]]  <- wp$Orig_Aqfr_Sat_Thickness # m (initialized but would be updated using pumping info)
+
+    wp[["Screen_length"]]   <- wp$Orig_Aqfr_Sat_Thickness * 0.3           # m TODO: assumption, why 30%?
+    wp[["Casing_length"]]   <- wp$Orig_Aqfr_Sat_Thickness + wp$Depth_to_Piezometric_Surface - wp$Screen_length # m
+    wp[["Total_Well_Length"]]   <- wp$Casing_length + wp$Screen_length    # m
+
+    wp[["Storativity"]]     <- df[i, "Porosity"] # assuming storativity is equal to porosity
+    wp[["Hydraulic_Conductivity"]] <- (10 ^ df[i, "Permeability"]) * 1e7
+    #wp[["Hydraulic_Conductivity"]] <- (10 ^ df[i, "Permeability"]) * g / (1.7918 * 1e-6) #TODO: check with kinematic viscosity = 1e6 or 1.7918 * 1e-6
+    wp[["Transmissivity"]]  <- wp$Hydraulic_Conductivity * wp$Aqfr_Sat_Thickness   # T = Kb [m2/s]
+
+
+    # different installation cost based on geologically different WHYclasses
     if (df[i, "WHYClass"] == 10) {
-      wp[["Well_Installation_cost"]] <- wp$Well_Install_10 * wp$Total_Well_Length
+      wp[["Well_Installation_Cost"]] <- wp$Well_Install_10 * wp$Total_Well_Length
     } else {
       if (df[i, "WHYClass"] == 20) {
-        wp[["Well_Installation_cost"]] <- wp$Well_Install_20 * wp$Total_Well_Length
+        wp[["Well_Installation_Cost"]] <- wp$Well_Install_20 * wp$Total_Well_Length
       } else {
-        wp[["Well_Installation_cost"]] <- wp$Well_Install_30 * wp$Total_Well_Length
+        wp[["Well_Installation_Cost"]] <- wp$Well_Install_30 * wp$Total_Well_Length
       }
     }
 
-    # Initialization
-    wp[["Exploitable_GW"]] <- 0
-    wp[["Total_Volume_Produced"]] <- 0
-    wp[["Total_Head"]] <- 0
-    wp[["Drawdown"]] <- 0
-    TotTime = 0
-    #wp[["Areal_Extent"]] <- df[i, "Area"]
-
-    outputList <- list()
-
-    #TODO: test with multiple ratios, use an array initially e.g. [0.2, 0.8] but later make it probabilistic (Normal + Monte Carlo)
     #TODO: test with multiple ratios, use an array initially e.g. [0.2, 0.8] but later make it probabilistic (Normal distribution + Monte Carlo)
     maxDepthRatio = 0.66
     wp$Max_Drawdown = maxDepthRatio * wp$Orig_Aqfr_Sat_Thickness  # two-thirds depletion limit
