@@ -573,12 +573,14 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 
         # initialize next 20 years ----
         #wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + wp$Well_Yield * wp$Max_Lifetime_in_Years * wp$Annual_Operation_time
-        wp[["Total_Volume_Produced"]] <- wp$Total_Volume_Produced + (wp$Volume_Produced * NumWells)
-        wp[["Aqfr_Sat_Thickness"]] <- wp$Total_Thickness - wp$Total_Volume_Produced / (3.14159 * wp$radial_extent ^ 2 * wp$Storativity)
-        wp[["Available_volume"]] <- (wp$Areal_Extent * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity)
-        wp[["Exploitable_GW"]] <- wp$Total_Volume_Produced / wp$Available_volume
+        wp[["Cumulative_Vol_Produced_allWells"]] <- wp$Cumulative_Vol_Produced_allWells + wp$Volume_Produced_allWells
+        wp[["Aqfr_Sat_Thickness"]] <- wp$Orig_Aqfr_Sat_Thickness - (wp$Cumulative_Vol_Produced_allWells / (df[i, "Area"] * wp$Storativity))
+        #wp[["Aqfr_Sat_Thickness"]] <- wp$Orig_Aqfr_Sat_Thickness - (wp$Volume_Produced_perWell / (wp$Areal_Extent * wp$Storativity)) # to calculate based on one well
+        #wp[["Available_Volume"]] <- df[i, "Area"] * wp$Orig_Aqfr_Sat_Thickness * wp$Storativity
+        wp[["Available_Volume"]] <- wp$Available_Volume
+        wp[["Depleted_Vol_Fraction"]] <- wp$Cumulative_Vol_Produced_allWells / wp$Available_Volume
         wp[["Depth_to_Piezometric_Surface"]] <- wp$Total_Thickness - wp$Aqfr_Sat_Thickness
-        wp[["Max_Drawdown"]] <- wp$Aqfr_Sat_Thickness - WT
+        wp[["Max_Drawdown"]] <- wp$Aqfr_Sat_Thickness - drawdownLimit
         wp[["Total_Head"]] <- sobs + wp$Depth_to_Piezometric_Surface
 
         NumIterations <- NumIterations + 1
