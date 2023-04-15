@@ -352,21 +352,35 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
         s <- calcResults$s
         W <- calcResults$W
 
-        # Second: iterate on Q ----
+        # recalculate actual well yield using actual drawdown at the well head. this well replace initial well yield guess
+        wp[["Well_Yield"]] <- (sadj * (4.0 * pi * wp$Transmissivity)) / W     # rearranged from Theis: s = Q*W(u)/4piT
 
-        inRange <- TRUE # initialize Q loop
-        while (inRange == TRUE) {
-          inRange = (abs(sadj - s) > errFactor)
-          wp[["Well_Yield"]] <- wp$Well_Yield * (abs(sadj / s))
-          s <- (wp$Well_Yield / (4.0 * 3.14159 * wp$Transmissivity) * W)
-        }
+        # we probably don't need this now as the line above does the same job of calculating the Q which will produce MaxDrawdown at the well head
+        # # initialize Q loop
+        # inRange <- TRUE
+        # while (inRange == TRUE) {
+        #   inRange = (abs(sadj - s) > errFactor)
+        #   wp[["Well_Yield"]] <- wp$Well_Yield * (abs(sadj / s))
+        #   s <- (wp$Well_Yield / (4.0 * pi * wp$Transmissivity) * W)   # s = Q*W(u)/4piT
+        # }
 
-
-        # roi ----
+        # second: roi ----
         #
-        # Guess the radius of influence of well yield Q
-        if (NumIterations < 2) {
-          roi <- (wp$Well_Yield * t * wp$Annual_Operation_time / (3.14159 * wp$Orig_Aqfr_Sat_Thickness * df[i, "Porosity"])) ^ 0.5
+        # Guess the radius of influence given actual well yield Q
+        if (NumIterations < 2) { # makes sure we are calculating roi only in the first time step
+
+          roi <- ((wp$Well_Yield * t_max * wp$Annual_Operation_time) / (pi * wp$Orig_Aqfr_Sat_Thickness * wp[["Storativity"]])) ^ 0.5
+
+          # the following is the actual equation but since roi is just a guess
+          # we are ignoring some terms, the following while loop adjusts roi
+          # based on a sroi = 1 limit.
+
+          # roi <- ((wp$Well_Yield * t * wp$Annual_Operation_time * W * u) / (pi * (wp[["Storativity"]]) * wp$roi_boundary)) ^ 0.5
+
+          # TODO: the approach could be changed to actually solve for roi instead of iterating
+          # 1) calc W based on well Q, aquifer props, and drawdown of 1m
+          # 2) lookup u value
+          # 3) solve r = ((Q * t_roi * W(u) * u ) / (S^2 * pi)) ^ 0.5
           sroi <- wp$roi_boundary + errFactor + 1
 
           inRange <- TRUE
