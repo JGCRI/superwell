@@ -214,24 +214,14 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 
   #fileName <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
   #fileName <- paste("MENA", "_WellResults.csv")
-  output_filename <- paste0(Sys.Date(),"_", gsub(" ", "_", tolower(country)),".csv") #TODO: change to xlsx
+  output_filename <- paste0(Sys.Date(),"_", gsub(" ", "_", tolower(country)),".csv")
   #output_filename <- paste0(format(Sys.time(), "%Y-%m-%d-t%H.%M"),"_", gsub(" ", "_", tolower(country)),".csv")
   output_file <- file.path(output_dir, output_filename)
 
   con <- file(output_file, "w") # open the file to write
 
   # write the headers for the output file
-  cat("iteration, year_number, depletion_limit, continent, well_id, country_name, gcam_basin_id, gcam_basin_name,
-      area, permeability, storativity, depth_to_piez_surface, total_thickness, orig_aqfr_sat_thickness, aqfr_sat_thickness,
-	  hydraulic_conductivity, transmissivity,
-    radius_of_influence, radial_extent, areal_extent, drawdown_roi, max_drawdown, drawdown, total_head,
-    well_yield,
-    volume_produced_perwell, cumulative_vol_produced_perwell, number_of_wells, volume_produced_allwells, cumulative_vol_produced_allwells,
-	  available_volume, depleted_vol_fraction,
-    well_installation_cost, annual_capital_cost, maintenance_cost, nonenergy_cost,
-	  power, energy, energy_cost_rate, energy_cost, total_cost_perwell, total_cost_allwells
-    unit_cost, unit_cost_per_acreft, unit_cost_per_km3,
-	  whyclass, screen_length, casing_length, total_well_length\n",
+    cat("iteration, year_number, depletion_limit, continent, country_name, gcam_basin_id, gcam_basin_name, well_id, grid_area, permeability, storativity, total_thickness, depth_to_piez_surface, orig_aqfr_sat_thickness, aqfr_sat_thickness, hydraulic_conductivity, transmissivity, radius_of_influence, areal_extent, max_drawdown, drawdown, total_head, well_yield, volume_produced_perwell, cumulative_vol_produced_perwell, number_of_wells, volume_produced_allwells, cumulative_vol_produced_allwells, available_volume, depleted_vol_fraction, well_installation_cost, annual_capital_cost, maintenance_cost, nonenergy_cost, power, energy, energy_cost_rate, energy_cost, total_cost_perwell, total_cost_allwells, unit_cost, unit_cost_per_km3, unit_cost_per_acreft, whyclass, screen_length, casing_length, total_well_length\n",
     file = con
   )
 
@@ -241,7 +231,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
   for (i in 1:(nrow(df))) {
 
     # print progress to the console
-    if (i < nrow(df) && i %in% seq(1, nrow(df), by=round(nrow(df)/100))) {
+    if (i < nrow(df) && i %in% seq(1, nrow(df), by=round(nrow(df)/20))) {
       prog <- percent(c(i/nrow(df)))
       print(paste(prog,"--",formatC(i,format="G",digits=6),"/",nrow(df),"--","Processing",df[i,"CNTRY_NAME"]))
     } else if (i == nrow(df)) {
@@ -383,9 +373,9 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
           while (inRange == TRUE) {
             inRange = (abs(sroi - wp$roi_boundary) > errFactor)
             if (sroi < 0) {
-              roi = roi * 0.75 #TODO: what are these assumptions?
+              roi = roi * 0.75
             } else {
-              roi = roi * (sroi / wp$roi_boundary) ^ 0.033 #TODO: what are these assumptions?
+              roi = roi * (sroi / wp$roi_boundary) ^ 0.033
             }
             calcResults <- calcWellsTheis(t, roi, wp)
             t <- calcResults$t
@@ -487,25 +477,23 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
           outputList[[paste("line", as.character(t))]] <-
             paste(       NumIterations,                  # iteration
               ",",       t,                              # year_number
-              ",",       wp$NumWells,                    # depletion_limit
+              ",",       wp$Depletion_Limit,             # depletion_limit
               ",",       df[i, "Continent"],             # continent
-              ",",       df[i, "OBJECTID"],              # well_id
               ",",       df[i, "CNTRY_NAME"],            # country_name
               ",",       df[i, "GCAM_ID"],               # gcam_basin_id
               ",",       df[i, "Basin_Name"],            # gcam_basin_name
-              ",",       df[i, "Area"],                  # area (m2)
+              ",",       df[i, "OBJECTID"],              # well_id
+              ",",       df[i, "Area"],                  # grid_area (m2)
               ",",       df[i, "Permeability"],          # permeability
               ",",       wp$Storativity,                 # storativity (-)
-              ",",       wp$Depth_to_Piezometric_Surface,# depth_to_piez_surface (m)
               ",",       wp$Total_Thickness,             # total_thickness
+              ",",       wp$Depth_to_Piezometric_Surface,# depth_to_piez_surface (m)
               ",",       wp$Orig_Aqfr_Sat_Thickness,     # orig_aqfr_sat_thickness
               ",",       wp$Aqfr_Sat_Thickness,          # aqfr_sat_thickness
               ",",       wp$Hydraulic_Conductivity,      # hydraulic_conductivity
               ",",       wp$Transmissivity,              # transmissivity
               ",",       roi,                            # radius_of_influence
-              ",",       wp$radial_extent,               # radial_extent
               ",",       wp$Areal_Extent,                # areal_extent
-              ",",       sroi,                           # drawdown_roi
               ",",       wp$Max_Drawdown,                # max_drawdown
               ",",       wp$Drawdown,                    # drawdown
               ",",       wp$Total_Head,                  # total_head
@@ -517,7 +505,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
               ",",       wp$Cumulative_Vol_Produced_allWells, # cumulative_vol_produced_allwells
               ",",       wp$Available_Volume,            # available_volume
               ",",       wp$Depleted_Vol_Fraction,       # depleted_vol_fraction
-              ",",       wp$Well_Installation_cost,      # well_installation_cost
+              ",",       wp$Well_Installation_Cost,      # well_installation_cost
               ",",       wp$NumWells,                    # annual_capital_cost
               ",",       wp$Annual_Capital_Cost,         # maintenance_cost
               ",",       wp$NonEnergy_Cost,              # nonenergy_cost
@@ -563,6 +551,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
       run <- 1
       # break the while run = 0 loop because run = 1
     }
+    # loop back to next grid cell
   }
   close(con)
 }
@@ -571,17 +560,35 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 # Execution ----
 #
 ## load file paths ----
+{
 well_params <- "inputs/wellParams.yml"
 elec_rates <- "inputs/GCAM_Electrical_Rates.yml"
 config <- "inputs/inputs.csv"
-output_dir <- "outputs/"
+#config <- "inputs/GW_cost_model_comparison_inputs.csv"
 
+output_dir <- "outputs"
+}
 # specify country name if running for a country, otherwise 'All' will run globally
 runcountry <- "United States"
+
 
 #TODO: Make temporal resolution flexible too
 #TODO: Give option to choose between running fully global inputs and filtered grid cells
 
+# temp data load (main superwell() will also load these)
+country <- runcountry
+wp <- load_well_data(well_params)   # well specific parameters
+ec <- load_elec_data(elec_rates)    # electrical USD/Unit costs by GCAM basin number
+
 ## run superwell ----
 system.time(superwell(well_params, elec_rates, config, runcountry, output_dir))
 
+
+# Tests ########################################################################
+
+# speed test between indexing methods (indexing using $ is MUCH faster)
+# x = 1:10
+# system.time({for(i in 1:1e5) identity(x)*wp$Storativity})
+# system.time({for(i in 1:1e5) identity(x)*df[i, "Porosity"]})
+
+## END
