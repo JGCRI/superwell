@@ -214,7 +214,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
 
   #fileName <- paste(df[1, "CNTRY_NAME"], "_WellResults.csv")
   #fileName <- paste("MENA", "_WellResults.csv")
-  output_filename <- paste0(Sys.Date(),"_", gsub(" ", "_", tolower(country)),".csv")
+  output_filename <- paste0(Sys.Date(),"_", gsub(" ", "_", tolower(country)), "_", output_ver,".csv")
   #output_filename <- paste0(format(Sys.time(), "%Y-%m-%d-t%H.%M"),"_", gsub(" ", "_", tolower(country)),".csv")
   output_file <- file.path(output_dir, output_filename)
 
@@ -336,16 +336,17 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
     wp[["Total_Head"]] <- 0
     wp[["Drawdown"]]   <- 0
 
-    TotTime       <- 0       # counter that allows maximum iterations
+
+    TotTime       <- 0       # counter that allows maximum iterations e.g., 100 years
+    NumIterations <- 1       # counter that controls on and off pumping periods
     run           <- 0
-    NumIterations <- 1
 
     while (run == 0) {
 
       ### iterate on depth, drawdown, and runtime ----
       # depth of depletion limit is higher than available groundwater depth
       while ((wp$Depleted_Vol_Fraction < wp$Depletion_Limit) &&
-             (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 800)) { #800 allows at least 20 iterations in year 20
+             (wp$Max_Drawdown >= 1) && (run == 0) && (TotTime <= 200)) {
         # initialize
         s <- 0
         t_max <- wp$Max_Lifetime_in_Years
@@ -353,7 +354,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
         # Jacob correction for observed drawdown. This is the drawdown to be used with the Theis solution.
         sadj <- wp$Max_Drawdown - ((wp$Max_Drawdown ^ 2) / (2 * wp$Aqfr_Sat_Thickness))
 
-        # first: compute drawdown with initial Q guess at well head ----
+        # well yield: drawdown with initial Q guess at well head ----
 
         # TODO: we can also simply solve Theis for Q directly rather than
         # guessing a Q and then adjusting till the Q produces drawdown within
@@ -377,7 +378,7 @@ superwell <- function(well_params, elec_rates, config_file, runcountry, output_d
         #   s <- (wp$Well_Yield / (4.0 * pi * wp$Transmissivity) * W)   # s = Q*W(u)/4piT
         # }
 
-        # second: roi ----
+        # roi ----
         #
         # Guess the radius of influence given actual well yield Q
         if (NumIterations < 2) { # makes sure we are calculating roi only in the first time step
@@ -615,7 +616,7 @@ output_dir <- "outputs"
 }
 # specify country name if running for a country, otherwise 'All' will run globally
 runcountry <- "United States"
-
+output_ver <- "v1"
 
 #TODO: Make temporal resolution flexible too
 #TODO: Give option to choose between running fully global inputs and filtered grid cells
