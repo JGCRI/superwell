@@ -13,8 +13,8 @@ load_well_data(well_param_file)
 Data frame of well parameters
 }
 \description{
-Load well-specific parameters (e.g., costs, etc.) from "wellParams.yml" (total 14 well parameters)
+Load a total of 14 well-specific parameters (e.g., constants, dimensions, costs, etc.) from a wellparam file
 }
 \author{
-<name>; <email>
+Superwell team; hassan.niazi@pnnl.gov
 }
