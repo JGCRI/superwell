@@ -121,7 +121,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     if selected_grid_df.Thickness[grid_cell] > 1000:
         selected_grid_df.Thickness[grid_cell] = 1000
 
-    # skip grid cells in which water has reached the surface
+    # skip grid cells where the depth is greater than thickness (negative transmissivity)
     if selected_grid_df.Thickness[grid_cell] < selected_grid_df.Depth[grid_cell]:
         continue
 
@@ -291,6 +291,10 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
         s_jacob = root_1
 
+        # skip rest of the years after drawdown becomes zero
+        if s_jacob == 0:
+            continue
+
         ########################### compute outputs ###########################
 
         # save annual pumping values to arrays 
@@ -335,6 +339,10 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             well_roi_array[year + 1] = well_roi_array[year]
             well_area_array[year + 1] = well_area_array[year]
             well_length_array[year + 1] = well_length_array[year]
+
+    # skip calculating costs and writing outputs for the last year in which drawdown is zero
+    if drawdown[year] == 0:
+        continue
 
     ##################### annual costs and unit costs ######################### 
     # assign well unit cost based on WHY Class
@@ -393,15 +401,15 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         offset = int(Start_indx[added_wells])
         for year in range(pumping_years):
 
-            # 1) no deepening, initial_sat_thickness < MAX_INITIAL_SAT_THICKNESS
-            if initial_sat_thickness < MAX_INITIAL_SAT_THICKNESS:
+            if year + offset == pumping_years:
+                break
+
+            # 1) no deepening, initial_sat_thickness < MAX_INITIAL_SAT_THICKNESS (pumping rate reduced)
+            elif initial_sat_thickness < MAX_INITIAL_SAT_THICKNESS:
                 install_cost = well_unit_cost * well_length_array[0]  # if no deepening, well install remains fixed
                 capital_cost_array[added_wells, year + offset], maintenance_array[added_wells, year + offset] = calculate_costs(added_wells, year, offset, install_cost, 0)
 
             # 2) deepening, initial_sat_thickness > MAX_INITIAL_SAT_THICKNESS
-            elif year + offset == pumping_years:
-                break
-
             elif year == 0:  # zero initial cost for first year
                 install_cost = well_unit_cost * well_length_array[0]
                 capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost, 0)
@@ -414,7 +422,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                 capital_cost_array[added_wells, year + offset] += capital_cost
                 maintenance_array[added_wells, year + offset] += maintenance_cost
 
-            elif well_length_array[year + offset] - well_length_array[year - 1 + offset] > 0:
+            elif well_length_array[year + offset] - well_length_array[year - 1 + offset] > 0:  # deepening
                 # TODO: isn't really clear what this block is doing.
                 #  Q: what does the elif argument mean?
                 #  Q: how would calculate_costs() get install_cost?
@@ -427,7 +435,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                 install_cost = well_unit_cost * well_length_array[year + offset]
                 maintenance_array[added_wells, year + offset] += maintenance_cost
 
-            else:
+            else:  # not deepening, not replacing in the current year
                 capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost, capital_cost_array[added_wells, year + offset])
                 capital_cost_array[added_wells, year + offset] += capital_cost
                 maintenance_array[added_wells, year + offset] += maintenance_cost
@@ -450,6 +458,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     annual_capital_cost = np.sum(capital_cost_array, axis=0)
     maintenance_cost = np.sum(maintenance_array, axis=0)
 
+    # calculate and store costs for a year
     for year in range(pumping_years):
         well_installation_cost[year] = well_unit_cost * well_length_array[year]
         nonenergy_cost[year] = annual_capital_cost[year] + maintenance_cost[year]
@@ -463,6 +472,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         unit_cost[year] = total_cost_all_wells[year] / volume_all_wells[year]  # $/m^3
         unit_cost_per_km3[year] = unit_cost[year] * 10 ** 9  # $/km^3
         unit_cost_per_acreft[year] = unit_cost[year] * 1233.48  # $/acft
+
 
     ######################## save grid cell results ###########################
     """
@@ -531,32 +541,4 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         file.write('\n')
         file.close()
 
-# %% Plot distributions of results
-#
-# results = pd.read_csv(output_path + "\\" + output_name, low_memory=False)
-#
-# first_year_unit_cost = results.where(results.year_number == 1)
-# first_year_unit_cost = first_year_unit_cost.dropna(thresh=5)
-#
-# import matplotlib.pyplot as plt
-#
-# plt.scatter(first_year_unit_cost.hydraulic_conductivity * 86400, first_year_unit_cost.unit_cost_per_acreft)
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.xlabel('Aquifer K (m/d)')
-# plt.ylabel('$ per acre-foot')
-# plt.show()
-#
-# plt.scatter(first_year_unit_cost.well_yield * 60 * 264.17, first_year_unit_cost.unit_cost_per_acreft)
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.xlabel('Well pumping rate (gpm)')
-# plt.ylabel('$ per acre-foot')
-# plt.show()
-#
-# plt.scatter(first_year_unit_cost.areal_extent * 0.000247105, first_year_unit_cost.unit_cost_per_acreft)
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.xlabel('Acres per well')
-# plt.ylabel('$ per acre-foot')
-# plt.show()
+## END
