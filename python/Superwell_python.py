@@ -18,7 +18,6 @@ grid_df = pd.read_csv('inputs.csv')
 well_params = pd.read_csv('Well_Params.csv', index_col = 0)
 electricity_rates = pd.read_csv('GCAM_Electrical_Rates.csv', index_col = 0, header = None)
 W_lookup = pd.read_csv('Theis_well_function_table.csv', header = "infer") 
-lookup_idx = pd.Index(W_lookup.W)
 os.chdir('../')
 
 #%%
@@ -331,7 +330,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:,0])):
                   str(selected_grid_df.CNTRY_NAME[grid_cell]) + ', ' + \
                   str(int(selected_grid_df.GCAM_ID[grid_cell])) + ', ' + \
                   str(selected_grid_df.Basin_Name[grid_cell]) + ', ' + \
-                  str('Well_ID') + ', ' + \
+                  str(selected_grid_df.OBJECTID[grid_cell]) + ', ' + \
                   str(grid_cell_area) + ', ' + \
                   str(selected_grid_df.Permeability[grid_cell]) + ', ' + \
                   str(selected_grid_df.Porosity[grid_cell]) + ', ' + \
