@@ -9,11 +9,12 @@ import math
 #  params file, write outputs and save a few key plots e.g., a summary diagnostic plot and maps (volume, unit cost etc)
 
 # load data
-grid_df = pd.read_csv('inputs/inputs.csv')
-params = pd.read_csv('inputs/params.csv', index_col=0)
-electricity_rates = pd.read_csv('inputs/GCAM_Electrical_Rates.csv', index_col=0, header=None)
-W_lookup = pd.read_csv('inputs/Theis_well_function_table.csv', header="infer")
+grid_df = pd.read_csv('../inputs/inputs.csv')
+params = pd.read_csv('../inputs/params.csv', index_col=0)
+electricity_rates = pd.read_csv('../inputs/GCAM_Electrical_Rates.csv', index_col=0, header=None)
+W_lookup = pd.read_csv('../inputs/Theis_well_function_table.csv', header="infer")
 lookup_idx = pd.Index(W_lookup.W)
+
 
 # define constants
 MAX_INITIAL_SAT_THICKNESS = params.Val['Max_Initial_Sat_Thickness']  # maximum initial saturated thickness
@@ -39,16 +40,16 @@ country = 'all'
 if country == 'all':
     selected_grid_df = grid_df
 else:
-    selected_grid_df = grid_df[grid_df['CNTRY_NAME'] == country].reset_index(drop=True)
+    selected_grid_df = grid_df[grid_df['Country'] == country].reset_index(drop=True)
 
 # define outputs file name
-output_path = 'outputs'
+output_path = '../outputs/'
 output_name = 'superwell_py_deep_' + str.replace(country, ' ', '') + '_' + str(IRR_DEPTH) + 'IrD_' + str(DEPLETION_LIMIT) + 'DL'
 
 # header for output file
-header_column_names = 'year_number,DEPLETION_LIMIT,continent,country_name,' \
-                      'gcam_basin_id,gcam_basin_name,well_id,grid_area,permeability,storativity,' \
-                      'total_thickness,depth_to_piez_surface,orig_aqfr_sat_thickness,aqfr_sat_thickness,' \
+header_column_names = 'year_number,depletion_limit,continent,country,' \
+                      'gcam_basin_id,Basin_long_name,grid_id,grid_area,permeability,porosity,' \
+                      'total_thickness,depth_to_water,orig_aqfr_sat_thickness,aqfr_sat_thickness,' \
                       'hydraulic_conductivity,transmissivity,radius_of_influence,areal_extent,' \
                       'max_drawdown,drawdown,drawdown_interference,total_head,well_yield,volume_produced_perwell,' \
                       'cumulative_vol_produced_perwell,number_of_wells,volume_produced_allwells,' \
@@ -58,13 +59,13 @@ header_column_names = 'year_number,DEPLETION_LIMIT,continent,country_name,' \
                       'unit_cost,unit_cost_per_km3,unit_cost_per_acreft,whyclass,total_well_length'
 
 # write header to the output file
-file = open(output_path + "\\" + output_name + '.csv', 'w')
+file = open(output_path + output_name + '.csv', 'w')
 file.write(str(header_column_names))
 file.write('\n')
 file.close()
 
 # TODO: we don't have max depletion ratio now, how do we calculate max drawdown now? # (originally it was supposed to
-#  be max_drawdown = Max_Depletion * Original Aquifer Thickness ). It could be max_s_frac * selected_grid_df.Thickness
+#  be max_drawdown = Max_Depletion * Original Aquifer Thickness ). It could be max_s_frac * selected_grid_df.Aquifer_thickness
 #  (or the array tracking aquifer thickness sat_thickness_array?)
 
 # define Theis function
@@ -87,61 +88,70 @@ def drawdown_theis(time, r, S, T, Q):
 
     return (s)
 
+
 # candidate well pumping rates (gallons per minute)
 Q_array_gpm = [10, 20, 30, 40, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1300, 1400, 1500]
 
 Q_array = np.array(Q_array_gpm) / (60 * 264.17)  # Convert candidate pumping rates to m^3/s
 
+skipped_cells = 0
 
 # %% superwell code block
 for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
-    print('Percent complete = ' + str(np.round(100 * grid_cell / len(selected_grid_df.iloc[:, 0]), 3)) +
-          ' | Currently processing: ' + str(selected_grid_df.CNTRY_NAME[grid_cell]))
+    if grid_cell % int(np.round(len(selected_grid_df.iloc[:, 0]) / 1000)) == 0 or selected_grid_df.Country[
+        grid_cell] != selected_grid_df.Country[grid_cell - 1]:
+        print('Percent complete = ' + str(np.round(100 * grid_cell / len(selected_grid_df.iloc[:, 0]), 1)) +
+              ' | Processing Cell # ' + str(selected_grid_df.GridCellID[grid_cell]) + ' in '
+              + str(selected_grid_df.Country[grid_cell]))
 
-################ determine if grid cell is skipped ########################
+    ################ determine if grid cell is skipped ########################
 
-    # skip grid areas less than 10x10 km
-    if selected_grid_df.Area[grid_cell] < 1 * 10 ** 7:
+    # skip grid areas less than 5x5 km (1% of a normal 50x50 grid size)
+    if selected_grid_df.Grid_area[grid_cell] < 5 * 5 * (10 ** 6):
+        skipped_cells += 1
         continue
 
     # depth to water table should we at least 1 meter
-    if selected_grid_df.Depth[grid_cell] < 1:
+    if selected_grid_df.Depth_to_water[grid_cell] < 1:
+        skipped_cells += 1
         continue
 
     # limit low permeability values
     if selected_grid_df.Permeability[grid_cell] < -15:
+        skipped_cells += 1
         continue
 
     # limit porosity to 5% voids at least
     if selected_grid_df.Porosity[grid_cell] < 0.05:
+        skipped_cells += 1
         continue
 
     # correct aquifer thickness outliers, replace >1000m thickness with 1000m
-    if selected_grid_df.Thickness[grid_cell] > 1000:
-        selected_grid_df.Thickness[grid_cell] = 1000
+    selected_grid_df.loc[selected_grid_df['Aquifer_thickness'] > 1000, 'Aquifer_thickness'] = 1000 # to avoid warning
 
     # skip grid cells where the depth is greater than thickness (negative transmissivity)
-    if selected_grid_df.Thickness[grid_cell] < selected_grid_df.Depth[grid_cell]:
+    if selected_grid_df.Aquifer_thickness[grid_cell] < selected_grid_df.Depth_to_water[grid_cell]:
+        skipped_cells += 1
         continue
 
     ################ store grid cell attributes for output ####################
 
     # Get the country name from selected_grid_df and check if the country is in electricity_rate_dict
-    if str(selected_grid_df.CNTRY_NAME[grid_cell]) in electricity_rate_dict:
-        ELECTRICITY_RATE = electricity_rate_dict[str(selected_grid_df.CNTRY_NAME[grid_cell])]
+    if str(selected_grid_df.Country[grid_cell]) in electricity_rate_dict:
+        ELECTRICITY_RATE = electricity_rate_dict[str(selected_grid_df.Country[grid_cell])]
     else:
         ELECTRICITY_RATE = DEFAULT_ELECTRICITY_RATE  # give default electricity rate if missing cost data
 
-    total_thickness = selected_grid_df.Thickness[grid_cell]  # m
-    grid_cell_area = selected_grid_df.Area[grid_cell]
+    total_thickness = selected_grid_df.Aquifer_thickness[grid_cell]  # m
+    grid_cell_area = selected_grid_df.Grid_area[grid_cell]
 
     # depth to water
     DTW_array = np.zeros(NUM_YEARS)  # tracks depth to water for each year
-    DTW_array[0] = selected_grid_df.Depth[grid_cell]  # initial depth to water
+    DTW_array[0] = selected_grid_df.Depth_to_water[grid_cell]  # initial depth to water
 
     # saturated thickness: total aquifer thickness minus depth to piezometric surface
-    initial_sat_thickness = selected_grid_df.Thickness[grid_cell] - selected_grid_df.Depth[grid_cell]  # m
+    initial_sat_thickness = selected_grid_df.Aquifer_thickness[grid_cell] - selected_grid_df.Depth_to_water[grid_cell]  # m
 
     sat_thickness_array = np.zeros(NUM_YEARS)
     well_length_array = np.zeros(NUM_YEARS)
@@ -313,7 +323,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             drawdown_interference[year] = s_interference_avg
             total_head[year] = s_jacob + DTW_array[year]
             volume_per_well[year] = Well_Q_array[year] * 86400 * DAYS
-            num_wells[year] = selected_grid_df.Area[grid_cell] / well_area_array[year]
+            num_wells[year] = selected_grid_df.Grid_area[grid_cell] / well_area_array[year]
             volume_all_wells[year] = volume_per_well[year] * num_wells[year]
             cumulative_volume_per_well[year] = volume_per_well[year]
             cumulative_volume_all_wells[year] = volume_all_wells[year]
@@ -324,7 +334,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             drawdown_interference[year] = s_interference_avg
             total_head[year] = s_jacob + DTW_array[year]
             volume_per_well[year] = Well_Q_array[year] * 86400 * DAYS
-            num_wells[year] = selected_grid_df.Area[grid_cell] / well_area_array[year]
+            num_wells[year] = selected_grid_df.Grid_area[grid_cell] / well_area_array[year]
             volume_all_wells[year] = volume_per_well[year] * num_wells[year]
             cumulative_volume_per_well[year] = volume_per_well[year] + cumulative_volume_per_well[year - 1]
             cumulative_volume_all_wells[year] = volume_all_wells[year] + cumulative_volume_all_wells[year - 1]
@@ -476,9 +486,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     ######################## save grid cell results ###########################
     """
-    ['year_number', 'DEPLETION_LIMIT', 'continent', 'country_name', 
-    'gcam_basin_id', 'gcam_basin_name', 'well_id', 'grid_area', 'permeability', 'storativity', 
-    'total_thickness', 'depth_to_piez_surface', 'orig_aqfr_sat_thickness', 'aqfr_sat_thickness', 
+    ['year_number', 'depletion_limit', 'continent', 'country', 
+    'gcam_basin_id', 'Basin_long_name', 'grid_id', 'grid_area', 'permeability', 'porosity', 
+    'total_thickness', 'depth_to_water', 'orig_aqfr_sat_thickness', 'aqfr_sat_thickness', 
     'hydraulic_conductivity', 'transmissivity', 'radius_of_influence', 'areal_extent', 
     'max_drawdown', 'drawdown', 'drawdown_interference', 'total_head', 'well_yield', 'volume_produced_perwell', 
     'cumulative_vol_produced_perwell', 'number_of_wells', 'volume_produced_allwells', 
@@ -492,14 +502,14 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         outputs = str(year + 1) + ', ' + \
                   str(DEPLETION_LIMIT) + ', ' + \
                   str(selected_grid_df.Continent[grid_cell]) + ', ' + \
-                  str(selected_grid_df.CNTRY_NAME[grid_cell]) + ', ' + \
-                  str(int(selected_grid_df.GCAM_ID[grid_cell])) + ', ' + \
-                  str(selected_grid_df.Basin_Name[grid_cell]) + ', ' + \
-                  str(selected_grid_df.OBJECTID[grid_cell]) + ', ' + \
+                  str(selected_grid_df.Country[grid_cell]) + ', ' + \
+                  str(int(selected_grid_df.GCAM_basin_ID[grid_cell])) + ', ' + \
+                  str(selected_grid_df.Basin_long_name[grid_cell]) + ', ' + \
+                  str(selected_grid_df.GridCellID[grid_cell]) + ', ' + \
                   str(grid_cell_area) + ', ' + \
                   str(selected_grid_df.Permeability[grid_cell]) + ', ' + \
                   str(selected_grid_df.Porosity[grid_cell]) + ', ' + \
-                  str(selected_grid_df.Thickness[grid_cell]) + ', ' + \
+                  str(selected_grid_df.Aquifer_thickness[grid_cell]) + ', ' + \
                   str(DTW_array[year]) + ', ' + \
                   str(initial_sat_thickness) + ', ' + \
                   str(sat_thickness_array[year]) + ', ' + \
@@ -533,12 +543,14 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(unit_cost_per_km3[year]) + ', ' + \
                   str(unit_cost_per_acreft[year]) + ', ' + \
                   str(selected_grid_df.WHYClass[grid_cell]) + ', ' + \
-                  str(selected_grid_df.Thickness[grid_cell])
+                  str(selected_grid_df.Aquifer_thickness[grid_cell])
 
         # write outputs to the file
-        file = open(output_path + "\\" + output_name + '.csv', 'a')
+        file = open(output_path + output_name + '.csv', 'a')
         file.write(outputs)
         file.write('\n')
         file.close()
 
+print('ALL DONE! ', skipped_cells, 'grid cells out of ', grid_cell,' cells (',
+      round(skipped_cells * 100 /grid_cell), '% ) were skipped due to screening criteria')
 ## END
