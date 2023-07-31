@@ -99,7 +99,7 @@ skipped_cells = 0
 # %% superwell code block
 for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
-    if grid_cell % int(np.round(len(selected_grid_df.iloc[:, 0]) / 1000)) == 0 or selected_grid_df.Country[
+    if grid_cell % int(len(selected_grid_df.iloc[:, 0]) / 1000) == 0 or selected_grid_df.Country[
         grid_cell] != selected_grid_df.Country[grid_cell - 1]:
         print('Percent complete = ' + str(np.round(100 * grid_cell / len(selected_grid_df.iloc[:, 0]), 1)) +
               ' | Processing Cell # ' + str(selected_grid_df.GridCellID[grid_cell]) + ' in '
@@ -543,7 +543,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(unit_cost_per_km3[year]) + ', ' + \
                   str(unit_cost_per_acreft[year]) + ', ' + \
                   str(selected_grid_df.WHYClass[grid_cell]) + ', ' + \
-                  str(selected_grid_df.Aquifer_thickness[grid_cell])
+                  str(well_length_array[year])
 
         # write outputs to the file
         file = open(output_path + output_name + '.csv', 'a')
