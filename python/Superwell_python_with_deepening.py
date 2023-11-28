@@ -17,17 +17,19 @@ lookup_idx = pd.Index(W_lookup.W)
 
 
 # define constants
-MAX_INITIAL_SAT_THICKNESS = params.Val['Max_Initial_Sat_Thickness']  # maximum initial saturated thickness
-DEFAULT_ELECTRICITY_RATE = params.Val['Energy_cost_rate']  # default electricity rate
-DEPLETION_LIMIT = params.Val['Depletion_Limit']  # depletion limit for this scenario
-IRR_DEPTH = params.Val['Irrigated_Depth']  # annual irrigation depth target [m]
+MAX_INITIAL_SAT_THICKNESS = float(params.Val['Max_Initial_Sat_Thickness']) # maximum initial saturated thickness
+DEFAULT_ELECTRICITY_RATE = float(params.Val['Energy_cost_rate'])  # default electricity rate
+DEPLETION_LIMIT = float(params.Val['Depletion_Limit'])  # depletion limit for this scenario
+IRR_DEPTH = float(params.Val['Irrigated_Depth'])  # annual irrigation depth target [m]
 NUM_YEARS = int(params.Val['Total_Simulation_Years'])  # maximum years of pumping
 DAYS = int(params.Val['Pumping_Days'])  # days pumping per year
-SPECIFIC_WEIGHT = params.Val['Specific_weight']  # specific weight of water
-EFFICIENCY = params.Val['Pump_Efficiency']  # well efficiency
-WELL_LIFETIME = params.Val['Max_Lifetime_in_Years']
-INTEREST_RATE = params.Val['Interest_Rate']
-MAINTENANCE_RATE = params.Val['Maintenance_factor']
+SPECIFIC_WEIGHT = float(params.Val['Specific_weight'])  # specific weight of water
+EFFICIENCY = float(params.Val['Pump_Efficiency'])  # well efficiency
+WELL_LIFETIME = float(params.Val['Max_Lifetime_in_Years'])
+INTEREST_RATE = float(params.Val['Interest_Rate'])
+MAINTENANCE_RATE = float(params.Val['Maintenance_factor'])
+COUNTRY_FILTER = params.Val['Country_filter']  # filter by country
+GRIDCELL_FILTER = params.Val['Gridcell_filter']  # filter by grid cell ID
 
 # convert electricity rate dictionary
 electricity_rate_dict = {}
@@ -35,16 +37,30 @@ for i in range(len(electricity_rates.iloc[:, 0])):
     country = electricity_rates.index[i]
     electricity_rate_dict[country.rstrip()] = electricity_rates.iloc[i, 0]
 
-# filter by country, if desired
-country = 'all'
-if country == 'all':
+# filter by country and/or grid cell, change filters in params.csv
+if COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all':
     selected_grid_df = grid_df
+elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all':
+    selected_grid_df = grid_df[grid_df['GridCellID'] == int(GRIDCELL_FILTER)].reset_index(drop=True)
+elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all':
+    selected_grid_df = grid_df[grid_df['Country'] == COUNTRY_FILTER].reset_index(drop=True)
 else:
-    selected_grid_df = grid_df[grid_df['Country'] == country].reset_index(drop=True)
+    selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+
+# if selected_grid_df is empty, print error message that country and grid cell combination is not valid
+if selected_grid_df.empty:
+    print('Error: Country and Grid Cell combination is not valid. Please check the inputs file (params.csv) to make '
+          'sure that the grid cell ID belongs to the filtered country or vice versa.')
+    exit()
 
 # define outputs file name
 output_path = '../outputs/'
-output_name = 'superwell_py_deep_' + str.replace(country, ' ', '') + '_' + str(IRR_DEPTH) + 'IrD_' + str(DEPLETION_LIMIT) + 'DL'
+if GRIDCELL_FILTER == 'all':
+    output_name = 'superwell_py_deep_' + str.replace(COUNTRY_FILTER, ' ', '') + '_' + str(IRR_DEPTH) + 'IrD_' + str(
+        DEPLETION_LIMIT) + 'DL'
+else:
+    output_name = 'superwell_py_deep_' + str.replace(COUNTRY_FILTER, ' ', '') + '_' + str(IRR_DEPTH) + 'IrD_' + str(
+    DEPLETION_LIMIT) + 'DL_Grid_' + str(GRIDCELL_FILTER)
 
 # header for output file
 header_column_names = 'year_number,depletion_limit,continent,country,' \
@@ -94,13 +110,16 @@ Q_array_gpm = [10, 20, 30, 40, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600, 
 
 Q_array = np.array(Q_array_gpm) / (60 * 264.17)  # Convert candidate pumping rates to m^3/s
 
+print("Preamble complete. Beginning the simulation...")
+
 skipped_cells = 0
 
 # %% superwell code block
 for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
-    if grid_cell % int(len(selected_grid_df.iloc[:, 0]) / 1000) == 0 or selected_grid_df.Country[
-        grid_cell] != selected_grid_df.Country[grid_cell - 1]:
+    if GRIDCELL_FILTER == 'all' and grid_cell % int(len(selected_grid_df.iloc[:, 0]) / 1000) == (0 or
+                                                                                            selected_grid_df.Country[
+        grid_cell] != selected_grid_df.Country[grid_cell - 1]):
         print('Percent complete = ' + str(np.round(100 * grid_cell / len(selected_grid_df.iloc[:, 0]), 1)) +
               ' | Processing Cell # ' + str(selected_grid_df.GridCellID[grid_cell]) + ' in '
               + str(selected_grid_df.Country[grid_cell]))
@@ -177,7 +196,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     # time and well radius for Theis solution
     time_Q = 2 * 365 * 86400  # time period used for determining initial well Q
-    well_r = 0.5 * params.Val['Well_Diameter']
+    well_r = 0.5 * float(params.Val['Well_Diameter'])
 
     # drawdown at t = 2 years for all candidate well Qs 
     s_array = np.zeros(len(Q_array))
@@ -357,11 +376,11 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     ##################### annual costs and unit costs ######################### 
     # assign well unit cost based on WHY Class
     if selected_grid_df.WHYClass[grid_cell] == 10:
-        well_unit_cost = params.Val['Well_Install_10']
+        well_unit_cost = float(params.Val['Well_Install_10'])
     elif selected_grid_df.WHYClass[grid_cell] == 20:
-        well_unit_cost = params.Val['Well_Install_20']
+        well_unit_cost = float(params.Val['Well_Install_20'])
     else:
-        well_unit_cost = params.Val['Well_Install_30']
+        well_unit_cost = float(params.Val['Well_Install_30'])
 
     # find indexes of years when number of wells increase due to pumping rate reduction 
     # along with pumping rate and corresponding number of wells
@@ -551,6 +570,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         file.write('\n')
         file.close()
 
-print('ALL DONE! ', skipped_cells, 'grid cells out of ', grid_cell,' cells (',
+if GRIDCELL_FILTER == 'all':
+    print(skipped_cells, 'grid cells out of ', grid_cell,' cells (',
       round(skipped_cells * 100 /grid_cell), '% ) were skipped due to screening criteria')
+
+print('ALL DONE!')
 ## END
