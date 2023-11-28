@@ -1,5 +1,7 @@
 ﻿Index,Val,Units
-Total_Simulation_Years,100,years
+Country_filter,all,
+Gridcell_filter,72548,
+Total_Simulation_Years,500,years
 Pumping_Days,100,days/year
 Irrigated_Depth,0.3,m
 Depletion_Limit,0.25,
@@ -16,4 +18,3 @@ Maintenance_factor,0.07,
 Well_Install_10,82.0209974,$/m
 Well_Install_20,164,$/m
 Well_Install_30,50,$/m
-
