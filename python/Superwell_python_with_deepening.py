@@ -227,16 +227,28 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     ###################### determine initial well Area ########################
     initial_well_area = initial_Q * DAYS * 86400 / (IRR_DEPTH)  # m^2
     initial_roi = (initial_well_area / math.pi) ** 0.5  # m
+    initial_num_wells = selected_grid_df.Grid_area[grid_cell] / initial_well_area # initial number of wells
     well_roi_array = np.zeros(NUM_YEARS)
     well_roi_array[0] = initial_roi
     well_area_array = np.zeros(NUM_YEARS)
     well_area_array[0] = initial_well_area
 
+    # make sure depleted volume fraction does not exceed depletion limit
+    # check for first year: ratio of volume pumped in 1st year to available volume should be less than depletion limit
+    # same as this initial_Q * DAYS * 86400 * initial_num_wells / available_volume > DEPLETION_LIMIT:
+    if (((selected_grid_df.Grid_area[grid_cell] / well_area_array[0]) * Well_Q_array[0] * 86400 * DAYS) /
+            available_volume > DEPLETION_LIMIT):
+        continue
+
     ####################### annual pumping simulation loop ####################
     depleted_volume_fraction = np.zeros(NUM_YEARS)  # initialize
+    volume_all_wells = np.zeros(NUM_YEARS)
 
     for year in range(NUM_YEARS):
-        if depleted_volume_fraction[year - 1] > DEPLETION_LIMIT:
+
+        # make sure depleted volume fraction does not exceed depletion limit
+        # check for last year: if we pump for one more year would we hit the depletion limit
+        if depleted_volume_fraction[year - 1] + (volume_all_wells[year - 1] / available_volume) > DEPLETION_LIMIT:
             year = year - 1
             break
 
@@ -333,7 +345,6 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             total_head = np.zeros(NUM_YEARS)
             volume_per_well = np.zeros(NUM_YEARS)
             num_wells = np.zeros(NUM_YEARS)
-            volume_all_wells = np.zeros(NUM_YEARS)
             cumulative_volume_per_well = np.zeros(NUM_YEARS)
             cumulative_volume_all_wells = np.zeros(NUM_YEARS)
             depleted_volume_fraction = np.zeros(NUM_YEARS)
