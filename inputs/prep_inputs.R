@@ -10,6 +10,7 @@
 #   - renames NA to NAm to avoid getting NaN
 # - renames Côte d'Ivoire to avoid special characters
 # - makes sure grid cell IDs are unique
+# - removes zero permeability cells
 # - renames parameters to be consistent
 # - removes any , in basin name to avoid issues with reading in csvs
 # - prepares mapping files to be used later
@@ -22,7 +23,7 @@ library(tidyverse)
 library(sf)
 
 # load data
-df <- st_read("inputs/shapefiles/All_merged.shp") %>% st_make_valid()
+df <- st_read("inputs/shapefiles/All_merged.shp") #%>% st_make_valid()
 basin_mapping <- read_csv("inputs/basin_to_country_mapping.csv") %>%
   mutate(Basin_long_name = str_replace_all(Basin_long_name, ",", "_"))
 continent_mapping <- read_csv("inputs/continent_county_mapping.csv")
@@ -40,7 +41,8 @@ unique(diff_area$COUNTRY)
 plot(diff_area %>% filter(COUNTRY == "Australia") %>% select(areadiff)) # biggest errors
 plot(diff_area %>% filter(COUNTRY == "India") %>% select(areadiff)) # normal errors
 # flag the area mismatch cells with a new column and plot them to see if there is any spatial coherency to the errors
-# decision for now: take CalcArea_m because it reasonable, Shape_Area has a "step" on some latitude but is also reproducible from coordinates so there's a tradeoff
+# decision for now: take CalcArea_m because it reasonable, Shape_Area has a "step" on some latitudes but is also reproducible from coordinates so there's a tradeoff
+# it is possible that the mesh for Australia isn't right
 
 plot(df %>% filter(COUNTRY == "Australia") %>% select(CalcArea_m) %>% mutate(CalcArea_m = CalcArea_m * 1e-6))
 plot(df %>% filter(COUNTRY == "Australia") %>% select(Shape_Area) %>% mutate(Shape_Area = Shape_Area * 1e-6))
@@ -103,8 +105,9 @@ na_check(df_in_map)
 
 {# run
 # attach continents to input file
-df_all <- df_fill %>% left_join(df_in_map, by = c("Country", "GCAM_basin_ID", "WHYClass")) %>%
-  select(GridCellID, Continent, Country, GCAM_basin_ID, Basin_long_name, WHYClass,
+df_all <- df_fill %>% filter(Permeability != 0) %>%
+    left_join(df_in_map, by = c("Country", "GCAM_basin_ID", "WHYClass")) %>%
+    select(GridCellID, Continent, Country, GCAM_basin_ID, Basin_long_name, WHYClass,
          Porosity, Permeability, Aquifer_thickness, Depth_to_water, Grid_area, geometry)
 }
 
