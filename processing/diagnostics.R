@@ -1,11 +1,9 @@
-# PREAMBLE    ########
 # Diagnostics and post processing of superwell outputs
 #
 # Hassan Niazi, hassan.niazi@pnnl.gov
 # Jan 2023, JGCRI, PNNL
 
 library(tidyverse)
-library(ggplot2)
 library(GGally)
 library(ggpubr)
 library(plotly)
