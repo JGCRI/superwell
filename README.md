@@ -6,7 +6,7 @@
 
 # _superwell_: A physics-based hydro-economic model for groundwater cost and supply assessment
 
-The [`superwell`](https://github.com/JGCRI/superwell.git) model provides estimates of the global extractable volumes and unit-costs $(\$/km^3)$ of accessible groundwater production under user-specified extraction scenarios.  
+The [`superwell`](https://github.com/JGCRI/superwell.git) model provides estimates of the global extractable volumes and unit-costs $(USD/km^3)$ of accessible groundwater production under user-specified extraction scenarios.  
 The structure of [`superwell`](https://github.com/JGCRI/superwell.git) is:
 
 - input driven  
