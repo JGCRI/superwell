@@ -1,10 +1,10 @@
 ﻿Index,Val,Units
 Country_filter,all,
-Gridcell_filter,72548,
+Gridcell_filter,all,
 Total_Simulation_Years,500,years
 Pumping_Days,100,days/year
-Irrigated_Depth,0.3,m
 Depletion_Limit,0.25,
+Ponded_Depth,0.3,m
 Specific_weight,9800,(kg/m3*m/s2)
 Static_head,0,m
 Max_Initial_Sat_Thickness,200,m 
