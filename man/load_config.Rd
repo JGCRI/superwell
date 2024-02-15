@@ -2,19 +2,19 @@
 % Please edit documentation in R/superwell.R
 \name{load_config}
 \alias{load_config}
-\title{Load electricity data by GCAM basin}
+\title{Load aquifer data by country}
 \usage{
-load_config(config_file, country = "Iran")
+load_config(config_file, country)
 }
 \arguments{
 \item{config_file}{Full path with file name and extension to the input configuration CSV file}
 }
 \value{
-<fill in>
+hydro-geological data for each aquifer of the specified country
 }
 \description{
-Read in the cost of electricity by GCAM basin (USD/Unit for 172 countries)
+Read in the aquifer data for countries
 }
 \author{
-<name>; <email>
+Superwell team; hassan.niazi@pnnl.gov
 }
