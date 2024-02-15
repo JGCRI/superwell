@@ -1,0 +1,1414 @@
+Continent,Country,GCAM_basin_ID,WHYClass,Basin_long_name,GLU_code,GLU_name,ISO,ISO_NUM,Country_name,desal
+As,Afghanistan,52,10,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Afghanistan,58,10,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Afghanistan,97,20,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Afghanistan,52,20,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Afghanistan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Afghanistan,89,20,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,Afghanistan,97,30,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Afghanistan,102,30,HamuniMashkel,GLU102,HamuMashR,PAK,586,Pakistan,0
+As,Afghanistan,90,30,Farahrud,GLU090,FarahrudR,AFG,4,Afghanistan,0
+As,Afghanistan,89,30,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,Afghanistan,52,30,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Afghanistan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Afghanistan,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+Eu,Albania,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Albania,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Af,Algeria,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Algeria,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Algeria,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Algeria,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Algeria,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Algeria,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Algeria,86,30,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Algeria,144,20,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Algeria,80,20,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Algeria,80,10,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Eu,Andorra,64,30,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,Andorra,73,30,Ebro,GLU073,EbroR,ESP,724,Spain,0
+Af,Angola,197,10,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Angola,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Angola,182,30,Angola_Coast,GLU182,AngolaCst,AGO,24,Angola,1
+Af,Angola,182,10,Angola_Coast,GLU182,AngolaCst,AGO,24,Angola,1
+Af,Angola,197,30,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Angola,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Angola,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Angola,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Angola,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Angola,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+"NAm",Anguilla,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Antigua and Barbuda,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+SA,Argentina,169,10,South_Chile_Pacific_Coast,GLU169,ChileCstS,CHL,152,Chile,1
+SA,Argentina,169,30,South_Chile_Pacific_Coast,GLU169,ChileCstS,CHL,152,Chile,1
+SA,Argentina,215,30,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+SA,Argentina,215,10,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+SA,Argentina,215,20,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+SA,Argentina,169,20,South_Chile_Pacific_Coast,GLU169,ChileCstS,CHL,152,Chile,1
+SA,Argentina,214,20,Central_Patagonia_Highlands,GLU214,Patagonia,ARG,32,Argentina,0
+SA,Argentina,214,30,Central_Patagonia_Highlands,GLU214,Patagonia,ARG,32,Argentina,0
+SA,Argentina,213,30,Negro,GLU213,NegroR,ARG,32,Argentina,0
+SA,Argentina,213,20,Negro,GLU213,NegroR,ARG,32,Argentina,0
+SA,Argentina,214,10,Central_Patagonia_Highlands,GLU214,Patagonia,ARG,32,Argentina,0
+SA,Argentina,213,10,Negro,GLU213,NegroR,ARG,32,Argentina,0
+SA,Argentina,212,10,South_America_Colorado,GLU212,ArgColoR,ARG,32,Argentina,1
+SA,Argentina,210,10,North_Argentina_South_Atlantic_Coast,GLU210,ArgCstN,ARG,32,Argentina,1
+SA,Argentina,210,30,North_Argentina_South_Atlantic_Coast,GLU210,ArgCstN,ARG,32,Argentina,1
+SA,Argentina,212,20,South_America_Colorado,GLU212,ArgColoR,ARG,32,Argentina,1
+SA,Argentina,209,10,Pampas_Region,GLU209,Pampas,ARG,32,Argentina,1
+SA,Argentina,209,30,Pampas_Region,GLU209,Pampas,ARG,32,Argentina,1
+SA,Argentina,212,30,South_America_Colorado,GLU212,ArgColoR,ARG,32,Argentina,1
+SA,Argentina,206,10,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Argentina,207,30,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Argentina,206,30,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Argentina,205,10,Salinas_Grandes,GLU205,Salinas,ARG,32,Argentina,1
+SA,Argentina,205,30,Salinas_Grandes,GLU205,Salinas,ARG,32,Argentina,1
+SA,Argentina,203,30,Mar_Chiquita,GLU203,MarChiq,ARG,32,Argentina,1
+SA,Argentina,203,10,Mar_Chiquita,GLU203,MarChiq,ARG,32,Argentina,1
+SA,Argentina,206,20,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Argentina,200,30,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Argentina,200,20,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+As,Armenia,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+Au,Australia,211,20,Tasmania,GLU211,Tasmania,AUS,36,Australia,0
+Au,Australia,211,10,Tasmania,GLU211,Tasmania,AUS,36,Australia,0
+Au,Australia,189,20,Australia_East_Coast,GLU189,AusCstE,AUS,36,Australia,1
+Au,Australia,189,10,Australia_East_Coast,GLU189,AusCstE,AUS,36,Australia,1
+Au,Australia,208,20,Murray_Darling,GLU208,MurrayDrlg,AUS,36,Australia,1
+Au,Australia,208,10,Murray_Darling,GLU208,MurrayDrlg,AUS,36,Australia,1
+Au,Australia,202,30,Australia_South_Coast,GLU202,AusCstS,AUS,36,Australia,1
+Au,Australia,202,20,Australia_South_Coast,GLU202,AusCstS,AUS,36,Australia,1
+Au,Australia,191,30,Australia_West_Coast,GLU191,AusCstW,AUS,36,Australia,1
+Au,Australia,191,10,Australia_West_Coast,GLU191,AusCstW,AUS,36,Australia,1
+Au,Australia,202,10,Australia_South_Coast,GLU202,AusCstS,AUS,36,Australia,1
+Au,Australia,208,30,Murray_Darling,GLU208,MurrayDrlg,AUS,36,Australia,1
+Au,Australia,193,30,Australia_Interior,GLU193,AusInt,AUS,36,Australia,0
+Au,Australia,193,20,Australia_Interior,GLU193,AusInt,AUS,36,Australia,0
+Au,Australia,193,10,Australia_Interior,GLU193,AusInt,AUS,36,Australia,0
+Au,Australia,184,30,Australia_North_Coast,GLU184,AusCstN,AUS,36,Australia,1
+Au,Australia,184,20,Australia_North_Coast,GLU184,AusCstN,AUS,36,Australia,1
+Au,Australia,184,10,Australia_North_Coast,GLU184,AusCstN,AUS,36,Australia,1
+Au,Australia,191,20,Australia_West_Coast,GLU191,AusCstW,AUS,36,Australia,1
+Eu,Austria,50,30,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Austria,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Austria,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Austria,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Austria,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Austria,50,20,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Austria,31,30,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+As,Azerbaijan,45,20,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Azerbaijan,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+"NAm",Bahamas,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+As,Bahrain,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Bangladesh,110,10,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Bangladesh,116,10,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,Bangladesh,116,30,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,Bangladesh,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+"NAm",Barbados,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Eu,Belarus,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Belarus,39,10,Dnieper,GLU039,DnieperR,UKR,804,Ukraine,0
+Eu,Belarus,39,20,Dnieper,GLU039,DnieperR,UKR,804,Ukraine,0
+Eu,Belarus,35,10,Neman,GLU035,NemanR,LTU,440,Lithuania,0
+Eu,Belarus,25,10,Daugava,GLU025,DaugavaR,BLR,112,Belarus,0
+Eu,Belarus,22,10,Narva,GLU022,NarvaR,RUS,643,Russian Federation,0
+Eu,Belarus,17,10,Neva,GLU017,NevaR,RUS,643,Russian Federation,0
+Eu,Belgium,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Belgium,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Belgium,46,30,Seine,GLU046,SeineR,FRA,250,France,0
+Eu,Belgium,36,10,Scheldt,GLU036,ScheldtR,BEL,56,Belgium,0
+Eu,Belgium,36,30,Scheldt,GLU036,ScheldtR,BEL,56,Belgium,0
+"NAm",Belize,111,20,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Belize,111,10,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+Af,Benin,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Benin,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Benin,160,30,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Benin,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Benin,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+As,Bhutan,110,10,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Bhutan,110,20,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Bhutan,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+SA,Bolivia,206,20,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Bolivia,200,30,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Bolivia,206,30,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Bolivia,200,20,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Bolivia,207,20,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Bolivia,206,10,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Bolivia,200,10,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Bolivia,168,20,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Bolivia,168,10,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Bolivia,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+Eu,Bosnia and Herzegovina,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Bosnia and Herzegovina,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Bosnia and Herzegovina,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Af,Botswana,194,10,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Botswana,194,30,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Botswana,194,20,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Botswana,199,30,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Botswana,197,20,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Botswana,197,30,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Botswana,199,20,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Botswana,197,10,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Botswana,199,10,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Botswana,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Botswana,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+SA,Brazil,195,10,Uruguay_Brazil_South_Atlantic_Coast,GLU195,BrzCstS,BRA,76,Brazil,1
+SA,Brazil,195,30,Uruguay_Brazil_South_Atlantic_Coast,GLU195,BrzCstS,BRA,76,Brazil,1
+SA,Brazil,206,10,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Brazil,206,20,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Brazil,206,30,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Brazil,195,20,Uruguay_Brazil_South_Atlantic_Coast,GLU195,BrzCstS,BRA,76,Brazil,1
+SA,Brazil,192,10,Sao_Francisco,GLU192,SaoFrancR,BRA,76,Brazil,0
+SA,Brazil,192,30,Sao_Francisco,GLU192,SaoFrancR,BRA,76,Brazil,0
+SA,Brazil,174,10,Tocantins,GLU174,TocantinsR,BRA,76,Brazil,0
+SA,Brazil,174,30,Tocantins,GLU174,TocantinsR,BRA,76,Brazil,0
+SA,Brazil,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Brazil,168,10,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Brazil,187,10,Parnaiba,GLU187,ParnaibaR,BRA,76,Brazil,0
+SA,Brazil,187,30,Parnaiba,GLU187,ParnaibaR,BRA,76,Brazil,0
+SA,Brazil,186,10,East_Brazil_South_Atlantic_Coast,GLU186,BrzCstE,BRA,76,Brazil,1
+SA,Brazil,186,30,East_Brazil_South_Atlantic_Coast,GLU186,BrzCstE,BRA,76,Brazil,1
+SA,Brazil,172,10,North_Brazil_South_Atlantic_Coast,GLU172,BrzCstN,BRA,76,Brazil,1
+SA,Brazil,172,30,North_Brazil_South_Atlantic_Coast,GLU172,BrzCstN,BRA,76,Brazil,1
+SA,Brazil,161,30,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Brazil,161,10,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Brazil,156,30,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+"NAm",British Virgin Islands,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+As,Brunei Darussalam,159,10,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Brunei Darussalam,159,30,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+Eu,Bulgaria,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Bulgaria,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Bulgaria,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Bulgaria,55,10,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Bulgaria,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Af,Burkina Faso,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Burkina Faso,160,30,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Burkina Faso,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Burkina Faso,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Burkina Faso,160,10,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Burkina Faso,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Burundi,183,20,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Burundi,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Burundi,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+As,Cambodia,148,10,Gulf_of_Thailand_Coast,GLU148,ThaiGulf,THA,764,Thailand,0
+As,Cambodia,125,10,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Cambodia,126,10,Viet_Nam_Coast,GLU126,VietnamCst,VNM,704,Viet Nam,0
+As,Cambodia,148,30,Gulf_of_Thailand_Coast,GLU148,ThaiGulf,THA,764,Thailand,0
+As,Cambodia,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+Af,Cameroon,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Cameroon,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Cameroon,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Cameroon,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Cameroon,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Cameroon,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Cameroon,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Cameroon,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+"NAm",Canada,227,20,Great_Lakes_Basin,GLU227,GreatLakes,CAN,124,Canada,0
+"NAm",Canada,227,30,Great_Lakes_Basin,GLU227,GreatLakes,CAN,124,Canada,0
+"NAm",Canada,19,30,Atlantic_Ocean_Seaboard,GLU019,CanAtl,CAN,124,Canada,0
+"NAm",Canada,232,30,New_England_Basin,GLU232,UsaCstNE,USA,840,United States,0
+"NAm",Canada,232,20,New_England_Basin,GLU232,UsaCstNE,USA,840,United States,0
+"NAm",Canada,19,20,Atlantic_Ocean_Seaboard,GLU019,CanAtl,CAN,124,Canada,0
+"NAm",Canada,15,30,Hudson_Bay_Coast,GLU015,HudsonBay,CAN,124,Canada,0
+"NAm",Canada,40,30,St_Lawrence,GLU040,StLwrncR,CAN,124,Canada,0
+"NAm",Canada,40,20,St_Lawrence,GLU040,StLwrncR,CAN,124,Canada,0
+"NAm",Canada,23,30,Saskatchewan_Nelson,GLU023,NelsonR,CAN,124,Canada,1
+"NAm",Canada,7,30,Pacific_and_Arctic_Coast,GLU007,PacArctic,USA,840,United States,1
+"NAm",Canada,229,30,Pacific_Northwest_Basin,GLU229,UsaPacNW,USA,840,United States,0
+"NAm",Canada,7,10,Pacific_and_Arctic_Coast,GLU007,PacArctic,USA,840,United States,1
+"NAm",Canada,27,10,Fraser,GLU027,FraserR,CAN,124,Canada,0
+"NAm",Canada,27,30,Fraser,GLU027,FraserR,CAN,124,Canada,0
+"NAm",Canada,23,10,Saskatchewan_Nelson,GLU023,NelsonR,CAN,124,Canada,1
+"NAm",Canada,23,20,Saskatchewan_Nelson,GLU023,NelsonR,CAN,124,Canada,1
+"NAm",Canada,223,30,Missouri_River_Basin,GLU223,MissouriR,USA,840,United States,0
+"NAm",Canada,223,20,Missouri_River_Basin,GLU223,MissouriR,USA,840,United States,0
+"NAm",Canada,15,20,Hudson_Bay_Coast,GLU015,HudsonBay,CAN,124,Canada,0
+"NAm",Canada,34,30,Churchill,GLU034,ChurchillR,CAN,124,Canada,1
+"NAm",Canada,10,30,Mackenzie,GLU010,Mackenzie,CAN,124,Canada,1
+"NAm",Canada,10,10,Mackenzie,GLU010,Mackenzie,CAN,124,Canada,1
+"NAm",Canada,2,20,Northwest_Territories,GLU002,NWTerr,CAN,124,Canada,0
+"NAm",Canada,10,20,Mackenzie,GLU010,Mackenzie,CAN,124,Canada,1
+"NAm",Canada,2,30,Northwest_Territories,GLU002,NWTerr,CAN,124,Canada,0
+"NAm",Canada,7,20,Pacific_and_Arctic_Coast,GLU007,PacArctic,USA,840,United States,1
+"NAm",Canada,1,30,Arctic_Ocean_Islands,GLU001,ArcticIsl,GRL,304,Greenland,0
+"NAm",Cayman Islands,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Af,Central African Republic,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Central African Republic,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Central African Republic,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Central African Republic,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Central African Republic,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Central African Republic,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Central African Republic,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Central African Republic,87,10,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Chad,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Chad,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Chad,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Chad,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Chad,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Chad,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+SA,Chile,169,30,South_Chile_Pacific_Coast,GLU169,ChileCstS,CHL,152,Chile,1
+SA,Chile,215,30,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+SA,Chile,169,10,South_Chile_Pacific_Coast,GLU169,ChileCstS,CHL,152,Chile,1
+SA,Chile,215,10,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+SA,Chile,213,30,Negro,GLU213,NegroR,ARG,32,Argentina,0
+SA,Chile,212,30,South_America_Colorado,GLU212,ArgColoR,ARG,32,Argentina,1
+SA,Chile,207,10,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Chile,207,30,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Chile,205,30,Salinas_Grandes,GLU205,Salinas,ARG,32,Argentina,1
+SA,Chile,200,30,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Chile,207,20,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Chile,200,20,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Chile,200,10,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+As,China,124,10,Hainan,GLU124,Hainan,CHN,156,China,0
+As,China,112,10,South_China_Sea_Coast,GLU112,SChinaSea,CHN,156,China,1
+As,China,108,10,Xun_Jiang,GLU108,XunJiang,CHN,156,China,0
+As,China,103,10,Taiwan,GLU103,Taiwan,TWN,158,Taiwan,0
+As,China,78,10,China_Coast,GLU078,ChinaCst,CHN,156,China,1
+As,China,106,10,Yangtze,GLU106,Yangtze,CHN,156,China,0
+As,China,110,10,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,China,89,10,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,China,92,10,Plateau_of_Tibet_Interior,GLU092,Tibet,CHN,156,China,0
+As,China,79,10,Huang_He,GLU079,HuangHeR,CHN,156,China,0
+As,China,85,10,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,China,77,10,Ziya_He_Interior,GLU077,ZiyaHe,CHN,156,China,0
+As,China,42,10,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,China,66,10,Bo_Hai_Korean_Bay_North_Coast,GLU066,BoHai,CHN,156,China,1
+As,China,43,10,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,China,68,10,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,China,37,10,Russia_South_East_Coast,GLU037,RusCstSE,RUS,643,Russian Federation,1
+As,China,56,10,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,China,124,20,Hainan,GLU124,Hainan,CHN,156,China,0
+As,China,108,20,Xun_Jiang,GLU108,XunJiang,CHN,156,China,0
+As,China,109,20,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+As,China,125,20,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,China,127,20,Salween,GLU127,Salween,CHN,156,China,0
+As,China,106,20,Yangtze,GLU106,Yangtze,CHN,156,China,0
+As,China,110,20,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,China,78,20,China_Coast,GLU078,ChinaCst,CHN,156,China,1
+As,China,92,20,Plateau_of_Tibet_Interior,GLU092,Tibet,CHN,156,China,0
+As,China,79,20,Huang_He,GLU079,HuangHeR,CHN,156,China,0
+As,China,85,20,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,China,77,20,Ziya_He_Interior,GLU077,ZiyaHe,CHN,156,China,0
+As,China,76,20,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,China,66,20,Bo_Hai_Korean_Bay_North_Coast,GLU066,BoHai,CHN,156,China,1
+As,China,43,20,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,China,68,20,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,China,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,China,108,30,Xun_Jiang,GLU108,XunJiang,CHN,156,China,0
+As,China,112,30,South_China_Sea_Coast,GLU112,SChinaSea,CHN,156,China,1
+As,China,127,30,Salween,GLU127,Salween,CHN,156,China,0
+As,China,103,30,Taiwan,GLU103,Taiwan,TWN,158,Taiwan,0
+As,China,109,30,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+As,China,78,30,China_Coast,GLU078,ChinaCst,CHN,156,China,1
+As,China,137,30,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,China,106,30,Yangtze,GLU106,Yangtze,CHN,156,China,0
+As,China,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,China,92,30,Plateau_of_Tibet_Interior,GLU092,Tibet,CHN,156,China,0
+As,China,89,30,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,China,79,30,Huang_He,GLU079,HuangHeR,CHN,156,China,0
+As,China,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,China,77,30,Ziya_He_Interior,GLU077,ZiyaHe,CHN,156,China,0
+As,China,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,China,42,30,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,China,66,30,Bo_Hai_Korean_Bay_North_Coast,GLU066,BoHai,CHN,156,China,1
+As,China,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,China,43,30,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,China,68,30,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,China,37,30,Russia_South_East_Coast,GLU037,RusCstSE,RUS,643,Russian Federation,1
+As,China,56,30,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+SA,Colombia,143,20,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Colombia,157,20,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Colombia,157,30,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Colombia,168,10,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Colombia,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Colombia,166,30,Magdalena,GLU166,MagdalenaR,COL,170,Colombia,0
+SA,Colombia,166,10,Magdalena,GLU166,MagdalenaR,COL,170,Colombia,0
+SA,Colombia,156,10,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Colombia,166,20,Magdalena,GLU166,MagdalenaR,COL,170,Colombia,0
+SA,Colombia,168,20,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Colombia,156,30,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Colombia,156,20,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Colombia,157,10,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Colombia,143,10,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Colombia,143,30,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+Af,Comoros,177,30,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+Af,Congo,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Congo,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Congo,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Congo,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+"NAm",Costa Rica,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Costa Rica,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+Eu,Croatia,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Croatia,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Croatia,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Af,Cote d'Ivoire,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Cote d'Ivoire,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Cote d'Ivoire,160,30,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Cote d'Ivoire,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+"NAm",Cuba,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Cuba,101,30,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+As,Cyprus,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Eu,Czech Republic,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Czech Republic,31,30,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Czech Republic,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Czech Republic,29,30,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Czech Republic,30,30,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Czech Republic,31,10,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Czech Republic,29,10,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Czech Republic,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+Af,Democratic Republic of the Congo,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Democratic Republic of the Congo,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Democratic Republic of the Congo,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Democratic Republic of the Congo,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Democratic Republic of the Congo,183,20,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Democratic Republic of the Congo,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Democratic Republic of the Congo,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Democratic Republic of the Congo,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Democratic Republic of the Congo,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Eu,Denmark,21,10,Denmark_Germany_Coast,GLU021,DnkGrmCst,DNK,208,Denmark,1
+Eu,Denmark,12,30,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Denmark,12,10,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Af,Djibouti,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Djibouti,100,20,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+"NAm",Dominica,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Dominican Republic,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Dominican Republic,101,30,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+SA,Ecuador,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Ecuador,180,30,Peru_Pacific_Coast,GLU180,PeruCst,PER,604,Peru,1
+SA,Ecuador,168,20,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Ecuador,157,30,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Ecuador,157,20,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Ecuador,168,10,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Ecuador,180,20,Peru_Pacific_Coast,GLU180,PeruCst,PER,604,Peru,1
+Af,Egypt,75,10,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Egypt,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+Af,Egypt,98,20,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+Af,Egypt,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Egypt,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Egypt,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Egypt,87,10,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Egypt,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Egypt,100,30,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Egypt,100,10,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Egypt,98,30,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+Af,Egypt,98,10,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+Af,Egypt,75,30,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Egypt,100,20,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Egypt,80,10,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+"NAm",El Salvador,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",El Salvador,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+Af,Equatorial Guinea,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Eritrea,100,20,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Eritrea,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Eritrea,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Eritrea,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Eritrea,100,30,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Eritrea,100,10,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Eu,Estonia,20,10,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+Eu,Estonia,22,10,Narva,GLU022,NarvaR,RUS,643,Russian Federation,0
+Af,Ethiopia,170,20,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Ethiopia,170,10,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Ethiopia,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Ethiopia,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Ethiopia,170,30,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Ethiopia,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Ethiopia,100,20,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Ethiopia,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Ethiopia,87,10,Nile,GLU087,NileR,SDN,736,Sudan,0
+SA,Falkland Islands,215,30,South_Argentina_South_Atlantic_Coast,GLU215,ArgCstS,ARG,32,Argentina,1
+Eu,Faroe Islands,16,30,Scotland,GLU016,Scotland,GBR,826,United Kingdom,1
+Oc,Fiji,185,20,South_Pacific_Islands,GLU185,NewCaledn,NCL,540,New Caledonia,0
+Eu,Finland,12,30,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Finland,13,30,Finland,GLU013,Finland,FIN,246,Finland,1
+Eu,Finland,20,30,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+Eu,Finland,17,30,Neva,GLU017,NevaR,RUS,643,Russian Federation,0
+Eu,Finland,8,30,Scandinavia_North_Coast,GLU008,ScndnvN,NOR,578,Norway,1
+Oc,France,185,20,South_Pacific_Islands,GLU185,NewCaledn,NCL,540,New Caledonia,0
+"NAm",France,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Eu,France,63,20,Mediterranean_Sea_Islands,GLU063,MeditIsl,ITA,380,Italy,1
+Eu,France,67,30,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Eu,France,73,30,Ebro,GLU073,EbroR,ESP,724,Spain,0
+Eu,France,67,20,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Eu,France,41,30,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+Eu,France,64,30,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,France,64,10,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,France,61,10,France_South_Coast,GLU061,FranceCstS,FRA,250,France,1
+Eu,France,61,20,France_South_Coast,GLU061,FranceCstS,FRA,250,France,1
+Eu,France,64,20,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,France,61,30,France_South_Coast,GLU061,FranceCstS,FRA,250,France,1
+Eu,France,59,20,Italy_West_Coast,GLU059,ItalyCstW,ITA,380,Italy,1
+Eu,France,41,10,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+Eu,France,60,10,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,France,60,20,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,France,60,30,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,France,62,20,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,France,62,30,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,France,57,20,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,France,57,30,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,France,44,20,Loire,GLU044,LoireR,FRA,250,France,0
+Eu,France,44,30,Loire,GLU044,LoireR,FRA,250,France,0
+Eu,France,44,10,Loire,GLU044,LoireR,FRA,250,France,0
+Eu,France,32,20,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,France,46,10,Seine,GLU046,SeineR,FRA,250,France,0
+Eu,France,46,30,Seine,GLU046,SeineR,FRA,250,France,0
+Eu,France,62,10,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,France,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,France,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,France,36,10,Scheldt,GLU036,ScheldtR,BEL,56,Belgium,0
+Eu,France,36,30,Scheldt,GLU036,ScheldtR,BEL,56,Belgium,0
+Af,France,177,30,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+SA,France,161,30,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,France,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,France,161,10,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+Af,Gabon,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Gabon,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Gabon,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Gabon,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Gambia,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+As,Georgia,45,20,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Georgia,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+As,Georgia,45,30,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Georgia,70,30,Black_Sea_South_Coast,GLU070,BlackSeaS,TUR,792,Turkey,1
+As,Georgia,47,20,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+As,Georgia,47,30,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+As,Georgia,70,20,Black_Sea_South_Coast,GLU070,BlackSeaS,TUR,792,Turkey,1
+As,Georgia,72,30,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+Eu,Germany,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Germany,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Germany,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Germany,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Germany,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Germany,32,20,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Germany,31,30,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Germany,28,10,Ems_Weser,GLU028,EmsWeserR,DEU,276,Germany,0
+Eu,Germany,28,30,Ems_Weser,GLU028,EmsWeserR,DEU,276,Germany,0
+Eu,Germany,31,10,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Germany,31,20,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Germany,28,20,Ems_Weser,GLU028,EmsWeserR,DEU,276,Germany,0
+Eu,Germany,29,10,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Germany,29,30,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Germany,21,10,Denmark_Germany_Coast,GLU021,DnkGrmCst,DNK,208,Denmark,1
+Eu,Germany,12,10,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Af,Ghana,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Ghana,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Ghana,160,30,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Ghana,160,10,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Eu,Gibraltar,67,20,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Eu,Greece,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Greece,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+"NAm",Grenada,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Guatemala,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Guatemala,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Guatemala,111,20,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Guatemala,133,20,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+"NAm",Guatemala,133,30,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+"NAm",Guatemala,135,30,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Guatemala,111,30,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Guatemala,111,10,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Guatemala,133,10,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+Eu,Guernsey,41,30,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+Af,Guinea,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Guinea,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Guinea,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Guinea,152,30,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Guinea,152,10,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Guinea,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Guinea-Bissau,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Guinea-Bissau,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+SA,Guyana,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Guyana,161,30,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Guyana,161,10,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Guyana,156,30,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+"NAm",Haiti,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Haiti,101,30,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Eu,Holy See,69,20,Tiber,GLU069,TiberR,ITA,380,Italy,1
+"NAm",Honduras,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Honduras,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Honduras,135,30,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Honduras,111,20,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Honduras,111,10,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+Eu,Hungary,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Hungary,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Iceland,11,30,Iceland,GLU011,Iceland,ISL,352,Iceland,0
+As,India,155,10,India_South_Coast,GLU155,IndCstS,IND,356,India,1
+As,India,154,10,Sri_Lanka,GLU154,SriLanka,LKA,144,Sri Lanka,0
+As,India,153,10,Cauvery,GLU153,CauveryR,IND,356,India,0
+As,India,145,10,India_East_Coast,GLU145,IndCstE,IND,356,India,1
+As,India,147,10,Pennar,GLU147,PennarR,IND,356,India,0
+As,India,140,10,Krishna,GLU140,KrishnaR,IND,356,India,0
+As,India,123,10,Godavari,GLU123,GodavariR,IND,356,India,0
+As,India,128,10,India_North_East_Coast,GLU128,IndCstNE,IND,356,India,1
+As,India,122,10,Mahanadi,GLU122,MahanadiR,IND,356,India,0
+As,India,107,10,Sabarmati,GLU107,SabarmatiR,IND,356,India,1
+As,India,117,10,Tapti,GLU117,TaptiR,IND,356,India,0
+As,India,129,10,India_West_Coast,GLU129,IndCstW,IND,356,India,1
+As,India,120,10,Brahmani,GLU120,BrahmaniR,IND,356,India,0
+As,India,118,10,Yasai,GLU118,BengalW,IND,356,India,0
+As,India,235,10,Narmada,GLU235,NarmadaR,IND,356,India,0
+As,India,113,10,Mahi,GLU113,MahiR,IND,356,India,0
+As,India,110,10,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,India,116,10,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,India,89,10,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,India,155,20,India_South_Coast,GLU155,IndCstS,IND,356,India,1
+As,India,153,20,Cauvery,GLU153,CauveryR,IND,356,India,0
+As,India,129,20,India_West_Coast,GLU129,IndCstW,IND,356,India,1
+As,India,145,20,India_East_Coast,GLU145,IndCstE,IND,356,India,1
+As,India,140,20,Krishna,GLU140,KrishnaR,IND,356,India,0
+As,India,147,20,Pennar,GLU147,PennarR,IND,356,India,0
+As,India,123,20,Godavari,GLU123,GodavariR,IND,356,India,0
+As,India,128,20,India_North_East_Coast,GLU128,IndCstNE,IND,356,India,1
+As,India,122,20,Mahanadi,GLU122,MahanadiR,IND,356,India,0
+As,India,117,20,Tapti,GLU117,TaptiR,IND,356,India,0
+As,India,120,20,Brahmani,GLU120,BrahmaniR,IND,356,India,0
+As,India,235,20,Narmada,GLU235,NarmadaR,IND,356,India,0
+As,India,118,20,Yasai,GLU118,BengalW,IND,356,India,0
+As,India,113,20,Mahi,GLU113,MahiR,IND,356,India,0
+As,India,110,20,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,India,107,20,Sabarmati,GLU107,SabarmatiR,IND,356,India,1
+As,India,137,20,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,India,163,30,Sumatra,GLU163,Sumatra,IDN,360,Indonesia,0
+As,India,141,30,Andaman_Nicobar_Islands,GLU141,AdnNicIsl,IND,356,India,0
+As,India,107,30,Sabarmati,GLU107,SabarmatiR,IND,356,India,1
+As,India,116,30,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,India,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,India,137,30,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,India,89,30,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,India,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Indonesia,167,10,Irian_Jaya_Coast,GLU167,IrianJaya,IDN,360,Indonesia,1
+As,Indonesia,181,10,Fly,GLU181,FlyR,PNG,598,Papua New Guinea,0
+As,Indonesia,175,10,Java_Timor,GLU175,JavaTimor,IDN,360,Indonesia,1
+As,Indonesia,164,10,Sulawesi,GLU164,Sulawesi,IDN,360,Indonesia,0
+As,Indonesia,163,10,Sumatra,GLU163,Sumatra,IDN,360,Indonesia,0
+As,Indonesia,165,10,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Indonesia,139,10,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Indonesia,159,10,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Indonesia,175,20,Java_Timor,GLU175,JavaTimor,IDN,360,Indonesia,1
+As,Indonesia,158,20,Palau_and_East_Indonesia,GLU158,IdnE,IDN,360,Indonesia,0
+As,Indonesia,164,20,Sulawesi,GLU164,Sulawesi,IDN,360,Indonesia,0
+As,Indonesia,181,20,Fly,GLU181,FlyR,PNG,598,Papua New Guinea,0
+As,Indonesia,163,20,Sumatra,GLU163,Sumatra,IDN,360,Indonesia,0
+As,Indonesia,167,20,Irian_Jaya_Coast,GLU167,IrianJaya,IDN,360,Indonesia,1
+As,Indonesia,178,20,Sepik,GLU178,SepikR,PNG,598,Papua New Guinea,0
+As,Indonesia,165,20,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Indonesia,139,20,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Indonesia,159,20,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Indonesia,175,30,Java_Timor,GLU175,JavaTimor,IDN,360,Indonesia,1
+As,Indonesia,164,30,Sulawesi,GLU164,Sulawesi,IDN,360,Indonesia,0
+As,Indonesia,165,30,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Indonesia,159,30,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Indonesia,163,30,Sumatra,GLU163,Sumatra,IDN,360,Indonesia,0
+As,Iran,82,10,Central_Iran,GLU082,Iran,IRN,364,"Iran, Islamic Republic of",0
+As,Iran,104,10,Arabian_Sea_Coast,GLU104,ArabianSea,PAK,586,Pakistan,1
+As,Iran,102,10,HamuniMashkel,GLU102,HamuMashR,PAK,586,Pakistan,0
+As,Iran,88,10,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,Iran,97,10,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Iran,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iran,52,10,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Iran,72,10,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+As,Iran,88,20,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,Iran,82,20,Central_Iran,GLU082,Iran,IRN,364,"Iran, Islamic Republic of",0
+As,Iran,84,20,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iran,90,20,Farahrud,GLU090,FarahrudR,AFG,4,Afghanistan,0
+As,Iran,52,20,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Iran,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+As,Iran,104,30,Arabian_Sea_Coast,GLU104,ArabianSea,PAK,586,Pakistan,1
+As,Iran,88,30,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,Iran,82,30,Central_Iran,GLU082,Iran,IRN,364,"Iran, Islamic Republic of",0
+As,Iran,102,30,HamuniMashkel,GLU102,HamuMashR,PAK,586,Pakistan,0
+As,Iran,97,30,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Iran,90,30,Farahrud,GLU090,FarahrudR,AFG,4,Afghanistan,0
+As,Iran,52,30,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Iran,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iraq,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iraq,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Iraq,84,20,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iraq,88,20,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,Iraq,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Iraq,99,30,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+Eu,Ireland,24,30,Ireland,GLU024,Ireland,IRL,372,Ireland,1
+Eu,Ireland,24,20,Ireland,GLU024,Ireland,IRL,372,Ireland,1
+Eu,Isle of Man,16,30,Scotland,GLU016,Scotland,GBR,826,United Kingdom,1
+Af,Israel,95,10,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+Af,Israel,75,10,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Israel,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+Af,Israel,98,20,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+Af,Israel,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Israel,98,30,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+Af,Israel,95,30,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+Eu,Italy,63,20,Mediterranean_Sea_Islands,GLU063,MeditIsl,ITA,380,Italy,1
+Eu,Italy,63,10,Mediterranean_Sea_Islands,GLU063,MeditIsl,ITA,380,Italy,1
+Eu,Italy,63,30,Mediterranean_Sea_Islands,GLU063,MeditIsl,ITA,380,Italy,1
+Eu,Italy,59,20,Italy_West_Coast,GLU059,ItalyCstW,ITA,380,Italy,1
+Eu,Italy,59,30,Italy_West_Coast,GLU059,ItalyCstW,ITA,380,Italy,1
+Eu,Italy,59,10,Italy_West_Coast,GLU059,ItalyCstW,ITA,380,Italy,1
+Eu,Italy,50,10,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Italy,50,30,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Italy,50,20,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Italy,69,20,Tiber,GLU069,TiberR,ITA,380,Italy,1
+Eu,Italy,69,30,Tiber,GLU069,TiberR,ITA,380,Italy,1
+Eu,Italy,69,10,Tiber,GLU069,TiberR,ITA,380,Italy,1
+Eu,Italy,57,30,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Italy,62,30,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,Italy,61,20,France_South_Coast,GLU061,FranceCstS,FRA,250,France,1
+Eu,Italy,57,20,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Italy,57,10,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Italy,62,20,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,Italy,55,10,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Italy,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Italy,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Italy,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+"NAm",Jamaica,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+As,Japan,51,10,Japan,GLU051,Japan,JPN,392,Japan,1
+As,Japan,51,20,Japan,GLU051,Japan,JPN,392,Japan,1
+As,Japan,103,30,Taiwan,GLU103,Taiwan,TWN,158,Taiwan,0
+As,Japan,51,30,Japan,GLU051,Japan,JPN,392,Japan,1
+As,Japan,65,30,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+Eu,Jersey,41,30,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+As,Jordan,93,10,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Jordan,98,10,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Jordan,99,10,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Jordan,95,10,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Jordan,93,20,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Jordan,98,20,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Jordan,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Jordan,99,20,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Jordan,98,30,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Jordan,95,30,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Jordan,99,30,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Jordan,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Kazakhstan,18,30,Volga,GLU018,VolgaR,RUS,643,Russian Federation,0
+As,Kazakhstan,45,30,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Kazakhstan,38,30,Ural,GLU038,UralR,RUS,643,Russian Federation,0
+As,Kazakhstan,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Kazakhstan,18,10,Volga,GLU018,VolgaR,RUS,643,Russian Federation,0
+As,Kazakhstan,56,30,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Kazakhstan,76,10,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Kazakhstan,58,10,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Kazakhstan,68,10,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,Kazakhstan,42,10,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,Kazakhstan,56,10,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Kazakhstan,76,20,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Kazakhstan,68,20,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,Kazakhstan,85,20,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Kazakhstan,56,20,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Kazakhstan,52,30,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Kazakhstan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Kazakhstan,68,30,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,Kazakhstan,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Kazakhstan,42,30,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+Af,Kenya,171,30,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Kenya,171,10,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Kenya,171,20,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Kenya,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Kenya,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Kenya,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Kenya,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Kenya,170,20,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Kenya,170,30,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Kenya,170,10,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+As,Kuwait,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Kuwait,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Kyrgyzstan,76,10,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Kyrgyzstan,68,10,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,Kyrgyzstan,85,10,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Kyrgyzstan,76,20,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Kyrgyzstan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Kyrgyzstan,85,20,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Kyrgyzstan,68,20,Lake_Balkash,GLU068,LBalkash,KAZ,398,Kazakhstan,0
+As,Kyrgyzstan,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Kyrgyzstan,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Laos,125,10,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Laos,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Laos,126,30,Viet_Nam_Coast,GLU126,VietnamCst,VNM,704,Viet Nam,0
+As,Laos,146,30,Chao_Phraya,GLU146,ChaoPhrR,THA,764,Thailand,0
+As,Laos,109,30,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+Eu,Latvia,20,10,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+Eu,Latvia,25,10,Daugava,GLU025,DaugavaR,BLR,112,Belarus,0
+Eu,Latvia,35,10,Neman,GLU035,NemanR,LTU,440,Lithuania,0
+Eu,Latvia,22,10,Narva,GLU022,NarvaR,RUS,643,Russian Federation,0
+As,Lebanon,75,10,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Lebanon,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Lebanon,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Lebanon,95,30,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Lebanon,75,30,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Lesotho,194,10,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Lesotho,198,10,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Lesotho,194,30,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Lesotho,198,30,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Liberia,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Liberia,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Libya,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Libya,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Libya,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Libya,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Libya,80,10,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Libya,80,30,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Libya,144,20,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Libya,80,20,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Eu,Liechtenstein,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Lithuania,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Lithuania,35,10,Neman,GLU035,NemanR,LTU,440,Lithuania,0
+Eu,Lithuania,25,10,Daugava,GLU025,DaugavaR,BLR,112,Belarus,0
+Eu,Lithuania,20,10,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+Eu,Luxembourg,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Luxembourg,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Af,Madagascar,177,10,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+Af,Madagascar,177,20,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+Af,Madagascar,177,30,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+Af,Malawi,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Malawi,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Malawi,171,30,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Malawi,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+As,Malaysia,159,10,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Malaysia,139,10,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Malaysia,165,10,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Malaysia,165,20,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Malaysia,159,20,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Malaysia,165,30,Kalimantan,GLU165,Kalimantan,IDN,360,Indonesia,0
+As,Malaysia,159,30,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Malaysia,139,30,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+Af,Mali,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Mali,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Mali,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Mali,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Mali,152,30,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Mali,152,10,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Mali,160,10,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+Af,Mali,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Mali,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Mauritania,152,30,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Mauritania,152,10,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Mauritania,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Mauritania,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Mauritania,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Mauritania,86,10,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Mauritania,86,30,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Mauritania,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+"NAm",Mexico,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Mexico,136,10,Isthmus_of_Tehuantepec,GLU136,Tehuantpc,MEX,484,Mexico,1
+"NAm",Mexico,133,10,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+"NAm",Mexico,133,20,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+"NAm",Mexico,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Mexico,136,30,Isthmus_of_Tehuantepec,GLU136,Tehuantpc,MEX,484,Mexico,1
+"NAm",Mexico,133,30,Grijalva_Usumacinta,GLU133,GrijUsuR,MEX,484,Mexico,1
+"NAm",Mexico,134,30,Rio_Balsas,GLU134,RioBalsas,MEX,484,Mexico,0
+"NAm",Mexico,130,20,Papaloapan,GLU130,Papaloapan,MEX,484,Mexico,1
+"NAm",Mexico,130,30,Papaloapan,GLU130,Papaloapan,MEX,484,Mexico,1
+"NAm",Mexico,136,20,Isthmus_of_Tehuantepec,GLU136,Tehuantpc,MEX,484,Mexico,1
+"NAm",Mexico,134,20,Rio_Balsas,GLU134,RioBalsas,MEX,484,Mexico,0
+"NAm",Mexico,130,10,Papaloapan,GLU130,Papaloapan,MEX,484,Mexico,1
+"NAm",Mexico,111,10,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Mexico,111,20,Yucatan_Peninsula,GLU111,YucatanP,MEX,484,Mexico,0
+"NAm",Mexico,115,30,Pacific_Central_Coast,GLU115,MexCstW,MEX,484,Mexico,1
+"NAm",Mexico,131,20,Rio_Lerma,GLU131,RioLerma,MEX,484,Mexico,0
+"NAm",Mexico,131,30,Rio_Lerma,GLU131,RioLerma,MEX,484,Mexico,0
+"NAm",Mexico,132,20,Rio_Verde,GLU132,RioVerde,MEX,484,Mexico,0
+"NAm",Mexico,115,20,Pacific_Central_Coast,GLU115,MexCstW,MEX,484,Mexico,1
+"NAm",Mexico,105,20,North_Gulf,GLU105,MexGulf,MEX,484,Mexico,1
+"NAm",Mexico,131,10,Rio_Lerma,GLU131,RioLerma,MEX,484,Mexico,0
+"NAm",Mexico,96,10,Mexico_Northwest_Coast,GLU096,MexCstNW,MEX,484,Mexico,1
+"NAm",Mexico,115,10,Pacific_Central_Coast,GLU115,MexCstW,MEX,484,Mexico,1
+"NAm",Mexico,114,10,Mexico_Interior,GLU114,MexInt,MEX,484,Mexico,0
+"NAm",Mexico,114,20,Mexico_Interior,GLU114,MexInt,MEX,484,Mexico,0
+"NAm",Mexico,132,10,Rio_Verde,GLU132,RioVerde,MEX,484,Mexico,0
+"NAm",Mexico,96,30,Mexico_Northwest_Coast,GLU096,MexCstNW,MEX,484,Mexico,1
+"NAm",Mexico,114,30,Mexico_Interior,GLU114,MexInt,MEX,484,Mexico,0
+"NAm",Mexico,91,30,Baja_California,GLU091,MexBaja,MEX,484,Mexico,1
+"NAm",Mexico,105,10,North_Gulf,GLU105,MexGulf,MEX,484,Mexico,1
+"NAm",Mexico,91,10,Baja_California,GLU091,MexBaja,MEX,484,Mexico,1
+"NAm",Mexico,91,20,Baja_California,GLU091,MexBaja,MEX,484,Mexico,1
+"NAm",Mexico,231,20,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",Mexico,231,10,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",Mexico,231,30,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",Mexico,225,10,Texas_Gulf_Coast_Basin,GLU225,TexasCst,USA,840,United States,1
+"NAm",Mexico,96,20,Mexico_Northwest_Coast,GLU096,MexCstNW,MEX,484,Mexico,1
+"NAm",Mexico,221,10,Lower_Colorado_River_Basin,GLU221,UsaColoRS,USA,840,United States,1
+"NAm",Mexico,221,30,Lower_Colorado_River_Basin,GLU221,UsaColoRS,USA,840,United States,1
+"NAm",Mexico,217,30,California_River_Basin,GLU217,California,USA,840,United States,1
+"NAm",Mexico,217,10,California_River_Basin,GLU217,California,USA,840,United States,1
+Eu,Moldova,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Moldova,47,10,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+Eu,Moldova,49,10,Dniester,GLU049,DniesterR,UKR,804,Ukraine,0
+Eu,Monaco,61,20,France_South_Coast,GLU061,FranceCstS,FRA,250,France,1
+As,Mongolia,42,10,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,Mongolia,56,10,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Mongolia,43,10,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,Mongolia,42,30,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,Mongolia,56,30,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Mongolia,48,30,Yenisei,GLU048,YeniseiR,RUS,643,Russian Federation,0
+As,Mongolia,43,30,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+Eu,Montenegro,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Montenegro,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+"NAm",Montserrat,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Af,Morocco,86,10,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Morocco,86,30,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Morocco,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Morocco,86,20,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Af,Morocco,144,20,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Morocco,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Morocco,80,20,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Morocco,80,10,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Morocco,67,20,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Af,Mozambique,198,30,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Mozambique,198,10,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Mozambique,199,10,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Mozambique,199,30,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Mozambique,190,30,Africa_Indian_Ocean_Coast,GLU190,AfrCstSE,MOZ,508,Mozambique,0
+Af,Mozambique,198,20,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Mozambique,199,20,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Mozambique,190,20,Africa_Indian_Ocean_Coast,GLU190,AfrCstSE,MOZ,508,Mozambique,0
+Af,Mozambique,190,10,Africa_Indian_Ocean_Coast,GLU190,AfrCstSE,MOZ,508,Mozambique,0
+Af,Mozambique,188,20,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Mozambique,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Mozambique,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Mozambique,171,20,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Mozambique,171,30,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Mozambique,171,10,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+As,Myanmar,139,10,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Myanmar,137,10,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,Myanmar,138,10,Sittaung,GLU138,SittaungR,MMR,104,Myanmar,0
+As,Myanmar,127,10,Salween,GLU127,Salween,CHN,156,China,0
+As,Myanmar,116,10,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,Myanmar,139,20,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Myanmar,127,20,Salween,GLU127,Salween,CHN,156,China,0
+As,Myanmar,138,20,Sittaung,GLU138,SittaungR,MMR,104,Myanmar,0
+As,Myanmar,125,20,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Myanmar,137,20,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,Myanmar,110,20,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Myanmar,139,30,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Myanmar,137,30,Irrawaddy,GLU137,IrrawaddyR,MMR,104,Myanmar,0
+As,Myanmar,138,30,Sittaung,GLU138,SittaungR,MMR,104,Myanmar,0
+As,Myanmar,127,30,Salween,GLU127,Salween,CHN,156,China,0
+As,Myanmar,116,30,Bay_of_Bengal_North_East_Coast,GLU116,BengalBay,MMR,104,Myanmar,1
+As,Myanmar,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Myanmar,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+Af,Namibia,194,30,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Namibia,196,30,Namibia_Coast,GLU196,AfrCstSW,"NAM",516,Namibia,1
+Af,Namibia,194,20,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Namibia,194,10,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,Namibia,196,20,Namibia_Coast,GLU196,AfrCstSW,"NAM",516,Namibia,1
+Af,Namibia,196,10,Namibia_Coast,GLU196,AfrCstSW,"NAM",516,Namibia,1
+Af,Namibia,197,10,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Namibia,197,20,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Namibia,197,30,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Namibia,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Namibia,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Namibia,182,30,Angola_Coast,GLU182,AngolaCst,AGO,24,Angola,1
+Af,Namibia,182,20,Angola_Coast,GLU182,AngolaCst,AGO,24,Angola,1
+Af,Namibia,182,10,Angola_Coast,GLU182,AngolaCst,AGO,24,Angola,1
+As,Nepal,110,10,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Nepal,110,20,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+As,Nepal,110,30,Ganges_Bramaputra,GLU110,GangesR,IND,356,India,0
+Eu,Netherlands,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Netherlands,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Netherlands,36,10,Scheldt,GLU036,ScheldtR,BEL,56,Belgium,0
+Eu,Netherlands,28,10,Ems_Weser,GLU028,EmsWeserR,DEU,276,Germany,0
+Oc,New Zealand,201,30,New_Zealand,GLU201,NewZealand,NZL,554,New Zealand,0
+Oc,New Zealand,201,20,New_Zealand,GLU201,NewZealand,NZL,554,New Zealand,0
+Oc,New Zealand,201,10,New_Zealand,GLU201,NewZealand,NZL,554,New Zealand,0
+"NAm",Nicaragua,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Nicaragua,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+"NAm",Nicaragua,135,30,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+Af,Niger,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Niger,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Niger,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Niger,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Niger,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Niger,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Nigeria,149,10,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Nigeria,162,10,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Nigeria,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Nigeria,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+Af,Nigeria,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+Af,Nigeria,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Nigeria,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Nigeria,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Oc,Norfolk Island,201,20,New_Zealand,GLU201,NewZealand,NZL,554,New Zealand,0
+As,North Korea,65,10,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+As,North Korea,66,20,Bo_Hai_Korean_Bay_North_Coast,GLU066,BoHai,CHN,156,China,1
+As,North Korea,65,30,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+As,North Korea,66,30,Bo_Hai_Korean_Bay_North_Coast,GLU066,BoHai,CHN,156,China,1
+As,North Korea,37,30,Russia_South_East_Coast,GLU037,RusCstSE,RUS,643,Russian Federation,1
+As,North Korea,43,30,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+Eu,Norway,8,30,Scandinavia_North_Coast,GLU008,ScndnvN,NOR,578,Norway,1
+Eu,Norway,12,30,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Norway,11,30,Iceland,GLU011,Iceland,ISL,352,Iceland,0
+Eu,Norway,1,30,Arctic_Ocean_Islands,GLU001,ArcticIsl,GRL,304,Greenland,0
+As,Oman,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Oman,94,20,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Oman,88,20,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,Oman,94,30,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Pakistan,104,10,Arabian_Sea_Coast,GLU104,ArabianSea,PAK,586,Pakistan,1
+As,Pakistan,89,10,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,Pakistan,107,10,Sabarmati,GLU107,SabarmatiR,IND,356,India,1
+As,Pakistan,102,10,HamuniMashkel,GLU102,HamuMashR,PAK,586,Pakistan,0
+As,Pakistan,97,10,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Pakistan,107,20,Sabarmati,GLU107,SabarmatiR,IND,356,India,1
+As,Pakistan,89,20,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,Pakistan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Pakistan,104,30,Arabian_Sea_Coast,GLU104,ArabianSea,PAK,586,Pakistan,1
+As,Pakistan,89,30,Indus,GLU089,IndusR,PAK,586,Pakistan,1
+As,Pakistan,102,30,HamuniMashkel,GLU102,HamuMashR,PAK,586,Pakistan,0
+As,Pakistan,97,30,Helmand,GLU097,Helmand,AFG,4,Afghanistan,0
+As,Pakistan,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Pakistan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+Af,Palestinian Territory,75,10,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Palestinian Territory,95,10,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+Af,Palestinian Territory,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+Af,Palestinian Territory,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+SA,Panama,135,20,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+SA,Panama,143,30,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Panama,157,30,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Panama,143,20,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Panama,157,20,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+SA,Panama,135,10,Southern_Central_America,GLU135,CntAmer,NIC,558,Nicaragua,1
+Oc,Papua New Guinea,167,10,Irian_Jaya_Coast,GLU167,IrianJaya,IDN,360,Indonesia,1
+Oc,Papua New Guinea,181,10,Fly,GLU181,FlyR,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,173,10,Papua_New_Guinea_Coast,GLU173,PapuaCst,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,178,10,Sepik,GLU178,SepikR,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,185,20,South_Pacific_Islands,GLU185,NewCaledn,NCL,540,New Caledonia,0
+Oc,Papua New Guinea,173,20,Papua_New_Guinea_Coast,GLU173,PapuaCst,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,181,20,Fly,GLU181,FlyR,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,178,20,Sepik,GLU178,SepikR,PNG,598,Papua New Guinea,0
+Oc,Papua New Guinea,167,20,Irian_Jaya_Coast,GLU167,IrianJaya,IDN,360,Indonesia,1
+SA,Paraguay,206,10,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Paraguay,206,30,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Peru,180,20,Peru_Pacific_Coast,GLU180,PeruCst,PER,604,Peru,1
+SA,Peru,207,20,North_Chile_Pacific_Coast,GLU207,ChileCstN,CHL,152,Chile,1
+SA,Peru,180,30,Peru_Pacific_Coast,GLU180,PeruCst,PER,604,Peru,1
+SA,Peru,200,20,La_Puna_Region,GLU200,LaPuna,BOL,68,Bolivia,1
+SA,Peru,168,20,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Peru,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Peru,168,10,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Peru,157,30,Colombia_Ecuador_Pacific_Coast,GLU157,ColEcuaCst,ECU,218,Ecuador,1
+As,Philippines,159,20,North_Borneo_Coast,GLU159,BorneoCstN,MYS,458,Malaysia,1
+As,Philippines,119,20,Philippines,GLU119,Phlppns,PHL,608,Philippines,0
+As,Philippines,119,30,Philippines,GLU119,Phlppns,PHL,608,Philippines,0
+Eu,Poland,30,30,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Poland,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Poland,29,30,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Poland,29,10,Oder,GLU029,OderR,POL,616,Poland,0
+Eu,Poland,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Poland,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Poland,31,30,Elbe,GLU031,ElbeR,DEU,276,Germany,0
+Eu,Poland,35,10,Neman,GLU035,NemanR,LTU,440,Lithuania,0
+Eu,Poland,33,10,Poland_Coast,GLU033,PolandCst,POL,616,Poland,1
+Eu,Poland,12,10,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Portugal,60,30,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,Portugal,81,30,Guadiana,GLU081,GuadianaR,ESP,724,Spain,0
+Eu,Portugal,60,20,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,Portugal,71,20,Tagus,GLU071,TagusR,ESP,724,Spain,0
+Eu,Portugal,81,20,Guadiana,GLU081,GuadianaR,ESP,724,Spain,0
+Eu,Portugal,71,30,Tagus,GLU071,TagusR,ESP,724,Spain,0
+Eu,Portugal,74,30,Douro,GLU074,DouroR,ESP,724,Spain,0
+Af,Portugal,86,20,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+As,Qatar,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+Eu,Romania,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Romania,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+As,Russian Federation,45,20,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Russian Federation,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+As,Russian Federation,70,20,Black_Sea_South_Coast,GLU070,BlackSeaS,TUR,792,Turkey,1
+As,Russian Federation,45,30,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Russian Federation,70,30,Black_Sea_South_Coast,GLU070,BlackSeaS,TUR,792,Turkey,1
+As,Russian Federation,45,10,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+As,Russian Federation,47,20,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+As,Russian Federation,47,30,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+As,Russian Federation,47,10,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+As,Russian Federation,53,10,Don,GLU053,DonR,RUS,643,Russian Federation,0
+As,Russian Federation,18,30,Volga,GLU018,VolgaR,RUS,643,Russian Federation,0
+As,Russian Federation,18,10,Volga,GLU018,VolgaR,RUS,643,Russian Federation,0
+As,Russian Federation,53,20,Don,GLU053,DonR,RUS,643,Russian Federation,0
+As,Russian Federation,53,30,Don,GLU053,DonR,RUS,643,Russian Federation,0
+As,Russian Federation,39,10,Dnieper,GLU039,DnieperR,UKR,804,Ukraine,0
+As,Russian Federation,38,30,Ural,GLU038,UralR,RUS,643,Russian Federation,0
+As,Russian Federation,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Russian Federation,38,10,Ural,GLU038,UralR,RUS,643,Russian Federation,0
+As,Russian Federation,56,30,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Russian Federation,33,10,Poland_Coast,GLU033,PolandCst,POL,616,Poland,1
+As,Russian Federation,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+As,Russian Federation,35,10,Neman,GLU035,NemanR,LTU,440,Lithuania,0
+As,Russian Federation,25,10,Daugava,GLU025,DaugavaR,BLR,112,Belarus,0
+As,Russian Federation,22,10,Narva,GLU022,NarvaR,RUS,643,Russian Federation,0
+As,Russian Federation,17,10,Neva,GLU017,NevaR,RUS,643,Russian Federation,0
+As,Russian Federation,18,20,Volga,GLU018,VolgaR,RUS,643,Russian Federation,0
+As,Russian Federation,20,10,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+As,Russian Federation,14,10,Northern_Dvina,GLU014,DvinaRN,RUS,643,Russian Federation,0
+As,Russian Federation,17,30,Neva,GLU017,NevaR,RUS,643,Russian Federation,0
+As,Russian Federation,9,10,Russia_Barents_Sea_Coast,GLU009,BarentsSea,RUS,643,Russian Federation,0
+As,Russian Federation,43,10,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,Russian Federation,13,30,Finland,GLU013,Finland,FIN,246,Finland,1
+As,Russian Federation,20,30,Baltic_Sea_Coast,GLU020,BalticSea,LVA,428,Latvia,0
+As,Russian Federation,14,20,Northern_Dvina,GLU014,DvinaRN,RUS,643,Russian Federation,0
+As,Russian Federation,56,20,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Russian Federation,9,30,Russia_Barents_Sea_Coast,GLU009,BarentsSea,RUS,643,Russian Federation,0
+As,Russian Federation,9,20,Russia_Barents_Sea_Coast,GLU009,BarentsSea,RUS,643,Russian Federation,0
+As,Russian Federation,8,30,Scandinavia_North_Coast,GLU008,ScndnvN,NOR,578,Norway,1
+As,Russian Federation,14,30,Northern_Dvina,GLU014,DvinaRN,RUS,643,Russian Federation,0
+As,Russian Federation,4,10,Siberia_West_Coast,GLU004,SiberiaW,RUS,643,Russian Federation,0
+As,Russian Federation,42,10,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,Russian Federation,56,10,Ob,GLU056,ObR,RUS,643,Russian Federation,0
+As,Russian Federation,48,10,Yenisei,GLU048,YeniseiR,RUS,643,Russian Federation,0
+As,Russian Federation,6,10,Lena,GLU006,LenaR,RUS,643,Russian Federation,0
+As,Russian Federation,12,30,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+As,Russian Federation,1,30,Arctic_Ocean_Islands,GLU001,ArcticIsl,GRL,304,Greenland,0
+As,Russian Federation,5,10,Kara_Sea_Coast,GLU005,KaraSea,RUS,643,Russian Federation,0
+As,Russian Federation,3,10,Siberia_North_Coast,GLU003,SiberiaN,RUS,643,Russian Federation,0
+As,Russian Federation,37,20,Russia_South_East_Coast,GLU037,RusCstSE,RUS,643,Russian Federation,1
+As,Russian Federation,43,20,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,Russian Federation,4,20,Siberia_West_Coast,GLU004,SiberiaW,RUS,643,Russian Federation,0
+As,Russian Federation,48,20,Yenisei,GLU048,YeniseiR,RUS,643,Russian Federation,0
+As,Russian Federation,5,20,Kara_Sea_Coast,GLU005,KaraSea,RUS,643,Russian Federation,0
+As,Russian Federation,37,30,Russia_South_East_Coast,GLU037,RusCstSE,RUS,643,Russian Federation,1
+As,Russian Federation,43,30,Amur,GLU043,AmurR,RUS,643,Russian Federation,0
+As,Russian Federation,51,30,Japan,GLU051,Japan,JPN,392,Japan,1
+As,Russian Federation,4,30,Siberia_West_Coast,GLU004,SiberiaW,RUS,643,Russian Federation,0
+As,Russian Federation,42,30,Gobi_Interior,GLU042,Gobi,CHN,156,China,0
+As,Russian Federation,48,30,Yenisei,GLU048,YeniseiR,RUS,643,Russian Federation,0
+As,Russian Federation,6,30,Lena,GLU006,LenaR,RUS,643,Russian Federation,0
+As,Russian Federation,3,30,Siberia_North_Coast,GLU003,SiberiaN,RUS,643,Russian Federation,0
+As,Russian Federation,5,30,Kara_Sea_Coast,GLU005,KaraSea,RUS,643,Russian Federation,0
+Af,Rwanda,183,20,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Rwanda,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Rwanda,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Rwanda,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+"NAm",Saint Kitts and Nevis,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Saint Lucia,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",Saint Vincent and the Grenadines,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Eu,San Marino,69,10,Tiber,GLU069,TiberR,ITA,380,Italy,1
+Eu,San Marino,69,30,Tiber,GLU069,TiberR,ITA,380,Italy,1
+Eu,San Marino,50,10,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,San Marino,50,30,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Af,Sao Tome and Principe,162,30,Gulf_of_Guinea,GLU162,GuineaGulf,GAB,266,Gabon,1
+As,Saudi Arabia,93,10,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Saudi Arabia,99,10,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,98,10,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Saudi Arabia,98,20,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Saudi Arabia,99,20,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,93,30,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,94,30,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,98,30,Sinai_Peninsula,GLU098,SinaiP,EGY,818,Egypt,1
+As,Saudi Arabia,99,30,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Saudi Arabia,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+Af,Senegal,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Senegal,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Senegal,152,30,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Senegal,152,10,Senegal,GLU152,SenegalR,MRT,478,Mauritania,1
+Af,Senegal,86,10,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+Eu,Serbia,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Serbia,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Serbia,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Serbia,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Af,Seychelles,177,30,Madagascar,GLU177,Madagascar,MDG,450,Madagascar,1
+Af,Sierra Leone,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Sierra Leone,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Sierra Leone,149,30,Niger,GLU149,NigerR,MLI,466,Mali,1
+As,Singapore,139,30,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+Eu,Slovakia,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Slovakia,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Slovakia,30,30,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Slovenia,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Slovenia,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Slovenia,50,10,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Slovenia,55,10,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,Slovenia,50,20,Italy_East_Coast,GLU050,ItalyCstE,ITA,380,Italy,1
+Eu,Slovenia,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Oc,Solomon Islands,185,20,South_Pacific_Islands,GLU185,NewCaledn,NCL,540,New Caledonia,0
+Oc,Solomon Islands,176,20,Solomon_Islands,GLU176,SolomonIsl,SLB,90,Solomon Islands,0
+Oc,Solomon Islands,173,20,Papua_New_Guinea_Coast,GLU173,PapuaCst,PNG,598,Papua New Guinea,0
+Af,Somalia,171,10,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Somalia,170,10,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Somalia,170,20,Shebelli_Juba,GLU170,ShebJubR,ETH,231,Ethiopia,0
+Af,Somalia,100,10,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Somalia,100,20,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,South Africa,204,20,South_Africa_West_Coast,GLU204,AfrCstSSW,ZAF,710,South Africa,1
+Af,South Africa,198,20,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,South Africa,198,30,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,South Africa,204,30,South_Africa_West_Coast,GLU204,AfrCstSSW,ZAF,710,South Africa,1
+Af,South Africa,198,10,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,South Africa,194,10,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,South Africa,204,10,South_Africa_West_Coast,GLU204,AfrCstSSW,ZAF,710,South Africa,1
+Af,South Africa,194,30,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,South Africa,194,20,Orange,GLU194,OrangeR,ZAF,710,South Africa,0
+Af,South Africa,199,30,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,South Africa,199,10,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,South Africa,199,20,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+As,South Korea,65,10,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+As,South Korea,65,20,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+As,South Korea,65,30,North_and_South_Korea,GLU065,Korea,KOR,410,"Korea, Republic of",1
+Af,South Sudan,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,South Sudan,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,South Sudan,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,South Sudan,87,10,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,South Sudan,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,South Sudan,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,South Sudan,179,10,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Eu,Spain,67,20,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Eu,Spain,83,20,Guadalquivir,GLU083,GuadalqR,ESP,724,Spain,0
+Eu,Spain,81,20,Guadiana,GLU081,GuadianaR,ESP,724,Spain,0
+Eu,Spain,81,30,Guadiana,GLU081,GuadianaR,ESP,724,Spain,0
+Eu,Spain,83,30,Guadalquivir,GLU083,GuadalqR,ESP,724,Spain,0
+Eu,Spain,63,20,Mediterranean_Sea_Islands,GLU063,MeditIsl,ITA,380,Italy,1
+Eu,Spain,71,30,Tagus,GLU071,TagusR,ESP,724,Spain,0
+Eu,Spain,74,30,Douro,GLU074,DouroR,ESP,724,Spain,0
+Eu,Spain,71,20,Tagus,GLU071,TagusR,ESP,724,Spain,0
+Eu,Spain,74,20,Douro,GLU074,DouroR,ESP,724,Spain,0
+Eu,Spain,73,20,Ebro,GLU073,EbroR,ESP,724,Spain,0
+Eu,Spain,60,30,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,Spain,73,30,Ebro,GLU073,EbroR,ESP,724,Spain,0
+Eu,Spain,67,30,Spain_South_and_East_Coast,GLU067,SpainCstSE,ESP,724,Spain,1
+Eu,Spain,60,20,Spain_Portugal_Atlantic_Coast,GLU060,IberiaCst,ESP,724,Spain,1
+Eu,Spain,41,20,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+Eu,Spain,41,30,France_West_Coast,GLU041,FranceCstW,FRA,250,France,1
+Eu,Spain,64,20,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,Spain,64,30,Gironde,GLU064,Gironde,FRA,250,France,0
+Eu,Spain,86,20,Africa_North_West_Coast,GLU086,AfrCstNW,MAR,504,Morocco,1
+As,Sri Lanka,154,20,Sri_Lanka,GLU154,SriLanka,LKA,144,Sri Lanka,0
+As,Sri Lanka,154,30,Sri_Lanka,GLU154,SriLanka,LKA,144,Sri Lanka,0
+Af,Sudan,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Sudan,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Sudan,151,30,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Sudan,87,10,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Sudan,151,10,Lake_Chad,GLU151,LChad,TCD,148,Chad,0
+Af,Sudan,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Sudan,144,30,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Sudan,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Sudan,100,30,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+Af,Sudan,100,10,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+SA,Suriname,161,30,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Suriname,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Suriname,161,10,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+Af,Swaziland,198,10,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Swaziland,198,30,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Af,Swaziland,198,20,South_Africa_South_Coast,GLU198,AfrCstS,ZAF,710,South Africa,1
+Eu,Sweden,21,10,Denmark_Germany_Coast,GLU021,DnkGrmCst,DNK,208,Denmark,1
+Eu,Sweden,12,10,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Sweden,12,30,Sweden,GLU012,Sweden,SWE,752,Sweden,1
+Eu,Sweden,21,30,Denmark_Germany_Coast,GLU021,DnkGrmCst,DNK,208,Denmark,1
+Eu,Sweden,8,30,Scandinavia_North_Coast,GLU008,ScndnvN,NOR,578,Norway,1
+Eu,Switzerland,62,20,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,Switzerland,57,20,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Switzerland,57,30,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Switzerland,62,30,Rhone,GLU062,RhoneR,FRA,250,France,0
+Eu,Switzerland,57,10,Po,GLU057,PoR,ITA,380,Italy,0
+Eu,Switzerland,32,20,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Switzerland,32,10,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Switzerland,32,30,Rhine,GLU032,RhineR,DEU,276,Germany,0
+Eu,Switzerland,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Switzerland,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Switzerland,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+As,Syria,95,10,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Syria,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Syria,75,10,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Syria,99,20,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Syria,95,20,Dead_Sea,GLU095,DeadSea,JOR,400,Jordan,1
+As,Syria,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Syria,84,20,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Syria,99,30,Eastern_Jordan_Syria,GLU099,EJrdnSyr,SAU,682,Saudi Arabia,1
+As,Syria,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Syria,75,30,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Tajikistan,58,10,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Tajikistan,76,10,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Tajikistan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Tajikistan,85,20,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Tajikistan,76,20,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Tajikistan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Tajikistan,85,30,Tarim_Interior,GLU085,Tarim,CHN,156,China,0
+As,Tajikistan,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+Af,Tanzania,171,10,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Tanzania,171,30,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Tanzania,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Tanzania,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Tanzania,188,20,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Tanzania,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Tanzania,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Tanzania,179,20,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Tanzania,183,20,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Tanzania,171,20,Africa_East_Central_Coast,GLU171,AfrCstE,TZA,834,Tanzania,1
+Af,Tanzania,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+As,Thailand,139,10,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Thailand,148,10,Gulf_of_Thailand_Coast,GLU148,ThaiGulf,THA,764,Thailand,0
+As,Thailand,125,10,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Thailand,146,10,Chao_Phraya,GLU146,ChaoPhrR,THA,764,Thailand,0
+As,Thailand,139,20,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Thailand,146,20,Chao_Phraya,GLU146,ChaoPhrR,THA,764,Thailand,0
+As,Thailand,127,20,Salween,GLU127,Salween,CHN,156,China,0
+As,Thailand,139,30,Peninsula_Malaysia,GLU139,MalaysiaP,MYS,458,Malaysia,1
+As,Thailand,148,30,Gulf_of_Thailand_Coast,GLU148,ThaiGulf,THA,764,Thailand,0
+As,Thailand,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Thailand,146,30,Chao_Phraya,GLU146,ChaoPhrR,THA,764,Thailand,0
+As,Thailand,127,30,Salween,GLU127,Salween,CHN,156,China,0
+Eu,The Former Yugoslav Republic of Macedonia,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+Eu,The Former Yugoslav Republic of Macedonia,54,20,Danube,GLU054,DanubeR,ROM,642,Romania,0
+As,Timor-Leste,175,20,Java_Timor,GLU175,JavaTimor,IDN,360,Indonesia,1
+As,Timor-Leste,175,30,Java_Timor,GLU175,JavaTimor,IDN,360,Indonesia,1
+Af,Togo,142,10,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Togo,142,30,Africa_West_Coast,GLU142,AfrCstW,CIV,384,Cote dIvoire,1
+Af,Togo,160,30,Volta,GLU160,VoltaR,BFA,854,Burkina Faso,0
+"NAm",Trinidad and Tobago,143,10,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+"NAm",Trinidad and Tobago,143,20,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+Af,Tunisia,144,10,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Tunisia,80,10,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+Af,Tunisia,144,20,Africa_North_Interior,GLU144,AfrIntN,DZA,12,Algeria,0
+Af,Tunisia,80,20,Mediterranean_South_Coast,GLU080,MeditS,LBY,434,Libyan Arab Jamahiriya,1
+As,Turkey,55,20,Adriatic_Sea_Greece_Black_Sea_Coast,GLU055,AdrBlkSea,GRC,300,Greece,1
+As,Turkey,84,10,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Turkey,75,20,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Turkey,84,20,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Turkey,72,20,Caspian_Sea_South_West_Coast,GLU072,CaspianSW,IRN,364,"Iran, Islamic Republic of",1
+As,Turkey,70,20,Black_Sea_South_Coast,GLU070,BlackSeaS,TUR,792,Turkey,1
+As,Turkey,75,30,Mediterranean_Sea_East_Coast,GLU075,MeditE,TUR,792,Turkey,1
+As,Turkey,84,30,Tigris_Euphrates,GLU084,TigrEuphR,IRQ,368,Iraq,0
+As,Turkmenistan,58,10,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Turkmenistan,52,10,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Turkmenistan,52,20,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Turkmenistan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Turkmenistan,52,30,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Turkmenistan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+"NAm",Turks and Caicos Islands,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+Af,Uganda,87,20,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Uganda,87,30,Nile,GLU087,NileR,SDN,736,Sudan,0
+Af,Uganda,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Uganda,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Eu,Ukraine,47,10,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+Eu,Ukraine,54,10,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Ukraine,49,10,Dniester,GLU049,DniesterR,UKR,804,Ukraine,0
+Eu,Ukraine,39,10,Dnieper,GLU039,DnieperR,UKR,804,Ukraine,0
+Eu,Ukraine,47,20,Black_Sea_North_Coast,GLU047,BlackSeaN,UKR,804,Ukraine,0
+Eu,Ukraine,39,20,Dnieper,GLU039,DnieperR,UKR,804,Ukraine,0
+Eu,Ukraine,54,30,Danube,GLU054,DanubeR,ROM,642,Romania,0
+Eu,Ukraine,53,20,Don,GLU053,DonR,RUS,643,Russian Federation,0
+Eu,Ukraine,53,10,Don,GLU053,DonR,RUS,643,Russian Federation,0
+Eu,Ukraine,49,20,Dniester,GLU049,DniesterR,UKR,804,Ukraine,0
+Eu,Ukraine,30,30,Wisla,GLU030,WislaR,POL,616,Poland,0
+Eu,Ukraine,30,10,Wisla,GLU030,WislaR,POL,616,Poland,0
+As,United Arab Emirates,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,United Arab Emirates,88,10,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,United Arab Emirates,94,20,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,United Arab Emirates,88,20,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+As,United Arab Emirates,94,30,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,United Arab Emirates,88,30,Persian_Gulf_Coast,GLU088,PersianGulf,IRN,364,"Iran, Islamic Republic of",1
+Eu,United Kingdom,26,30,England_and_Wales,GLU026,EngWales,GBR,826,United Kingdom,1
+Eu,United Kingdom,26,10,England_and_Wales,GLU026,EngWales,GBR,826,United Kingdom,1
+Eu,United Kingdom,26,20,England_and_Wales,GLU026,EngWales,GBR,826,United Kingdom,1
+Eu,United Kingdom,24,20,Ireland,GLU024,Ireland,IRL,372,Ireland,1
+Eu,United Kingdom,24,30,Ireland,GLU024,Ireland,IRL,372,Ireland,1
+Eu,United Kingdom,16,30,Scotland,GLU016,Scotland,GBR,826,United Kingdom,1
+Eu,United Kingdom,16,20,Scotland,GLU016,Scotland,GBR,826,United Kingdom,1
+"NAm",United States,101,20,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",United States,101,30,Caribbean,GLU101,Caribbean,CUB,192,Cuba,1
+"NAm",United States,226,20,South_Atlantic_Gulf_Basin,GLU226,UsaCstSE,USA,840,United States,1
+"NAm",United States,226,10,South_Atlantic_Gulf_Basin,GLU226,UsaCstSE,USA,840,United States,1
+"NAm",United States,231,10,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",United States,225,10,Texas_Gulf_Coast_Basin,GLU225,TexasCst,USA,840,United States,1
+"NAm",United States,231,20,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",United States,225,20,Texas_Gulf_Coast_Basin,GLU225,TexasCst,USA,840,United States,1
+"NAm",United States,219,10,Lower_Mississippi_River_Basin,GLU219,MissppRS,USA,840,United States,0
+"NAm",United States,231,30,Rio_Grande_River_Basin,GLU231,RioGrande,USA,840,United States,1
+"NAm",United States,225,30,Texas_Gulf_Coast_Basin,GLU225,TexasCst,USA,840,United States,1
+"NAm",United States,221,10,Lower_Colorado_River_Basin,GLU221,UsaColoRS,USA,840,United States,1
+"NAm",United States,96,10,Mexico_Northwest_Coast,GLU096,MexCstNW,MEX,484,Mexico,1
+"NAm",United States,224,10,Arkansas_White_Red_Basin,GLU224,ArkWhtRedR,USA,840,United States,0
+"NAm",United States,226,30,South_Atlantic_Gulf_Basin,GLU226,UsaCstSE,USA,840,United States,1
+"NAm",United States,219,30,Lower_Mississippi_River_Basin,GLU219,MissppRS,USA,840,United States,0
+"NAm",United States,217,30,California_River_Basin,GLU217,California,USA,840,United States,1
+"NAm",United States,217,10,California_River_Basin,GLU217,California,USA,840,United States,1
+"NAm",United States,221,30,Lower_Colorado_River_Basin,GLU221,UsaColoRS,USA,840,United States,1
+"NAm",United States,224,30,Arkansas_White_Red_Basin,GLU224,ArkWhtRedR,USA,840,United States,0
+"NAm",United States,221,20,Lower_Colorado_River_Basin,GLU221,UsaColoRS,USA,840,United States,1
+"NAm",United States,224,20,Arkansas_White_Red_Basin,GLU224,ArkWhtRedR,USA,840,United States,0
+"NAm",United States,230,10,Tennessee_River_Basin,GLU230,TennR,USA,840,United States,0
+"NAm",United States,230,20,Tennessee_River_Basin,GLU230,TennR,USA,840,United States,0
+"NAm",United States,220,20,Upper_Colorado_River_Basin,GLU220,UsaColoRN,USA,840,United States,0
+"NAm",United States,230,30,Tennessee_River_Basin,GLU230,TennR,USA,840,United States,0
+"NAm",United States,228,20,Ohio_River_Basin,GLU228,OhioR,USA,840,United States,0
+"NAm",United States,220,30,Upper_Colorado_River_Basin,GLU220,UsaColoRN,USA,840,United States,0
+"NAm",United States,228,30,Ohio_River_Basin,GLU228,OhioR,USA,840,United States,0
+"NAm",United States,233,10,Mid_Atlantic_Basin,GLU233,UsaCstE,USA,840,United States,0
+"NAm",United States,219,20,Lower_Mississippi_River_Basin,GLU219,MissppRS,USA,840,United States,0
+"NAm",United States,233,30,Mid_Atlantic_Basin,GLU233,UsaCstE,USA,840,United States,0
+"NAm",United States,222,10,Great_Basin,GLU222,GreatBasin,USA,840,United States,0
+"NAm",United States,223,20,Missouri_River_Basin,GLU223,MissouriR,USA,840,United States,0
+"NAm",United States,218,20,Upper_Mississippi_Basin,GLU218,MissppRN,USA,840,United States,0
+"NAm",United States,218,10,Upper_Mississippi_Basin,GLU218,MissppRN,USA,840,United States,0
+"NAm",United States,228,10,Ohio_River_Basin,GLU228,OhioR,USA,840,United States,0
+"NAm",United States,222,30,Great_Basin,GLU222,GreatBasin,USA,840,United States,0
+"NAm",United States,222,20,Great_Basin,GLU222,GreatBasin,USA,840,United States,0
+"NAm",United States,223,30,Missouri_River_Basin,GLU223,MissouriR,USA,840,United States,0
+"NAm",United States,233,20,Mid_Atlantic_Basin,GLU233,UsaCstE,USA,840,United States,0
+"NAm",United States,223,10,Missouri_River_Basin,GLU223,MissouriR,USA,840,United States,0
+"NAm",United States,218,30,Upper_Mississippi_Basin,GLU218,MissppRN,USA,840,United States,0
+"NAm",United States,217,20,California_River_Basin,GLU217,California,USA,840,United States,1
+"NAm",United States,227,20,Great_Lakes_Basin,GLU227,GreatLakes,CAN,124,Canada,0
+"NAm",United States,229,10,Pacific_Northwest_Basin,GLU229,UsaPacNW,USA,840,United States,0
+"NAm",United States,229,30,Pacific_Northwest_Basin,GLU229,UsaPacNW,USA,840,United States,0
+"NAm",United States,227,30,Great_Lakes_Basin,GLU227,GreatLakes,CAN,124,Canada,0
+"NAm",United States,232,30,New_England_Basin,GLU232,UsaCstNE,USA,840,United States,0
+"NAm",United States,232,10,New_England_Basin,GLU232,UsaCstNE,USA,840,United States,0
+"NAm",United States,229,20,Pacific_Northwest_Basin,GLU229,UsaPacNW,USA,840,United States,0
+"NAm",United States,19,30,Atlantic_Ocean_Seaboard,GLU019,CanAtl,CAN,124,Canada,0
+"NAm",United States,23,30,Saskatchewan_Nelson,GLU023,NelsonR,CAN,124,Canada,1
+"NAm",United States,40,30,St_Lawrence,GLU040,StLwrncR,CAN,124,Canada,0
+"NAm",United States,23,20,Saskatchewan_Nelson,GLU023,NelsonR,CAN,124,Canada,1
+"NAm",United States,7,10,Pacific_and_Arctic_Coast,GLU007,PacArctic,USA,840,United States,1
+"NAm",United States,27,10,Fraser,GLU027,FraserR,CAN,124,Canada,0
+"NAm",United States,27,30,Fraser,GLU027,FraserR,CAN,124,Canada,0
+"NAm",United States,7,30,Pacific_and_Arctic_Coast,GLU007,PacArctic,USA,840,United States,1
+SA,Uruguay,206,30,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Uruguay,195,30,Uruguay_Brazil_South_Atlantic_Coast,GLU195,BrzCstS,BRA,76,Brazil,1
+SA,Uruguay,206,10,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+SA,Uruguay,195,10,Uruguay_Brazil_South_Atlantic_Coast,GLU195,BrzCstS,BRA,76,Brazil,1
+SA,Uruguay,206,20,La_Plata,GLU206,RioLaPlata,BRA,76,Brazil,0
+As,Uzbekistan,58,10,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Uzbekistan,76,10,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Uzbekistan,52,10,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Uzbekistan,58,20,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Uzbekistan,76,20,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Uzbekistan,58,30,Amu_Darya,GLU058,AmuDaryaR,UZB,860,Uzbekistan,0
+As,Uzbekistan,76,30,Syr_Darya,GLU076,SyrDaryaR,KAZ,398,Kazakhstan,0
+As,Uzbekistan,52,30,Caspian_Sea_East_Coast,GLU052,CaspianE,TKM,795,Turkmenistan,1
+As,Uzbekistan,45,30,Caspian_Sea_Coast,GLU045,CaspianNE,KAZ,398,Kazakhstan,1
+Oc,Vanuatu,185,20,South_Pacific_Islands,GLU185,NewCaledn,NCL,540,New Caledonia,0
+SA,Venezuela,168,30,Amazon,GLU168,AmazonR,BRA,76,Brazil,0
+SA,Venezuela,156,30,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Venezuela,156,10,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Venezuela,161,30,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Venezuela,156,20,Orinoco,GLU156,OrinocoR,BRA,76,Brazil,0
+SA,Venezuela,143,10,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Venezuela,143,20,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Venezuela,143,30,Caribbean_Coast,GLU143,SAmerCstN,VEN,862,Venezuela,1
+SA,Venezuela,161,10,Northeast_South_America_South_Atlantic_Coast,GLU161,SAmerCstNE,GUY,328,Guyana,1
+SA,Venezuela,166,30,Magdalena,GLU166,MagdalenaR,COL,170,Colombia,0
+As,Vietnam,125,10,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Vietnam,148,10,Gulf_of_Thailand_Coast,GLU148,ThaiGulf,THA,764,Thailand,0
+As,Vietnam,126,10,Viet_Nam_Coast,GLU126,VietnamCst,VNM,704,Viet Nam,0
+As,Vietnam,109,10,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+As,Vietnam,108,20,Xun_Jiang,GLU108,XunJiang,CHN,156,China,0
+As,Vietnam,109,20,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+As,Vietnam,126,30,Viet_Nam_Coast,GLU126,VietnamCst,VNM,704,Viet Nam,0
+As,Vietnam,125,30,Mekong,GLU125,Mekong,LAO,418,Lao Peoples Democratic Republic,0
+As,Vietnam,109,30,Hong_(Red_River),GLU109,Hong,VNM,704,Viet Nam,0
+As,Vietnam,112,30,South_China_Sea_Coast,GLU112,SChinaSea,CHN,156,China,1
+As,Vietnam,108,30,Xun_Jiang,GLU108,XunJiang,CHN,156,China,0
+As,Yemen,100,10,Africa_Red_Sea_Gulf_of_Aden_Coast,GLU100,AfrCstNE,SOM,706,Somalia,1
+As,Yemen,93,10,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Yemen,94,10,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Yemen,93,20,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Yemen,94,20,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+As,Yemen,93,30,Red_Sea_East_Coast,GLU093,RedSeaE,SAU,682,Saudi Arabia,1
+As,Yemen,94,30,Arabian_Peninsula,GLU094,ArabianP,SAU,682,Saudi Arabia,1
+Af,Zambia,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Zambia,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Zambia,183,30,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Zambia,183,10,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Zambia,179,30,Rift_Valley,GLU179,RiftValley,ETH,231,Ethiopia,0
+Af,Zambia,183,20,Congo,GLU183,CongoR,COD,180,"Congo, The Democratic Republic of the",0
+Af,Zimbabwe,199,10,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Zimbabwe,199,20,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Zimbabwe,199,30,Limpopo,GLU199,LimpopoR,ZAF,710,South Africa,0
+Af,Zimbabwe,190,10,Africa_Indian_Ocean_Coast,GLU190,AfrCstSE,MOZ,508,Mozambique,0
+Af,Zimbabwe,190,30,Africa_Indian_Ocean_Coast,GLU190,AfrCstSE,MOZ,508,Mozambique,0
+Af,Zimbabwe,197,10,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Zimbabwe,197,30,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Zimbabwe,188,10,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Zimbabwe,188,20,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
+Af,Zimbabwe,197,20,Africa_South_Interior,GLU197,AfrIntS,BWA,72,Botswana,0
+Af,Zimbabwe,188,30,Zambezi,GLU188,ZambeziR,ZMB,894,Zambia,0
