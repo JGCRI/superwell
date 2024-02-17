@@ -32,7 +32,7 @@ Adjust [params.csv](./inputs/params.csv) in [`inputs/`](./inputs/) folder to fit
 
 ### Conceptual Overview
 
-![superwell conceptual overview](concept_v5.png)
+![superwell conceptual overview](concept.png)
 
 ## Inputs
 
