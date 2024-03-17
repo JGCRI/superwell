@@ -11,6 +11,18 @@
 # Example code in package build process
 *-Ex.R
 
+# Folders, if any
+# inputs/
+# ignore shapefiles due to size limits, commit zipped shapefiles instead
+inputs/shapefiles/All_merged.shp
+inputs/shapefiles/inputs.shp
+# outputs/
+outputs/outplots-diag/
+.idea/
+.vscode/
+python/outputs_archive/
+processing/figures/
+
 # Output files from R CMD build
 /*.tar.gz
 
