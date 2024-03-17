@@ -49,7 +49,8 @@ and two supporting data files:
 [`inputs/`](./inputs/) folder also contains digitized, geo-processed [shape files](./inputs/shapefiles/) of aquifer properties that makes the contents of the [inputs.csv](./inputs/inputs.csv) file after processing.
 
 > _Cite input data as:_ \
-Niazi, H., Watson, D., Hejazi, M., Yonkofski, C., Ferencz, S., Vernon, C., Graham, N., Wild, T., & Yoon, J. (2024). [Global Geo-processed Data of Aquifer Properties by 0.5° Grid, Country and Water Basins](https://doi.org/10.5281/zenodo.10631420). Zenodo. <https://doi.org/10.5281/zenodo.10631420>
+Niazi, H., Watson, D., Hejazi, M., Yonkofski, C., Ferencz, S., Vernon, C., Graham, N., Wild, T., & Yoon, J. (2024). [Global Geo-processed Data of Aquifer Properties by 0.5° Grid, Country and Water Basins](https://doi.org/10.57931/2307831). MSD-LIVE Data Repository. <https://doi.org/10.57931/2307831> \
+[![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307831.svg)](https://doi.org/10.57931/2307831)
 
 See [documentation on inputs](./inputs/README.md) for more details.  
 
@@ -59,7 +60,8 @@ All outputs are written to [`outputs/`](./outputs/) folder as `.csv` formats.
 A select-few key outputs include: extractable volumes, drawdown, number of wells, costs including capital, maintenance, pumping, and unit costs of groundwater production.  
 
 > _Cite output data as:_ \
-Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.5281/zenodo.10632939). Zenodo. <https://doi.org/10.5281/zenodo.10632939>
+Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.57931/2307832). MSD-LIVE Data Repository. <https://doi.org/10.57931/2307832> \
+[![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832)
 
 See [documentation on outputs](./outputs/README.md) for more details.
 
