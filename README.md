@@ -1,8 +1,8 @@
-[![build](https://github.com/JGCRI/superwell/actions/workflows/build.yml/badge.svg)](https://github.com/JGCRI/superwell/actions/workflows/build.yml)
+<!-- [![build](https://github.com/JGCRI/superwell/actions/workflows/build.yml/badge.svg)](https://github.com/JGCRI/superwell/actions/workflows/build.yml)
 [![tests](https://github.com/JGCRI/superwell/actions/workflows/test_coverage.yml/badge.svg?branch=main)](https://github.com/JGCRI/superwell/actions/workflows/test_coverage.yml)
 [![codecov](https://codecov.io/gh/JGCRI/superwell/branch/main/graph/badge.svg?token=XQ913U4IYM)](https://codecov.io/gh/JGCRI/superwell)
 [![docs](https://github.com/JGCRI/superwell/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/JGCRI/superwell/actions/workflows/docs.yaml)
-[![status](https://joss.theoj.org/papers/status.svg)](https://joss.theoj.org/papers/ae736aa6e75758498cf79ab8ec3fa886)
+[![status](https://joss.theoj.org/papers/status.svg)](https://joss.theoj.org/papers/ae736aa6e75758498cf79ab8ec3fa886) -->
 
 # _superwell_: A physics-based hydro-economic model for groundwater cost and supply assessment
 
