@@ -12,10 +12,10 @@ import math
 #  params file, write outputs and save a few key plots e.g., a summary diagnostic plot and maps (volume, unit cost etc)
 
 # load data
-grid_df = pd.read_csv('./inputs/inputs.csv')
-params = pd.read_csv('./inputs/params.csv', index_col=0)
-electricity_rates = pd.read_csv('./inputs/GCAM_Electricity_Rates.csv', index_col=0, header=None)
-W_lookup = pd.read_csv('./inputs/Theis_well_function_table.csv', header="infer")
+grid_df = pd.read_csv('../inputs/inputs.csv')
+params = pd.read_csv('../inputs/params.csv', index_col=0)
+electricity_rates = pd.read_csv('../inputs/GCAM_Electricity_Rates.csv', index_col=0, header=None)
+W_lookup = pd.read_csv('../inputs/Theis_well_function_table.csv', header="infer")
 lookup_idx = pd.Index(W_lookup.W)
 
 # define constants
