@@ -12,10 +12,10 @@ import math
 #  params file, write outputs and save a few key plots e.g., a summary diagnostic plot and maps (volume, unit cost etc)
 
 # load data
-grid_df = pd.read_csv('../inputs/inputs.csv')
-params = pd.read_csv('../inputs/params.csv', index_col=0)
-electricity_rates = pd.read_csv('../inputs/GCAM_Electricity_Rates.csv', index_col=0, header=None)
-W_lookup = pd.read_csv('../inputs/Theis_well_function_table.csv', header="infer")
+grid_df = pd.read_csv('./inputs/inputs.csv')
+params = pd.read_csv('./inputs/params.csv', index_col=0)
+electricity_rates = pd.read_csv('./inputs/GCAM_Electricity_Rates.csv', index_col=0, header=None)
+W_lookup = pd.read_csv('./inputs/Theis_well_function_table.csv', header="infer")
 lookup_idx = pd.Index(W_lookup.W)
 
 # define constants
@@ -49,37 +49,34 @@ for i in range(len(electricity_rates.iloc[:, 0])):
     electricity_rate_dict[country.rstrip()] = electricity_rates.iloc[i, 0]
 
 # filter by basin, country and/or grid cell, change filters in params.csv
-# C	 B	G
-# T	 T	T	run global
-# F	 T	T	run country
-# T	 F	T	run basin
-# T	 T	F	run grid
-# F	 F	T	run basin and country
-# F	 F	F	error
-# T = all	F = specific filer name (e.g., country name, basin name, grid cell ID)
-
 if COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER == 'all':  # run global
     selected_grid_df = grid_df
+    print('Run Global with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER == 'all':  # run country
     selected_grid_df = grid_df[grid_df['Country'] == COUNTRY_FILTER].reset_index(drop=True)
+    print('Run Country with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER != 'all':  # run basin
     selected_grid_df = grid_df[grid_df['Basin_long_name'] == BASIN_FILTER].reset_index(drop=True)
+    print('Run Basin with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER == 'all':  # run grid
     selected_grid_df = grid_df[grid_df['GridCellID'] == int(GRIDCELL_FILTER)].reset_index(drop=True)
+    print('Run Grid with ' + str(len(selected_grid_df)) + ' cell! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER != 'all':  # run country and basin
     selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['Basin_long_name'] == BASIN_FILTER)].reset_index(drop=True)
+    print('Run Country and Basin with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER == 'all':  # run country and grid cell
     selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+    print('Run Country and Grid with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER != 'all':  # run basin and grid cell
     selected_grid_df = grid_df[(grid_df['Basin_long_name'] == BASIN_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+    print('Run Basin and Grid with ' + str(len(selected_grid_df)) + ' cells! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 else:
-    print('ERROR: Invalid combination of filters. Please check the inputs file (params.csv) to make sure the filter '
-          'combinations are logical.')
-    exit()
+    selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['Basin_long_name'] == BASIN_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True) # run basin, country and grid cell
+    print('Run Basin, Country and Grid with ' + str(len(selected_grid_df)) + ' cell! Country: ' + COUNTRY_FILTER + (' Basin: ') + BASIN_FILTER + ' Grid: ' + GRIDCELL_FILTER)
 
 # if selected_grid_df is empty, print error message that combination is not valid
 if selected_grid_df.empty:
-    print('ERROR: Filter combination is not valid. Please check the inputs file (params.csv).')
+    print('ERROR: Filter combination is not valid. Please check the params.csv file to make sure the filter combinations are logical.')
     exit()
 
 # define outputs file name
