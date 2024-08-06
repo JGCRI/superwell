@@ -1,10 +1,10 @@
 ﻿Index,Val,Units
 Country_filter,all,
-Basin_filter,California_River_Basin,
+Basin_filter,all,
 Gridcell_filter,all,
 Total_Simulation_Years,500,years
 Pumping_Days,100,days/year
-Depletion_Limit,0.05,
+Depletion_Limit,0.25,
 Ponded_Depth,0.3,m
 Recharge_Ratio,0.1,
 Specific_weight,9800,(kg/m3*m/s2)
