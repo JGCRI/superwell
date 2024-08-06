@@ -29,8 +29,9 @@ EFFICIENCY = float(params.Val['Pump_Efficiency'])  # well efficiency
 WELL_LIFETIME = float(params.Val['Max_Lifetime_in_Years'])
 INTEREST_RATE = float(params.Val['Interest_Rate'])
 MAINTENANCE_RATE = float(params.Val['Maintenance_factor'])
-COUNTRY_FILTER = params.Val['Country_filter']  # filter by country
-GRIDCELL_FILTER = params.Val['Gridcell_filter']  # filter by grid cell ID
+COUNTRY_FILTER = params.Val['Country_filter']  # filter by the country
+BASIN_FILTER = params.Val['Basin_filter']  # filter by the basin
+GRIDCELL_FILTER = params.Val['Gridcell_filter']  # filter by the grid cell ID
 
 # time constants 
 NUM_YEARS = int(params.Val['Total_Simulation_Years'])  # maximum years of pumping
@@ -47,30 +48,45 @@ for i in range(len(electricity_rates.iloc[:, 0])):
     country = electricity_rates.index[i]
     electricity_rate_dict[country.rstrip()] = electricity_rates.iloc[i, 0]
 
-# filter by country and/or grid cell, change filters in params.csv
-if COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all':
-    selected_grid_df = grid_df
-elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all':
-    selected_grid_df = grid_df[grid_df['GridCellID'] == int(GRIDCELL_FILTER)].reset_index(drop=True)
-elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all':
-    selected_grid_df = grid_df[grid_df['Country'] == COUNTRY_FILTER].reset_index(drop=True)
-else:
-    selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+# filter by basin, country and/or grid cell, change filters in params.csv
+# C	 B	G
+# T	 T	T	run global
+# F	 T	T	run country
+# T	 F	T	run basin
+# T	 T	F	run grid
+# F	 F	T	run basin and country
+# F	 F	F	error
+# T = all	F = specific filer name (e.g., country name, basin name, grid cell ID)
 
-# if selected_grid_df is empty, print error message that country and grid cell combination is not valid
+if COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER == 'all':  # run global
+    selected_grid_df = grid_df
+elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER == 'all':  # run country
+    selected_grid_df = grid_df[grid_df['Country'] == COUNTRY_FILTER].reset_index(drop=True)
+elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER != 'all':  # run basin
+    selected_grid_df = grid_df[grid_df['Basin_long_name'] == BASIN_FILTER].reset_index(drop=True)
+elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER == 'all':  # run grid
+    selected_grid_df = grid_df[grid_df['GridCellID'] == int(GRIDCELL_FILTER)].reset_index(drop=True)
+elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER != 'all':  # run country and basin
+    selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['Basin_long_name'] == BASIN_FILTER)].reset_index(drop=True)
+elif COUNTRY_FILTER != 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER == 'all':  # run country and grid cell
+    selected_grid_df = grid_df[(grid_df['Country'] == COUNTRY_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+elif COUNTRY_FILTER == 'all' and GRIDCELL_FILTER != 'all' and BASIN_FILTER != 'all':  # run basin and grid cell
+    selected_grid_df = grid_df[(grid_df['Basin_long_name'] == BASIN_FILTER) & (grid_df['GridCellID'] == int(GRIDCELL_FILTER))].reset_index(drop=True)
+else:
+    print('ERROR: Invalid combination of filters. Please check the inputs file (params.csv) to make sure the filter '
+          'combinations are logical.')
+    exit()
+
+# if selected_grid_df is empty, print error message that combination is not valid
 if selected_grid_df.empty:
-    print('ERROR: Country and Grid Cell combination is not valid. Please check the inputs file (params.csv) to make '
-          'sure that the grid cell ID belongs to the filtered country or vice versa.')
+    print('ERROR: Filter combination is not valid. Please check the inputs file (params.csv).')
     exit()
 
 # define outputs file name
 output_path = '../outputs/'
-if GRIDCELL_FILTER == 'all':
-    output_name = 'superwell_py_deep_' + str.replace(COUNTRY_FILTER, ' ', '') + '_' + str(PONDED_DEPTH_TARGET) + 'PD_' + str(
-        DEPLETION_LIMIT) + 'DL_' + str(RECHARGE_RATIO) + 'RR'
-else:
-    output_name = 'superwell_py_deep_' + str.replace(COUNTRY_FILTER, ' ', '') + '_' + str(PONDED_DEPTH_TARGET) + 'PD_' + str(
-    DEPLETION_LIMIT) + 'DL_Grid_' + str(GRIDCELL_FILTER) + str(RECHARGE_RATIO) + 'RR'
+output_name = ('superwell_py_deep_C_' + str.replace(COUNTRY_FILTER, ' ', '') + '_B_' +
+               str.replace(BASIN_FILTER, ' ', '')  + '_G_' + str(GRIDCELL_FILTER) + '_' +
+               str(PONDED_DEPTH_TARGET) + 'PD_' + str(DEPLETION_LIMIT) + 'DL_' + str(RECHARGE_RATIO) + 'RR')
 
 # header for output file
 header_column_names = 'year_number,depletion_limit,continent,country,' \
