@@ -6,16 +6,20 @@
 import numpy as np
 import pandas as pd
 import math
+import os
 
 # TODO: create an outer scenario loop, or make this whole file a function and call it using a batch run script,
 #  read the list of scenarios to be run from a file, create a directory for the scenario, copy the modified
 #  params file, write outputs and save a few key plots e.g., a summary diagnostic plot and maps (volume, unit cost etc)
 
-# load data
-grid_df = pd.read_csv('../inputs/inputs.csv')
-params = pd.read_csv('../inputs/params.csv', index_col=0)
-electricity_rates = pd.read_csv('../inputs/GCAM_Electricity_Rates.csv', index_col=0, header=None)
-W_lookup = pd.read_csv('../inputs/Theis_well_function_table.csv', header="infer")
+# Determine the relative path to the inputs directory
+inputs_dir = '../inputs' if os.path.exists('../inputs') else 'inputs'
+
+# Reading CSV files with the determined base directory
+grid_df = pd.read_csv(os.path.join(inputs_dir, 'inputs.csv'))
+params = pd.read_csv(os.path.join(inputs_dir, 'params.csv'), index_col=0)
+electricity_rates = pd.read_csv(os.path.join(inputs_dir, 'GCAM_Electricity_Rates.csv'), index_col=0, header=None)
+W_lookup = pd.read_csv(os.path.join(inputs_dir, 'Theis_well_function_table.csv'), header="infer")
 lookup_idx = pd.Index(W_lookup.W)
 
 # define constants
@@ -80,7 +84,7 @@ if selected_grid_df.empty:
     exit()
 
 # define outputs file name
-output_path = '../outputs/'
+output_path = '../outputs' if os.path.exists('../outputs') else 'outputs'
 output_name = ('superwell_py_deep_C_' + str.replace(COUNTRY_FILTER, ' ', '') + '_B_' +
                str.replace(BASIN_FILTER, ' ', '')  + '_G_' + str(GRIDCELL_FILTER) + '_' +
                str(PONDED_DEPTH_TARGET) + 'PD_' + str(DEPLETION_LIMIT) + 'DL_' + str(RECHARGE_RATIO) + 'RR')
