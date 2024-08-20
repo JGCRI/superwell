@@ -24,15 +24,20 @@ lookup_idx = pd.Index(W_lookup.W)
 
 # define constants
 MAX_INITIAL_SAT_THICKNESS = float(params.Val['Max_Initial_Sat_Thickness']) # maximum initial saturated thickness
-DEFAULT_ELECTRICITY_RATE = float(params.Val['Energy_cost_rate'])  # default electricity rate
+DEEPENING_INCREMENT = float(params.Val['Well_Deepening_Increment']) # increment for deepening well (m)
+
 DEPLETION_LIMIT = float(params.Val['Depletion_Limit'])  # depletion limit for this scenario
 PONDED_DEPTH_TARGET = float(params.Val['Ponded_Depth'])  # annual ponded/irrigation depth target [m]
 RECHARGE_RATIO = float(params.Val['Recharge_Ratio'])  # recharge ratio of the pumping rate [%]
+
 SPECIFIC_WEIGHT = float(params.Val['Specific_weight'])  # specific weight of water
 EFFICIENCY = float(params.Val['Pump_Efficiency'])  # well efficiency
+
 WELL_LIFETIME = float(params.Val['Max_Lifetime_in_Years'])
+DEFAULT_ELECTRICITY_RATE = float(params.Val['Energy_cost_rate'])  # default electricity rate
 INTEREST_RATE = float(params.Val['Interest_Rate'])
 MAINTENANCE_RATE = float(params.Val['Maintenance_factor'])
+
 COUNTRY_FILTER = params.Val['Country_filter']  # filter by the country
 BASIN_FILTER = params.Val['Basin_filter']  # filter by the basin
 GRIDCELL_FILTER = params.Val['Gridcell_filter']  # filter by the grid cell ID
@@ -42,9 +47,6 @@ NUM_YEARS = int(params.Val['Total_Simulation_Years'])  # maximum years of pumpin
 DAYS = int(params.Val['Pumping_Days'])  # days pumping per year
 HOURS_IN_DAY = 24  # hours in a day
 SECS_IN_DAY = 86400  # seconds in a day
-
-# TODO: Make it a parameter in params.csv
-DEEPENING_INCREMENT = 50  # increment for deepening well (m) 
 
 # convert electricity rate dictionary
 electricity_rate_dict = {}
@@ -103,7 +105,7 @@ header_column_names = 'year_number,depletion_limit,continent,country,' \
                       'unit_cost,unit_cost_per_km3,unit_cost_per_acreft,whyclass,total_well_length'
 
 # write header to the output file
-file = open(output_path + output_name + '.csv', 'w')
+file = open(output_path + '/' + output_name + '.csv', 'w')
 file.write(str(header_column_names))
 file.write('\n')
 file.close()
@@ -166,11 +168,16 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     progress_step_size = max(1, int(total_cells / 1000))  # change 1 to a bigger number if the progress bar is too fast
 
     # Print simulation progress
-    if (GRIDCELL_FILTER == 'all' and grid_cell % progress_step_size == 0) or (
+    if grid_cell == 0: # check if grid_cell is the first element
+        print('Percent complete = ' + str(np.round(100 * grid_cell / total_cells, 1)) +
+              ' | Processing Cell # ' + str(selected_grid_df.GridCellID[grid_cell]) + ' in '
+              + str(selected_grid_df.Country[grid_cell]))
+    elif (GRIDCELL_FILTER == 'all' and grid_cell % progress_step_size == 0) or (
             selected_grid_df.Country[grid_cell] != selected_grid_df.Country[grid_cell - 1]):
         print('Percent complete = ' + str(np.round(100 * grid_cell / total_cells, 1)) +
               ' | Processing Cell # ' + str(selected_grid_df.GridCellID[grid_cell]) + ' in '
               + str(selected_grid_df.Country[grid_cell]))
+
 
     ################ determine if grid cell is skipped ########################
 
@@ -680,7 +687,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(well_length_array[year])
 
         # write outputs to the file
-        file = open(output_path + output_name + '.csv', 'a')
+        file = open(output_path + '/' + output_name + '.csv', 'a')
         file.write(outputs)
         file.write('\n')
         file.close()
@@ -689,6 +696,6 @@ if GRIDCELL_FILTER == 'all':
     print(skipped_cells, 'grid cells out of ', grid_cell,' cells (',
       round(skipped_cells * 100 /grid_cell), '% ) were skipped due to screening criteria')
 
-print('Results are saved in ', output_path + output_name + '.csv\nALL DONE!')
+print('Results are saved in ', output_path + '/' + output_name + '.csv\nALL DONE!')
 
 ## END
