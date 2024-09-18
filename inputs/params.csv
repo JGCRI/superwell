@@ -1,12 +1,14 @@
-﻿Index,Val,Units
+﻿Index,Val,Notes
 Country_filter,all,
 Basin_filter,all,
 Gridcell_filter,all,
 Total_Simulation_Years,500,years
 Pumping_Days,100,days/year
-Depletion_Limit,0.25,
-Ponded_Depth,0.3,m
-Recharge_Ratio,0.1,
+Depletion_Limit,0.05,
+Ponded_Depth,0.6,m
+Recharge_Flag,1,
+Shallow_Recharge_Ratio,0.2,
+Shallow_Recharge_Threshold,0.75, try not to exceed 0.8
 Specific_weight,9800,(kg/m3*m/s2)
 Static_head,0,m
 Max_Initial_Sat_Thickness,200,m 
