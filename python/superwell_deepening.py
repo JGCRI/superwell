@@ -16,7 +16,7 @@ import os
 inputs_dir = '../inputs' if os.path.exists('../inputs') else 'inputs'
 
 # Reading CSV files with the determined base directory
-grid_df = pd.read_csv(os.path.join(inputs_dir, 'inputs.csv'))
+grid_df = pd.read_csv(os.path.join(inputs_dir, 'inputs_recharge.csv'))
 params = pd.read_csv(os.path.join(inputs_dir, 'params.csv'), index_col=0)
 electricity_rates = pd.read_csv(os.path.join(inputs_dir, 'GCAM_Electricity_Rates.csv'), index_col=0, header=None)
 W_lookup = pd.read_csv(os.path.join(inputs_dir, 'Theis_well_function_table.csv'), header="infer")
@@ -28,7 +28,11 @@ DEEPENING_INCREMENT = float(params.Val['Well_Deepening_Increment']) # increment 
 
 DEPLETION_LIMIT = float(params.Val['Depletion_Limit'])  # depletion limit for this scenario
 PONDED_DEPTH_TARGET = float(params.Val['Ponded_Depth'])  # annual ponded/irrigation depth target [m]
-RECHARGE_RATIO = float(params.Val['Recharge_Ratio'])  # recharge ratio of the volume pumped [%]
+
+RECHARGE_FLAG = int(params.Val['Recharge_Flag'])  # decide if recharge is considered in the model (value zero or 1)
+SHALLOW_RECHARGE_RATIO = float(params.Val['Shallow_Recharge_Ratio'])  # part of recharge reducing pumping requirement [-]
+SHALLOW_RECHARGE_THRESHOLD = float(params.Val['Shallow_Recharge_Threshold'])  # % of ponded depth after which shallow
+# recharge starts contributing to deep aquifer recharge [-]
 
 SPECIFIC_WEIGHT = float(params.Val['Specific_weight'])  # specific weight of water
 EFFICIENCY = float(params.Val['Pump_Efficiency'])  # well efficiency
@@ -87,17 +91,18 @@ if selected_grid_df.empty:
 
 # define outputs file name
 output_path = '../outputs' if os.path.exists('../outputs') else 'outputs'
-output_name = ('vsuperwell_py_deep_C_' + str.replace(COUNTRY_FILTER, ' ', '') + '_B_' +
+output_name = ('superwell_py_deep_C_' + str.replace(COUNTRY_FILTER, ' ', '') + '_B_' +
                str.replace(BASIN_FILTER, ' ', '')  + '_G_' + str(GRIDCELL_FILTER) + '_' +
-               str(PONDED_DEPTH_TARGET) + 'PD_' + str(DEPLETION_LIMIT) + 'DL_' + str(RECHARGE_RATIO) + 'RR')
+               str(PONDED_DEPTH_TARGET) + 'PD_' + str(DEPLETION_LIMIT) + 'DL_' + str(SHALLOW_RECHARGE_RATIO) + 'RR')
 
 # header for output file
 header_column_names = 'year_number,depletion_limit,continent,country,' \
                       'gcam_basin_id,Basin_long_name,grid_id,grid_area,permeability,porosity,' \
                       'total_thickness,depth_to_water,orig_aqfr_sat_thickness,aqfr_sat_thickness,' \
                       'hydraulic_conductivity,transmissivity,radius_of_influence,areal_extent,' \
-                      'max_drawdown,drawdown,drawdown_interference,total_head,well_yield,' \
-                      'recharge_ratio,volume_recharged,volume_produced_perwell,' \
+                      'drawdown,drawdown_interference,total_head,well_yield,' \
+                      'recharge,shallow_recharge_depth,threshold_depth,net_ponded_depth_target,' \
+                      'excessive_recharge_depth,deep_recharge_vol,volume_deep_recharge,volume_produced_perwell,' \
                       'cumulative_vol_produced_perwell,number_of_wells,volume_produced_allwells,' \
                       'cumulative_vol_produced_allwells,available_volume,depleted_vol_fraction,' \
                       'well_installation_cost, annual_capital_cost,maintenance_cost,nonenergy_cost,' \
@@ -287,8 +292,40 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     Well_Q_array = np.zeros(NUM_YEARS)
     Well_Q_array[0] = initial_Q
 
-    ###################### determine initial well Area ########################
-    initial_well_area = initial_Q * DAYS * SECS_IN_DAY / (PONDED_DEPTH_TARGET)  # initial well area A = Qt/d = V/d (m^2)
+    ################# recharge calculations and adjustments ###################
+    recharge = selected_grid_df.Recharge[grid_cell]  # recharge rate (m/year)
+
+    # turn recharge effects on and off
+    if RECHARGE_FLAG == 0:
+        NET_PONDED_DEPTH_TARGET = PONDED_DEPTH_TARGET  # no change in pumping target
+        deep_recharge_vol = 0  # no change in depth to water
+    else:
+        # part of recharge that goes to shallow subsurface recharge and reduces pumping requirement
+        shallow_recharge_depth = SHALLOW_RECHARGE_RATIO * recharge  # (m/year)
+
+        # part of ponded depth the shallow recharge should reduce up to (m)
+        threshold_depth = SHALLOW_RECHARGE_THRESHOLD * PONDED_DEPTH_TARGET
+
+        # reduce ponded depth target with shallow recharge until threshold_depth is reached
+        if shallow_recharge_depth <= threshold_depth:
+            NET_PONDED_DEPTH_TARGET = PONDED_DEPTH_TARGET - shallow_recharge_depth
+            excessive_recharge_depth = 0  # no excess recharge to go to deep aquifer
+        else:
+            if threshold_depth == PONDED_DEPTH_TARGET:
+                NET_PONDED_DEPTH_TARGET = 0.2 * PONDED_DEPTH_TARGET  # ensure 20% ponded depth is maintained
+                # extra shallow recharge (a-b) plus the left over from maintaining 20% ponded depth (c)
+                excessive_recharge_depth = shallow_recharge_depth - threshold_depth + NET_PONDED_DEPTH_TARGET
+            else:
+                NET_PONDED_DEPTH_TARGET = PONDED_DEPTH_TARGET - threshold_depth
+                # excess shallow recharge beyond what is allowed to reduce PONDED_DEPTH_TARGET
+                excessive_recharge_depth = shallow_recharge_depth - threshold_depth
+
+        # part of recharge that contributes to an increase in deep subsurface volume
+        # (contains partitioned deep recharge and leftover shallow recharge)
+        deep_recharge_vol = ((1 - SHALLOW_RECHARGE_RATIO) * recharge + excessive_recharge_depth) * grid_cell_area
+
+    ################## determine initial well area and roi #####################
+    initial_well_area = initial_Q * DAYS * SECS_IN_DAY / NET_PONDED_DEPTH_TARGET  # initial well area A = Qt/d = V/d (m^2)
     initial_roi = (initial_well_area / math.pi) ** 0.5  # initial radius of influence (m)
     initial_num_wells = selected_grid_df.Grid_area[grid_cell] / initial_well_area # initial number of wells
 
@@ -332,7 +369,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
         # total drawdown (well own drawdown + interference from 4 neighboring wells)
         # TODO: 4x for square packing. It could be increased to 6x for circle packing, or 8x for hex packing
-        s_total = s_theis + 4 * s_theis_interference
+        s_total = s_theis + 6 * s_theis_interference
 
         # check if drawdown constraints are violated by end of 100 day pumping period
         # if constraints violated: (1) first deepen well, (2) then reduce well pumping rate 
@@ -380,7 +417,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                 Well_Q_array[year] = new_Q  # update Q for current YEAR
 
                 # update well area and roi for current year using new Q for current year
-                well_area_array[year] = Well_Q_array[year] * DAYS * SECS_IN_DAY / PONDED_DEPTH_TARGET
+                well_area_array[year] = Well_Q_array[year] * DAYS * SECS_IN_DAY / NET_PONDED_DEPTH_TARGET
                 well_roi = (well_area_array[year] / math.pi) ** 0.5
                 well_roi_array[year] = initial_roi
 
@@ -417,48 +454,44 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
         ########################### compute outputs ###########################
 
-        # save annual pumping values to arrays 
+        # save annual pumping values to arrays
         if year == 0: # for the first year
             drawdown = np.zeros(NUM_YEARS)
             drawdown_interference = np.zeros(NUM_YEARS)
             total_head = np.zeros(NUM_YEARS)
             volume_per_well = np.zeros(NUM_YEARS)
+            volume_deep_recharge = np.zeros(NUM_YEARS)
             num_wells = np.zeros(NUM_YEARS)
             cumulative_volume_per_well = np.zeros(NUM_YEARS)
             cumulative_volume_all_wells = np.zeros(NUM_YEARS)
             depleted_volume_fraction = np.zeros(NUM_YEARS)
 
-            drawdown[year] = s_jacob # m
-            drawdown_interference[year] = s_interference_avg # m
-            total_head[year] = s_jacob + DTW_array[year] # m
             volume_per_well[year] = Well_Q_array[year] * SECS_IN_DAY * DAYS # m^3
             num_wells[year] = selected_grid_df.Grid_area[grid_cell] / well_area_array[year] # number of wells [unitless]
             volume_all_wells[year] = volume_per_well[year] * num_wells[year] # m^3
-            volume_recharged[year] = RECHARGE_RATIO * volume_all_wells[year] # m^3
             cumulative_volume_per_well[year] = volume_per_well[year] # m^3
             cumulative_volume_all_wells[year] = volume_all_wells[year]  # m^3
             depleted_volume_fraction[year] = cumulative_volume_all_wells[year] / available_volume # fraction of available volume that is already pumped out
 
         else: # for the rest of the pumping years
-            drawdown[year] = s_jacob
-            drawdown_interference[year] = s_interference_avg
-            total_head[year] = s_jacob + DTW_array[year]
             volume_per_well[year] = Well_Q_array[year] * SECS_IN_DAY * DAYS
             num_wells[year] = selected_grid_df.Grid_area[grid_cell] / well_area_array[year]
             volume_all_wells[year] = volume_per_well[year] * num_wells[year]
-            volume_recharged[year] = RECHARGE_RATIO * volume_all_wells[year]  # m^3
-            # TODO: only cumulative calculations are different between first and rest of the years, shorten this block
             cumulative_volume_per_well[year] = volume_per_well[year] + cumulative_volume_per_well[year - 1]
             cumulative_volume_all_wells[year] = volume_all_wells[year] + cumulative_volume_all_wells[year - 1]
             depleted_volume_fraction[year] = cumulative_volume_all_wells[year] / available_volume
+
+        drawdown[year] = s_jacob  # m
+        drawdown_interference[year] = s_interference_avg  # m
+        total_head[year] = s_jacob + DTW_array[year]  # m
+        volume_deep_recharge[year] = min(deep_recharge_vol, volume_all_wells[year])
 
         # update variable arrays for next annual pumping iteration
         if year != NUM_YEARS - 1: # skip updating arrays for the last year
             # pass the same Q to the next year, checks before this determine if Q needs to be updated 
             Well_Q_array[year + 1] = Well_Q_array[year]
             # add the average depth of pumped groundwater in current year to the previous depth to water
-            # DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] / grid_cell_area) / S
-            DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] - volume_recharged[year]) / grid_cell_area / S
+            DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] - volume_deep_recharge[year]) / grid_cell_area / S
             # remaining length of well under water table
             sat_thickness_array[year + 1] = well_length_array[year] - DTW_array[year + 1]
             # updated transmissivity based on new saturated thickness
@@ -622,19 +655,28 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
 
     ######################## save grid cell results ###########################
+
     """
-    ['year_number', 'depletion_limit', 'continent', 'country', 
-    'gcam_basin_id', 'Basin_long_name', 'grid_id', 'grid_area', 'permeability', 'porosity', 
-    'total_thickness', 'depth_to_water', 'orig_aqfr_sat_thickness', 'aqfr_sat_thickness', 
-    'hydraulic_conductivity', 'transmissivity', 'radius_of_influence', 'areal_extent', 
-    'max_drawdown', 'drawdown', 'drawdown_interference', 'total_head', 'well_yield', 'recharge_ratio', 'volume_recharged', 
-    'volume_produced_perwell', 'cumulative_vol_produced_perwell', 'number_of_wells', 'volume_produced_allwells', 
-    'cumulative_vol_produced_allwells', 'available_volume', 'depleted_vol_fraction', 
-    'well_installation_cost', 'annual_capital_cost', 'maintenance_cost', 'nonenergy_cost', 
-    'power', 'energy', 'energy_cost_rate', 'energy_cost', 'total_cost_perwell', 'total_cost_allwells', 
-    'unit_cost', 'unit_cost_per_km3', 'unit_cost_per_acreft', 'whyclass', 'total_well_length']
+    ['year_number', 'depletion_limit', 'continent', 'country', gcam_basin_id, 'Basin_long_name', 'grid_id', 
+    'grid_area', 'permeability', 'porosity', 'total_thickness', 'depth_to_water', 'orig_aqfr_sat_thickness', 
+    'aqfr_sat_thickness', 'hydraulic_conductivity', 'transmissivity', 'radius_of_influence', 'areal_extent', 
+    'drawdown', 'drawdown_interference', 'total_head', 'well_yield', 'recharge', 'shallow_recharge_depth', 
+    'threshold_depth', 'net_ponded_depth_target', 'excessive_recharge_depth', 'deep_recharge_vol', 
+    'volume_deep_recharge', 'volume_produced_perwell', 'cumulative_vol_produced_perwell', 'number_of_wells', 
+    'volume_produced_allwells', 'annual_capital_cost', 'maintenance_cost', 'nonenergy_cost', 'power', 'energy', 
+    'energy_cost_rate', 'energy_cost', 'total_cost_perwell', 'total_cost_allwells', 'unit_cost', 'unit_cost_per_km3', 
+    'unit_cost_per_acreft', 'whyclass', 'total_well_length']
     """
+
     for year in range(pumping_years):
+        if RECHARGE_FLAG == 0:
+            shallow_recharge_str = 'recharge_off'
+            threshold_depth_str = 'recharge_off'
+            excessive_recharge_str = 'recharge_off'
+        else:
+            shallow_recharge_str = str(shallow_recharge_depth)
+            threshold_depth_str = str(threshold_depth)
+            excessive_recharge_str = str(excessive_recharge_depth)
 
         outputs = str(year + 1) + ', ' + \
                   str(DEPLETION_LIMIT) + ', ' + \
@@ -654,13 +696,17 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(T_array[year]) + ', ' + \
                   str(well_roi_array[year]) + ', ' + \
                   str(well_area_array[year]) + ', ' + \
-                  str('Max_Drawdown') + ', ' + \
                   str(drawdown[year]) + ', ' + \
                   str(drawdown_interference[year]) + ', ' + \
                   str(total_head[year]) + ', ' + \
                   str(Well_Q_array[year]) + ', ' + \
-                  str(RECHARGE_RATIO) + ', ' + \
-                  str(volume_recharged[year]) + ', ' + \
+                  str(recharge) + ', ' + \
+                  shallow_recharge_str + ', ' + \
+                  threshold_depth_str + ', ' + \
+                  str(NET_PONDED_DEPTH_TARGET) + ', ' + \
+                  excessive_recharge_str + ', ' + \
+                  str(deep_recharge_vol) + ', ' + \
+                  str(volume_deep_recharge[year]) + ', ' + \
                   str(volume_per_well[year]) + ', ' + \
                   str(cumulative_volume_per_well[year]) + ', ' + \
                   str(num_wells[year]) + ', ' + \
