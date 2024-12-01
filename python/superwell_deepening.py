@@ -15,8 +15,9 @@ import os
 # Determine the relative path to the inputs directory
 inputs_dir = '../inputs' if os.path.exists('../inputs') else 'inputs'
 
+# TODO: can make this a function that reads the inputs and params files and returns the dataframes
 # Reading CSV files with the determined base directory
-grid_df = pd.read_csv(os.path.join(inputs_dir, 'inputs_recharge.csv'))
+grid_df = pd.read_csv(os.path.join(inputs_dir, 'inputs_recharge_lakes.csv'))
 params = pd.read_csv(os.path.join(inputs_dir, 'params.csv'), index_col=0)
 electricity_rates = pd.read_csv(os.path.join(inputs_dir, 'GCAM_Electricity_Rates.csv'), index_col=0, header=None)
 W_lookup = pd.read_csv(os.path.join(inputs_dir, 'Theis_well_function_table.csv'), header="infer")
@@ -36,6 +37,7 @@ SHALLOW_RECHARGE_THRESHOLD = float(params.Val['Shallow_Recharge_Threshold'])  # 
 
 SPECIFIC_WEIGHT = float(params.Val['Specific_weight'])  # specific weight of water
 EFFICIENCY = float(params.Val['Pump_Efficiency'])  # well efficiency
+ADJACENT_WELLS = int(params.Val['Adjacent_Wells'])  # number of adjacent wells to consider for drawdown interference
 
 WELL_LIFETIME = float(params.Val['Max_Lifetime_in_Years'])
 DEFAULT_ELECTRICITY_RATE = float(params.Val['Energy_cost_rate'])  # default electricity rate
@@ -58,6 +60,8 @@ for i in range(len(electricity_rates.iloc[:, 0])):
     country = electricity_rates.index[i]
     electricity_rate_dict[country.rstrip()] = electricity_rates.iloc[i, 0]
 
+# TODO: ship the ancillary stuff like these filters or the headers for the output file to a separate file. The goal
+#  should for this file to have main logic
 # filter by basin, country and/or grid cell, change filters in params.csv
 if COUNTRY_FILTER == 'all' and GRIDCELL_FILTER == 'all' and BASIN_FILTER == 'all':  # run global
     selected_grid_df = grid_df
@@ -168,6 +172,7 @@ skipped_cells = 0
 # %% superwell code block
 for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
+    # TODO: can we make this progress printing a function?
     # print simulation progress
     total_cells = len(selected_grid_df.iloc[:, 0])
     progress_step_size = max(1, int(total_cells / 1000))  # change 1 to a bigger number if the progress bar is too fast
@@ -191,11 +196,21 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         skipped_cells += 1
         continue
 
+    # skip if the lake covers more than 90% of the grid, otherwise we use the dry area (grid area - lake area) for calcs
+    if selected_grid_df.Lake_area[grid_cell] / selected_grid_df.Grid_area[grid_cell] < 0.9:
+        # selected_grid_df.Grid_area[grid_cell] = selected_grid_df.Grid_area[grid_cell] - selected_grid_df.Lake_area[grid_cell]
+        selected_grid_df.loc[grid_cell, "Grid_area"] -= selected_grid_df.loc[grid_cell, "Lake_area"]
+    else:
+        skipped_cells += 1
+        continue
+
     # depth to water table should we at least 1 meter
     if selected_grid_df.Depth_to_water[grid_cell] < 1:
         skipped_cells += 1
         continue
 
+    # TODO: reevaluate if we need the permeability and porosity screening criteria. We should not overfilter the data
+    #  given that model dynamics have significantly improved since the original implementation
     # limit low permeability values
     if selected_grid_df.Permeability[grid_cell] < -15:
         skipped_cells += 1
@@ -214,9 +229,10 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         skipped_cells += 1
         continue
 
+
     ################ store grid cell attributes for output ####################
 
-    # Get the country name from selected_grid_df and check if the country is in electricity_rate_dict
+    # get the country name from selected_grid_df and check if the country is in electricity_rate_dict
     if str(selected_grid_df.Country[grid_cell]) in electricity_rate_dict:
         ELECTRICITY_RATE = electricity_rate_dict[str(selected_grid_df.Country[grid_cell])]
     else:
@@ -255,6 +271,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     T_array = np.zeros(NUM_YEARS)  # tracks T for each year
     T_array[0] = T  # initial T
 
+
     #################### determine initial well Q #############################
     # Q refers to pumping rate or well yield (m^3/s) 
 
@@ -292,7 +309,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     Well_Q_array = np.zeros(NUM_YEARS)
     Well_Q_array[0] = initial_Q
 
+
     ################# recharge calculations and adjustments ###################
+
     recharge = selected_grid_df.Recharge[grid_cell]  # recharge rate (m/year)
 
     # turn recharge effects on and off
@@ -311,6 +330,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             NET_PONDED_DEPTH_TARGET = PONDED_DEPTH_TARGET - shallow_recharge_depth
             excessive_recharge_depth = 0  # no excess recharge to go to deep aquifer
         else:
+            # this actually never gets triggered in current settings of 0.2 ratio, 0.75 threshold. Max recharge 0.95, max shallow 0.19, threshold 0.225
             if threshold_depth == PONDED_DEPTH_TARGET:
                 NET_PONDED_DEPTH_TARGET = 0.2 * PONDED_DEPTH_TARGET  # ensure 20% ponded depth is maintained
                 # extra shallow recharge (a-b) plus the left over from maintaining 20% ponded depth (c)
@@ -324,15 +344,17 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         # (contains partitioned deep recharge and leftover shallow recharge)
         deep_recharge_vol = ((1 - SHALLOW_RECHARGE_RATIO) * recharge + excessive_recharge_depth) * grid_cell_area
 
+
     ################## determine initial well area and roi #####################
+
     initial_well_area = initial_Q * DAYS * SECS_IN_DAY / NET_PONDED_DEPTH_TARGET  # initial well area A = Qt/d = V/d (m^2)
     initial_roi = (initial_well_area / math.pi) ** 0.5  # initial radius of influence (m)
     initial_num_wells = selected_grid_df.Grid_area[grid_cell] / initial_well_area # initial number of wells
 
-    well_roi_array = np.zeros(NUM_YEARS) # tracks roi for each year
+    well_roi_array = np.zeros(NUM_YEARS)  # tracks roi for each year
     well_roi_array[0] = initial_roi
 
-    well_area_array = np.zeros(NUM_YEARS) # tracks well area for each year
+    well_area_array = np.zeros(NUM_YEARS)  # tracks well area for each year
     well_area_array[0] = initial_well_area
 
     # make sure depleted volume fraction does not exceed depletion limit
@@ -342,10 +364,12 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             available_volume > DEPLETION_LIMIT):
         continue
 
+
     ####################### annual pumping simulation loop ####################
+
     depleted_volume_fraction = np.zeros(NUM_YEARS)  # tracks depleted volume fraction for each year
-    volume_all_wells = np.zeros(NUM_YEARS) # tracks volume produced by all wells for each year
-    volume_recharged = np.zeros(NUM_YEARS) # tracks volume recharged for each year
+    volume_all_wells = np.zeros(NUM_YEARS)  # tracks volume produced by all wells for each year
+    volume_recharged = np.zeros(NUM_YEARS)  # tracks volume recharged for each year
 
     # simulate pumping for each year
     for year in range(NUM_YEARS):
@@ -367,9 +391,8 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         # account for interference from neighboring wells (drawdown at the edge of the well's radius of influence)
         s_theis_interference = drawdown_theis(DAYS * SECS_IN_DAY, well_roi_array[year] * 2, S, T_array[year], Well_Q_array[year])
 
-        # total drawdown (well own drawdown + interference from 4 neighboring wells)
-        # TODO: 4x for square packing. It could be increased to 6x for circle packing, or 8x for hex packing
-        s_total = s_theis + 6 * s_theis_interference
+        # total drawdown (well own drawdown + interference from neighboring wells)
+        s_total = s_theis + ADJACENT_WELLS * s_theis_interference
 
         # check if drawdown constraints are violated by end of 100 day pumping period
         # if constraints violated: (1) first deepen well, (2) then reduce well pumping rate 
@@ -382,9 +405,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                     well_length_array[year] = DEEPENING_INCREMENT + well_length_array[year]  # deepening well by 50m
 
                 else: # if well cannot be deepened, update well length to total thickness
-                    remaining_length = total_thickness - well_length_array[year]
-                    well_length_array[year] = remaining_length + well_length_array[year]
-                    # TODO: this could just be well_length_array[year] = total_thickness
+                    well_length_array[year] = total_thickness
 
                 # update (increase) saturated thickness and T 
                 sat_thickness_array[year] = well_length_array[year] - DTW_array[year]
@@ -433,8 +454,8 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             s_theis_interference_ts[day] = drawdown_theis((day + 1) * 10 * SECS_IN_DAY, well_roi_array[year] * 2, S, T_array[year], Well_Q_array[year])
 
         # average drawdown over duration of pumping (e.g., 100 days)
-        s_theis_avg = np.mean(s_theis_ts) + np.mean(4 * s_theis_interference_ts)
-        s_interference_avg = 4 * np.mean(s_theis_interference_ts)
+        s_theis_avg = np.mean(s_theis_ts) + np.mean(ADJACENT_WELLS * s_theis_interference_ts)
+        s_interference_avg = ADJACENT_WELLS * np.mean(s_theis_interference_ts)
 
         # apply Jacob correction to Theis drawdown to account for partial penetration (e.g., in unconfined aquifers)
         # convert to Jacob - coefficient of quadratic equation (ax^2 + bx + c = 0) 
@@ -451,6 +472,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         # skip rest of the years after drawdown becomes zero
         if s_jacob == 0:
             continue
+
 
         ########################### compute outputs ###########################
 
@@ -490,7 +512,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         if year != NUM_YEARS - 1: # skip updating arrays for the last year
             # pass the same Q to the next year, checks before this determine if Q needs to be updated 
             Well_Q_array[year + 1] = Well_Q_array[year]
-            # add the average depth of pumped groundwater in current year to the previous depth to water
+            # add the average depth of net groundwater pumped in current year to the previous depth to water
             DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] - volume_deep_recharge[year]) / grid_cell_area / S
             # remaining length of well under water table
             sat_thickness_array[year + 1] = well_length_array[year] - DTW_array[year + 1]
@@ -505,7 +527,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     if drawdown[year] == 0:
         continue
 
-    ##################### annual costs and unit costs ######################### 
+
+    ##################### annual costs and unit costs #########################
+
     # assign well unit cost based on WHY Class
     if selected_grid_df.WHYClass[grid_cell] == 10:
         well_unit_cost = float(params.Val['Well_Install_10'])
@@ -559,11 +583,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         :param initial_cost:            initial cost for the year
         :return:                        capital and maintenance costs for the year     
         """
-        # # TODO: determine initial cost here and remove the initial_cost argument
-        # if year == 0:
-        #     initial_cost = 0
-        # else:
-        #     initial_cost = capital_cost_array[added_wells, year + offset]
+
         capital_cost = initial_cost + added_well_count[added_wells] * install_cost * ((1 + INTEREST_RATE) ** WELL_LIFETIME) * INTEREST_RATE / ((1 + INTEREST_RATE) ** WELL_LIFETIME - 1)
         maintenance_cost = MAINTENANCE_RATE * install_cost_for_maint * added_well_count[added_wells]  # maintenance cost [% of initial cost]
 
@@ -604,20 +624,20 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                     well_length_array[year + offset] - well_length_array[year - 1 + offset]) * (
                     (1 + INTEREST_RATE) ** WELL_LIFETIME) * INTEREST_RATE / ((1 + INTEREST_RATE) ** WELL_LIFETIME - 1) * added_well_count[added_wells]
                 install_cost_for_maint = well_unit_cost * well_length_array[year + offset]
-                capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost,
-                                                                 install_cost_for_maint, 0)
+                capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost, install_cost_for_maint, 0)
                 capital_cost_array[added_wells, year + offset] += capital_cost
                 maintenance_array[added_wells, year + offset] += maintenance_cost
 
             # not deepening, not replacing in the current year
             # just accumulating costs without any additional initial costs
             else:
-                capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost,
-                                                                 install_cost_for_maint, 0)
+                capital_cost, maintenance_cost = calculate_costs(added_wells, year + offset, offset, install_cost, install_cost_for_maint, 0)
                 capital_cost_array[added_wells, year + offset] += capital_cost
                 maintenance_array[added_wells, year + offset] += maintenance_cost
 
+
     ####################### annual cost metrics ###########################
+
     annual_capital_cost = np.zeros(NUM_YEARS)
     maintenance_cost = np.zeros(NUM_YEARS)
     well_installation_cost = np.zeros(NUM_YEARS)
@@ -667,6 +687,12 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
     'energy_cost_rate', 'energy_cost', 'total_cost_perwell', 'total_cost_allwells', 'unit_cost', 'unit_cost_per_km3', 
     'unit_cost_per_acreft', 'whyclass', 'total_well_length']
     """
+
+    # TODO: improve the way outputs are written to the file. Currently it is time consuming to write to the file for
+    #  each grid cell and each year. It would be better to write to the file in chunks or at the end of the
+    #  simulation. We can use some dataframes approach to store the results and write them at the end of the
+    #  simulation. We can also use the pandas library to write to the file which is faster than the current method.
+    #  Also, we can zip the outputs to reduce the file size.
 
     for year in range(pumping_years):
         if RECHARGE_FLAG == 0:
