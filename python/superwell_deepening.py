@@ -101,12 +101,12 @@ output_name = ('superwell_py_deep_C_' + str.replace(COUNTRY_FILTER, ' ', '') + '
 
 # header for output file
 header_column_names = 'year_number,depletion_limit,continent,country,' \
-                      'gcam_basin_id,Basin_long_name,grid_id,grid_area,permeability,porosity,' \
+                      'gcam_basin_id,Basin_long_name,grid_id,grid_area,lake_area,grid_area_dry,permeability,porosity,' \
                       'total_thickness,depth_to_water,orig_aqfr_sat_thickness,aqfr_sat_thickness,' \
                       'hydraulic_conductivity,transmissivity,radius_of_influence,areal_extent,' \
                       'drawdown,drawdown_interference,total_head,well_yield,' \
                       'recharge,shallow_recharge_depth,threshold_depth,net_ponded_depth_target,' \
-                      'excessive_recharge_depth,deep_recharge_vol,volume_deep_recharge,volume_produced_perwell,' \
+                      'excessive_recharge_depth,deep_recharge_vol,deep_recharge_vol_imposed,volume_produced_perwell,' \
                       'cumulative_vol_produced_perwell,number_of_wells,volume_produced_allwells,' \
                       'cumulative_vol_produced_allwells,available_volume,depleted_vol_fraction,' \
                       'well_installation_cost, annual_capital_cost,maintenance_cost,nonenergy_cost,' \
@@ -191,6 +191,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     ################ determine if grid cell is skipped ########################
 
+    grid_area = selected_grid_df.Grid_area[grid_cell]
+    lake_area = selected_grid_df.Lake_area[grid_cell]
+
     # skip grid areas less than 5x5 km (1% of a normal 50x50 grid size)
     if selected_grid_df.Grid_area[grid_cell] < 5 * 5 * (10 ** 6):
         skipped_cells += 1
@@ -198,7 +201,6 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     # skip if the lake covers more than 90% of the grid, otherwise we use the dry area (grid area - lake area) for calcs
     if selected_grid_df.Lake_area[grid_cell] / selected_grid_df.Grid_area[grid_cell] < 0.9:
-        # selected_grid_df.Grid_area[grid_cell] = selected_grid_df.Grid_area[grid_cell] - selected_grid_df.Lake_area[grid_cell]
         selected_grid_df.loc[grid_cell, "Grid_area"] -= selected_grid_df.loc[grid_cell, "Lake_area"]
     else:
         skipped_cells += 1
@@ -240,7 +242,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     # extract total aquifer thickness from input data (m) and grid cell area (m^2)
     total_thickness = selected_grid_df.Aquifer_thickness[grid_cell]  # m
-    grid_cell_area = selected_grid_df.Grid_area[grid_cell]
+    grid_area_dry = selected_grid_df.Grid_area[grid_cell]
 
     # depth to water
     DTW_array = np.zeros(NUM_YEARS)  # tracks depth to water for each year
@@ -261,7 +263,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         well_length_array[0] = total_thickness  # m
 
     # available volume (V=nAh) for the grid cell (m^3)
-    available_volume = initial_sat_thickness * grid_cell_area * selected_grid_df.Porosity[grid_cell]
+    available_volume = initial_sat_thickness * grid_area_dry * selected_grid_df.Porosity[grid_cell]
 
     # aquifer properties for Theis 
     S = selected_grid_df.Porosity[grid_cell]    # storativity [-] (same as porosity for confined aquifer)
@@ -342,7 +344,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
         # part of recharge that contributes to an increase in deep subsurface volume
         # (contains partitioned deep recharge and leftover shallow recharge)
-        deep_recharge_vol = ((1 - SHALLOW_RECHARGE_RATIO) * recharge + excessive_recharge_depth) * grid_cell_area
+        deep_recharge_vol = ((1 - SHALLOW_RECHARGE_RATIO) * recharge + excessive_recharge_depth) * grid_area_dry
 
 
     ################## determine initial well area and roi #####################
@@ -482,7 +484,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
             drawdown_interference = np.zeros(NUM_YEARS)
             total_head = np.zeros(NUM_YEARS)
             volume_per_well = np.zeros(NUM_YEARS)
-            volume_deep_recharge = np.zeros(NUM_YEARS)
+            deep_recharge_vol_imposed = np.zeros(NUM_YEARS)
             num_wells = np.zeros(NUM_YEARS)
             cumulative_volume_per_well = np.zeros(NUM_YEARS)
             cumulative_volume_all_wells = np.zeros(NUM_YEARS)
@@ -506,14 +508,15 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
         drawdown[year] = s_jacob  # m
         drawdown_interference[year] = s_interference_avg  # m
         total_head[year] = s_jacob + DTW_array[year]  # m
-        volume_deep_recharge[year] = min(deep_recharge_vol, volume_all_wells[year])
+        # prevent rising water tables: force deep recharge not to exceed annual pumping volume
+        deep_recharge_vol_imposed[year] = min(deep_recharge_vol, volume_all_wells[year])
 
         # update variable arrays for next annual pumping iteration
         if year != NUM_YEARS - 1: # skip updating arrays for the last year
             # pass the same Q to the next year, checks before this determine if Q needs to be updated 
             Well_Q_array[year + 1] = Well_Q_array[year]
             # add the average depth of net groundwater pumped in current year to the previous depth to water
-            DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] - volume_deep_recharge[year]) / grid_cell_area / S
+            DTW_array[year + 1] = DTW_array[year] + (volume_all_wells[year] - deep_recharge_vol_imposed[year]) / grid_area_dry / S
             # remaining length of well under water table
             sat_thickness_array[year + 1] = well_length_array[year] - DTW_array[year + 1]
             # updated transmissivity based on new saturated thickness
@@ -678,14 +681,14 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
 
     """
     ['year_number', 'depletion_limit', 'continent', 'country', gcam_basin_id, 'Basin_long_name', 'grid_id', 
-    'grid_area', 'permeability', 'porosity', 'total_thickness', 'depth_to_water', 'orig_aqfr_sat_thickness', 
-    'aqfr_sat_thickness', 'hydraulic_conductivity', 'transmissivity', 'radius_of_influence', 'areal_extent', 
-    'drawdown', 'drawdown_interference', 'total_head', 'well_yield', 'recharge', 'shallow_recharge_depth', 
-    'threshold_depth', 'net_ponded_depth_target', 'excessive_recharge_depth', 'deep_recharge_vol', 
-    'volume_deep_recharge', 'volume_produced_perwell', 'cumulative_vol_produced_perwell', 'number_of_wells', 
-    'volume_produced_allwells', 'annual_capital_cost', 'maintenance_cost', 'nonenergy_cost', 'power', 'energy', 
-    'energy_cost_rate', 'energy_cost', 'total_cost_perwell', 'total_cost_allwells', 'unit_cost', 'unit_cost_per_km3', 
-    'unit_cost_per_acreft', 'whyclass', 'total_well_length']
+    'grid_area', 'lake_area', 'grid_area_dry', 'permeability', 'porosity', 'total_thickness', 'depth_to_water',  
+    'orig_aqfr_sat_thickness', 'aqfr_sat_thickness', 'hydraulic_conductivity', 'transmissivity', 
+    'radius_of_influence', 'areal_extent', 'drawdown', 'drawdown_interference', 'total_head', 'well_yield', 
+    'recharge', 'shallow_recharge_depth', 'threshold_depth', 'net_ponded_depth_target', 'excessive_recharge_depth', 
+    'deep_recharge_vol', 'deep_recharge_vol_imposed', 'volume_produced_perwell', 'cumulative_vol_produced_perwell', 
+    'number_of_wells', 'volume_produced_allwells', 'annual_capital_cost', 'maintenance_cost', 'nonenergy_cost', 
+    'power', 'energy', 'energy_cost_rate', 'energy_cost', 'total_cost_perwell', 'total_cost_allwells', 'unit_cost', 
+    'unit_cost_per_km3', 'unit_cost_per_acreft', 'whyclass', 'total_well_length']
     """
 
     # TODO: improve the way outputs are written to the file. Currently it is time consuming to write to the file for
@@ -711,7 +714,9 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(int(selected_grid_df.GCAM_basin_ID[grid_cell])) + ', ' + \
                   str(selected_grid_df.Basin_long_name[grid_cell]) + ', ' + \
                   str(selected_grid_df.GridCellID[grid_cell]) + ', ' + \
-                  str(grid_cell_area) + ', ' + \
+                  str(grid_area) + ', ' + \
+                  str(lake_area) + ', ' + \
+                  str(grid_area_dry) + ', ' + \
                   str(selected_grid_df.Permeability[grid_cell]) + ', ' + \
                   str(selected_grid_df.Porosity[grid_cell]) + ', ' + \
                   str(selected_grid_df.Aquifer_thickness[grid_cell]) + ', ' + \
@@ -732,7 +737,7 @@ for grid_cell in range(len(selected_grid_df.iloc[:, 0])):
                   str(NET_PONDED_DEPTH_TARGET) + ', ' + \
                   excessive_recharge_str + ', ' + \
                   str(deep_recharge_vol) + ', ' + \
-                  str(volume_deep_recharge[year]) + ', ' + \
+                  str(deep_recharge_vol_imposed[year]) + ', ' + \
                   str(volume_per_well[year]) + ', ' + \
                   str(cumulative_volume_per_well[year]) + ', ' + \
                   str(num_wells[year]) + ', ' + \
