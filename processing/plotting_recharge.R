@@ -33,17 +33,6 @@ print(paste0("Number of Grid Cells Processed: ", length(unique(df_0.3PD_0.25DL$G
              " out of ", length(unique(df_in_R$GridCellID)),
                                 " (", round(length(unique(df_0.3PD_0.25DL$GridCellID))*100/length(unique(df_in_R$GridCellID)), 1), "%)"))
 
-# numer of cells affected by lakes processing
-df_0.3PD_0.25DL %>% left_join(df_in_R %>% select("GridCellID", "Grid_area", "Lake_area"), by = "GridCellID") -> lakes_affected
-
-paste0("Number of Grid Cells Affected by Lakes Processing: ", length(unique((lakes_affected %>% filter(Grid_area > grid_area))$GridCellID)),
-       " out of ", length(unique(df_in_R$GridCellID)),
-       " (", round(length(unique((lakes_affected %>% filter(Grid_area > grid_area))$GridCellID))*100/length(unique(df_in_R$GridCellID)), 1), "%)")
-
-print(paste0("Number of Skipped Grid Cells with Large Lakes: ", length(unique((df_in_R %>% filter(Lake_area > 0.9 * Grid_area))$GridCellID)),
-             " out of ", length(unique(df_in_R$GridCellID)),
-             " (", round(length(unique((df_in_R %>% filter(Lake_area > 0.9 * Grid_area))$GridCellID))*100/length(unique(df_in_R$GridCellID)), 1), "%)"))
-
 # base plot format
 my_theme <- function () {
   theme_bw() +
@@ -64,6 +53,11 @@ my_theme <- function () {
                            l = 3)  # Left margin
     )
 }
+
+add_geometry <- function (df) {
+  df %>% left_join(select(sf_in_R, c("GridCellID", "geometry")), by = "GridCellID") %>% st_as_sf()
+}
+
 saveformat <- ".png"
 }
 
@@ -101,8 +95,21 @@ df_0.3PD_0.25DL %>% left_join(select(sf_in_R, c("GridCellID", "geometry")), by =
 # df_unique %>% anti_join(df_in_unique, by = c("COUNTRY" = "CNTRY_NAME", "OriginalOb" = "OBJECTID")) -> df_diff
 
 
-# high-level analysis on volume ----
 
+# high-level analysis ----
+# number of cells affected by lakes processing
+df_0.3PD_0.25DL %>% left_join(df_in_R %>% select("GridCellID", "Grid_area", "Lake_area"), by = "GridCellID") -> lakes_affected
+
+paste0("Number of Grid Cells Affected by Lakes Processing: ", length(unique((lakes_affected %>% filter(Grid_area > grid_area))$GridCellID)),
+       " out of ", length(unique(df_in_R$GridCellID)),
+       " (", round(length(unique((lakes_affected %>% filter(Grid_area > grid_area))$GridCellID))*100/length(unique(df_in_R$GridCellID)), 1), "%)")
+
+print(paste0("Number of Skipped Grid Cells with Large Lakes: ", length(unique((df_in_R %>% filter(Lake_area > 0.9 * Grid_area))$GridCellID)),
+             " out of ", length(unique(df_in_R$GridCellID)),
+             " (", round(length(unique((df_in_R %>% filter(Lake_area > 0.9 * Grid_area))$GridCellID))*100/length(unique(df_in_R$GridCellID)), 1), "%)"))
+
+
+# on volumes
 df_in_R %>%  mutate(available_volume_allcells = Porosity * Grid_area * (Aquifer_thickness - Depth_to_water),
                   ponded_depth_avail = Porosity * (Aquifer_thickness - Depth_to_water)) -> df_in_vol
 
@@ -111,6 +118,52 @@ df_in_R %>%  mutate(Aquifer_thickness = case_when(Aquifer_thickness > 1000 ~ 100
                                                 TRUE ~ Aquifer_thickness),
                   available_volume_allcells = Porosity * Grid_area * (Aquifer_thickness - Depth_to_water),
                   ponded_depth_avail = Porosity * (Aquifer_thickness - Depth_to_water)) -> df_in_vol_screened
+
+
+# prep data for Caroline SAWS ----
+# one with years aggregated
+df_in_vol_screened %>% filter(Country == "United States") %>%
+  select(GridCellID, Continent, Country, GCAM_basin_ID, Basin_long_name, Grid_area, available_volume_allcells) %>%
+  left_join(df_out %>% filter(country == "United States") %>%
+              select(GridCellID, year_number, volume_produced_allwells, total_cost_allwells) %>%
+              # replace na with 0
+              group_by(GridCellID) %>% summarise(tot_volume_produced_allwells = sum(volume_produced_allwells),
+                                                 tot_cost_allwells = sum(total_cost_allwells),
+                                                 unit_cost = tot_cost_allwells / tot_volume_produced_allwells),
+            by = "GridCellID") %>% add_geometry() %>%
+  replace_na(list(tot_volume_produced_allwells = 0, tot_cost_allwells = 0, unit_cost = 0)) -> df_out_SAWS
+
+# write df_out_SAWS as .nc
+names(df_out_SAWS)
+# write_sf(df_out_SAWS, paste0("C:/Users/niaz981/OneDrive - PNNL/PNNL/Papers/Caroline_SAWS/superwell_saws.shp"))
+
+# outputs with years
+# explore using a grid cell
+df_out %>% filter(country == "United States") %>% # cell: 89461
+  select(GridCellID, year_number, continent, country, gcam_basin_id, Basin_long_name, grid_area_dry = grid_area,
+         total_thickness, depth_to_water, aqfr_sat_thickness, total_well_length, drawdown, total_head,
+         initial_available_volume = available_volume, recharge, volume_produced_allwells, total_cost_allwells, unit_cost, geometry) %>%
+  filter(GridCellID == 89461) %>%
+  right_join(df_in_vol_screened %>% filter(Country == "United States") %>%
+               select(GridCellID, Continent, Country, GCAM_basin_ID, Basin_long_name, Grid_area, available_volume_allcells),
+             by = "GridCellID") -> df_out_SAWS_test
+
+# final one
+df_in_vol_screened %>% filter(Country == "United States") %>%
+  select(GridCellID, Continent, Country, GCAM_basin_ID, Basin_long_name, Grid_area, available_volume_allcells) %>%
+  left_join(df_out %>% filter(country == "United States") %>% # cell: 89461
+              # select(GridCellID, year_number, continent, country, gcam_basin_id, Basin_long_name, grid_area_dry = grid_area,
+              select(GridCellID, year_number, grid_area_dry = grid_area,
+                     total_thickness, depth_to_water, aqfr_sat_thickness, total_well_length, drawdown, total_head,
+                     adj_available_volume = available_volume, recharge, volume_produced_allwells, total_cost_allwells, unit_cost)
+    , by = "GridCellID") %>%
+  mutate(available_volume_allcells = round(available_volume_allcells, 1),
+         adj_available_volume = round(adj_available_volume, 1),
+         status = if_else(rowSums(is.na(.)) > 0, "screened", "simulated"),
+         across(where(is.numeric), ~ replace_na(., 0))) %>%
+  add_geometry() -> df_out_SAWS_year
+
+# write_sf(df_out_SAWS_year, paste0("C:/Users/niaz981/Downloads/Modelling/GCAM/superwell_saws_year.shp"), delete_layer = TRUE)
 
 # start analysis
 #
@@ -993,10 +1046,6 @@ ggsave(paste0(figs_dir, "map_out_adjusted_grid_area_km.png"), width = 11, height
 
 # plot outputs #################################################################
 
-add_geometry <- function (df) {
-  df %>% left_join(select(sf_in_R, c("GridCellID", "geometry")), by = "GridCellID") %>% st_as_sf()
-  }
-
 
 # for old inputs and outputs
 # df_0.3PD_0.25DL %>% filter(country_name %in% c("United States", "Canada")) %>% #%in% c("United States", "Canada")
@@ -1082,14 +1131,14 @@ system.time(plot_map(df_out_vol_pdepth, "volume_produced_allwells_depth", "Groun
 
 
 ## recharge maps ----
-# "recharge" "shallow_recharge_depth" "threshold_depth" "net_ponded_depth_target" "excessive_recharge_depth" "deep_recharge_vol" "volume_deep_recharge"
+# "recharge" "shallow_recharge_depth" "threshold_depth" "net_ponded_depth_target" "excessive_recharge_depth" "deep_recharge_vol" "deep_recharge_vol_imposed"
 recharge_vars <- c("recharge", "shallow_recharge_depth", "grid_area", "threshold_depth", "net_ponded_depth_target", "excessive_recharge_depth",
-                   "deep_recharge_vol", "volume_deep_recharge")
+                   "deep_recharge_vol", "deep_recharge_vol_imposed")
 
 # cells where accumulation may be happening
 paste0("Cells where accumulation may be happening: ",
-       length(unique((df_out %>% select(c("GridCellID", volume_deep_recharge, volume_produced_allwells)) %>%
-                        filter(volume_produced_allwells == volume_deep_recharge))$GridCellID)))
+       length(unique((df_out %>% select(c("GridCellID", deep_recharge_vol_imposed, volume_produced_allwells)) %>%
+                        filter(volume_produced_allwells == deep_recharge_vol_imposed))$GridCellID)))
 
 paste0("Cells where all of shallow recharge depth is used to reduce ponded depth target: ",
        length(unique((df_out %>% select(c("GridCellID", shallow_recharge_depth, threshold_depth)) %>%
@@ -1101,7 +1150,7 @@ df_out_recharge <- df_out %>% select(c("GridCellID", recharge_vars, volume_produ
   group_by(GridCellID) %>%
   summarize_at(vars(recharge_vars), mean) %>%
   mutate(shallow_recharge_vol = shallow_recharge_depth * grid_area  * 1e-9,
-         volume_deep_recharge = volume_deep_recharge * 1e-9,
+         deep_recharge_vol_imposed = deep_recharge_vol_imposed * 1e-9,
          deep_recharge_vol = deep_recharge_vol * 1e-9
          ) %>% # in million km3
   ungroup() %>% add_geometry()
@@ -1113,7 +1162,7 @@ plot_map(df_out_recharge, "shallow_recharge_vol", "Shallow Recharge\nVolume (km3
 # plot_map(df_out_recharge, "excessive_recharge_depth", "Excessive Recharge\nDepth (m)", "Blues")
 plot_map(df_out_recharge, "deep_recharge_vol", "Deep Recharge Volume (km3)", "Blues", 2)
 # plot_map(df_out_recharge, "threshold_depth", "Threshold Depth (m)", "Oranges")
-plot_map(df_out_recharge, "volume_deep_recharge", "Volume of Imposed\nDeep Recharge (km3)", "GnBu", 2)
+plot_map(df_out_recharge, "deep_recharge_vol_imposed", "Volume of Imposed\nDeep Recharge (km3)", "GnBu", 2)
 
 
 ## pumped to available fraction ----
