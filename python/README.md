@@ -1,5 +1,7 @@
 # superwell
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10828260.svg)](https://doi.org/10.5281/zenodo.10828260)
+
 ## Overview of the Scripts
 
 - [`superwell.py`](./superwell.py): runs the superwell model to simulate groundwater extraction and cost estimation.
@@ -9,7 +11,7 @@
 
 ## Configuration and Setup
 
-Adjust settings in [`params.csv`](../inputs/params.csv) within the [`inputs/`](../inputs/) folder to match your scenario requirements. This file controls various model parameters like `Country_filter`, `Gridcell_filter`, `Ponded_Depth`, and `Depletion_Limit`.
+Adjust settings in [`params.csv`](../inputs/params.csv) within the [`inputs/`](../inputs/) folder to match your scenario requirements. This file controls various model parameters like `Country_filter`, `Basin_filter`, `Gridcell_filter`, `Ponded_Depth`, `Recharge_flag`, and `Depletion_Limit`.
 
 Before running the `superwell` scripts, ensure that Python, key libraries, and any other model-specific dependencies are installed.
 
@@ -27,7 +29,7 @@ This script will process the input data and populate results in the [`outputs/`]
 
 ## Superwell Algorithm Overview
 
-![superwell algorithm overview](sw_workflow_v2.jpg)
+![superwell algorithm overview](sw_workflow_v3.jpg)
 
 ## Citation
 

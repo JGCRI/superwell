@@ -2,9 +2,12 @@
 [![tests](https://github.com/JGCRI/superwell/actions/workflows/test_coverage.yml/badge.svg?branch=main)](https://github.com/JGCRI/superwell/actions/workflows/test_coverage.yml)
 [![codecov](https://codecov.io/gh/JGCRI/superwell/branch/main/graph/badge.svg?token=XQ913U4IYM)](https://codecov.io/gh/JGCRI/superwell)
 [![docs](https://github.com/JGCRI/superwell/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/JGCRI/superwell/actions/workflows/docs.yaml)
-[![status](https://joss.theoj.org/papers/status.svg)](https://joss.theoj.org/papers/ae736aa6e75758498cf79ab8ec3fa886) -->
+[![status](https://joss.theoj.org/papers/status.svg)](https://joss.theoj.org/papers/ae736aa6e75758498cf79ab8ec3fa886)
+Software [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10828260.svg)](https://doi.org/10.5281/zenodo.10828260)
+Inputs [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2484226.svg)](https://doi.org/10.57931/2484226)
+Outputs [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832) -->
 
-# _superwell_: A physics-based hydro-economic model for groundwater cost and supply assessment
+# _superwell_: A physics-based hydro-economic model for estimating groundwater cost and supply globally
 
 The [`superwell`](https://github.com/JGCRI/superwell.git) model provides estimates of the global extractable volumes and unit-costs $(USD/km^3)$ of accessible groundwater production under user-specified extraction scenarios.  
 The structure of [`superwell`](https://github.com/JGCRI/superwell.git) is:
@@ -14,7 +17,7 @@ The structure of [`superwell`](https://github.com/JGCRI/superwell.git) is:
 - spatially and temporally flexible (covers grid to global and hourly to centennial scales)  
 
 > _Key model documentation & primary citation:_ \
-Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024; In-prep). [Long-term Hydro-economic Assessment Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1](https://gmd.copernicus.org/preprints/). _Geoscientific Model Development_.
+Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2025). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://doi.org/10.5194/egusphere-2024-799). _Geoscientific Model Development_.
 
 ## Getting Started  
 
@@ -39,18 +42,18 @@ Adjust [params.csv](./inputs/params.csv) in [`inputs/`](./inputs/) folder to fit
 All inputs are in [`inputs/`](./inputs/) folder. The [`superwell`](https://github.com/JGCRI/superwell.git) code requires two primary input files:
 
 - [params.csv](./inputs/params.csv) defining model settings and scenario assumptions  
-- [inputs.csv](./inputs/inputs.csv) containing grided aquifer thickness, porosity, depth to water, permeability, grid area, WHY class, and grid area
+- [inputs_recharge_lakes.csv](./inputs/inputs_recharge_lakes.csv) containing grided aquifer thickness, porosity, depth to water, permeability, grid area, recharge, WHY class, and grid area
 
 and two supporting data files:
 
 - [GCAM_Electricity_Rates.csv](./inputs/GCAM_Electricity_Rates.csv) providing  assumptions on the cost of electricity in 172 countries
 - [Theis_well_function_table.csv](./inputs/Theis_well_function_table.csv) as a look-up table for relation between $u$ and well function $W(u)$  
 
-[`inputs/`](./inputs/) folder also contains digitized, geo-processed [shape files](./inputs/shapefiles/) of aquifer properties that makes the contents of the [inputs.csv](./inputs/inputs.csv) file after processing.
+[`inputs/`](./inputs/) folder also contains digitized, geo-processed [shape files](./inputs/shapefiles/) of aquifer properties that makes the contents of the [inputs_recharge_lakes.csv](./inputs/inputs_recharge_lakes.csv) file after processing.
 
 > _Cite input data as:_ \
-Niazi, H., Watson, D., Hejazi, M., Yonkofski, C., Ferencz, S., Vernon, C., Graham, N., Wild, T., & Yoon, J. (2024). [Global Geo-processed Data of Aquifer Properties by 0.5° Grid, Country and Water Basins](https://doi.org/10.57931/2307831). MSD-LIVE Data Repository. <https://doi.org/10.57931/2307831> \
-[![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307831.svg)](https://doi.org/10.57931/2307831)
+Niazi, H., Watson, D., Hejazi, M., Yonkofski, C., Ferencz, S., Vernon, C., Graham, N., Wild, T., & Yoon, J. (2024). [Global Geo-processed Data of Aquifer Properties by 0.5° Grid, Country and Water Basins](https://doi.org/10.57931/2484226). MultiSector Dynamics-Living, Intuitive, Value-adding, Environment. <https://doi.org/10.57931/2484226> \
+[![DOI](https://data.msdlive.org/badge/DOI/10.57931/2484226.svg)](https://doi.org/10.57931/2484226)
 
 See [documentation on inputs](./inputs/README.md) for more details.  
 
@@ -60,7 +63,7 @@ All outputs are written to [`outputs/`](./outputs/) folder as `.csv` formats.
 A select-few key outputs include: extractable volumes, drawdown, number of wells, costs including capital, maintenance, pumping, and unit costs of groundwater production.  
 
 > _Cite output data as:_ \
-Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.57931/2307832). MSD-LIVE Data Repository. <https://doi.org/10.57931/2307832> \
+Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.57931/2307832). MultiSector Dynamics-Living, Intuitive, Value-adding, Environment. <https://doi.org/10.57931/2307832> \
 [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832)
 
 See [documentation on outputs](./outputs/README.md) for more details.
@@ -85,7 +88,7 @@ Several high-impact publications and data products have utilized [`superwell`](h
 
 ### Papers
 
-- Niazi, H., Wild, T., Turner, S., Graham, N., Hejazi, M., Msangi, S., Kim, S., Lamontagne, J., & Zhao, M. (2024; In-press). [Global Peak Water Limit of Future Groundwater Withdrawals](https://www.nature.com/natsustain/). _Nature Sustainability_.
+- Niazi, H., Wild, T. B., Turner, S. W. D., Graham, N. T., Hejazi, M., Msangi, S., Kim, S., Lamontagne, J. R., & Zhao, M. (2024). Global peak water limit of future groundwater withdrawals. _Nature Sustainability, 7_(4), 413–422. <https://doi.org/10.1038/s41893-024-01306-w>
 
 - Turner, S., Hejazi, M., Yonkofski, C., Kim, S., & Kyle, P. (2019). [Influence of Groundwater Extraction Costs and Resource Depletion Limits on Simulated Global Nonrenewable Water Withdrawals Over the Twenty-First Century](https://doi.org/10.1029/2018EF001105). _Earth's Future_, 7(2), 123-135.
 
@@ -95,7 +98,7 @@ Several high-impact publications and data products have utilized [`superwell`](h
 
 ### Model documentation
 
-- Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024; In-prep). [Long-term Hydro-economic Assessment Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1](https://gmd.copernicus.org/preprints/). _Geoscientific Model Development_.
+- Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2025). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://doi.org/10.5194/egusphere-2024-799). _Geoscientific Model Development_.
 
 - Niazi/Ferencz et al software documentation JoSS in-prep
 
