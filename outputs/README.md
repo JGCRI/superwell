@@ -2,16 +2,16 @@
 
 [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832)
 
-This folder provides simulated outputs from [`superwell`](https://github.com/JGCRI/superwell.git), a hydro-economic tool designed for the long-term assessment of groundwater cost and supply. It offers globally gridded data on extractable groundwater volumes and associated unit costs (USD/km³), driven by various user-defined depletion and ponded depth scenarios.
+This folder contains simulated outputs from [`superwell`](https://github.com/JGCRI/superwell.git), a hydro-economic tool designed for the long-term assessment of groundwater cost and supply. It offers globally gridded data on extractable groundwater volumes and associated unit costs (USD/km³), driven by various user-defined depletion and ponded depth scenarios.
 
 ## Outputs Overview
 
-Simulation outputs from [`superwell`](https://github.com/JGCRI/superwell.git) will be written to this folder in the format of `superwell_py_deep_all_0.*PD_0.*DL.csv`. These files detail the outputs of global groundwater extraction volumes and cost estimates on a 0.5° scale across user-defined scenarios.
+Simulation outputs from [`superwell`](https://github.com/JGCRI/superwell.git) will be written to this folder in the format of `superwell_py_deep_C_*_B_*_G_*_0.*PD_0.*DL_*RR.csv`. These files detail the outputs of global groundwater extraction volumes and cost estimates on a 0.5° scale across user-defined scenarios.
 
 Six standard scenarios that vary Ponded Depth (PD; 0.3 and 0.6 m) and Depletion Limit (DL; 5%, 25%, and 40% of available volume) have been provided in a data repository: [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832). Two sample outputs include:
 
 - `superwell_py_deep_all_0.3PD_0.25DL_sample_100.csv` presents superwell outputs for 100 sampled data points that match the distributions of global aquifer properties.
-- `superwell_py_deep_all_0.3PD_0.25DL_Grid_72548.csv` provides superwell output for a single grid cell.
+- `superwell_py_deep_C_all_B_all_G_72548_0.3PD_0.25DL_0.2RR.csv` provides superwell output for a single grid cell.
 
 ## Outputs Description
 
@@ -22,9 +22,16 @@ The output files contain various parameters, grouped as follows:
 - `year_number`: Year of pumping
 - `depletion_limit`: Set depletion limit (DL) as a volume fraction of total available groundwater
 - Geographic identifiers: `continent`, `country`, `gcam_basin_id`, `Basin_long_name`, `grid_id`
-- `grid_area` (km²): Area of the grid cell
+- Areas: `grid_area` (km²): Area of the grid cell,  `lake_area` (km²): inland lake areas, `grid_area_dry` (km²): corrected grid area that excludes lake area covering the grid cell
 - `whyclass`: Hydrogeological classification of the aquifer
 - Aquifer properties: `permeability` (m/day), `porosity` (%), `total_thickness` (m), `depth_to_water` (m)
+
+### Recharge related metrics
+- `recharge` (m): long-term annual averaged recharge rate 
+- `shallow_recharge_depth` (m) part of total recharge contributing to shallow part of the aquifer
+- `threshold_depth` (m) depth part of ponded depth the shallow recharge should reduce up to
+- `net_ponded_depth_target` (m) corrected ponded depth target based on recharge 
+- `excessive_recharge_depth` (m) extra shallow recharge which will contribute to deep storage increase
 
 ### Hydraulic Properties and Extraction Metrics
 
@@ -47,6 +54,7 @@ The output files contain various parameters, grouped as follows:
 - `volume_produced_allwells` (m³), `cumulative_vol_produced_allwells` (m³): Total extraction volumes for all wells in a grid cell
 - `available_volume` (m³): Available groundwater volume in storage for the grid cell
 - `depleted_vol_fraction`: Fraction of total volume pumped over available volumes in a grid cell
+- `deep_recharge_vol` (m³) total recharge volume going to deep aquifer, `deep_recharge_vol_imposed` (m³) net deep recharge volume used to increase deep storage
 - Cost-related outputs: `well_installation_cost` (USD), `annual_capital_cost`, `maintenance_cost`, `nonenergy_cost` (USD)
 - `energy_cost_rate` (USD/kWh): Electricity rate
 - `energy_cost` (USD): Energy cost for groundwater pumping
@@ -56,9 +64,9 @@ The output files contain various parameters, grouped as follows:
 ## Cite Outputs
 
 > _Cite output data as:_ \
-Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.57931/2307832). MSD-LIVE Data Repository. <https://doi.org/10.57931/2307832> \
+Niazi, H., Ferencz, S., Yoon, J., Graham, N., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024). [Globally Gridded Groundwater Extraction Volumes and Costs under Six Depletion and Ponded Depth Targets](https://doi.org/10.57931/2307832). MultiSector Dynamics-Living, Intuitive, Value-adding, Environment. <https://doi.org/10.57931/2307832> \
 [![DOI](https://data.msdlive.org/badge/DOI/10.57931/2307832.svg)](https://doi.org/10.57931/2307832)
 
 ### Model documentation
 
-> Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024; In-prep). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://gmd.copernicus.org/preprints/). _Geoscientific Model Development_.
+> Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2025). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://doi.org/10.5194/egusphere-2024-799). _Geoscientific Model Development_.

@@ -24,6 +24,9 @@ library(sf)
 
 # load data
 df <- st_read("inputs/shapefiles/All_merged.shp") #%>% st_make_valid()
+# df_R <- st_read("inputs/shapefiles/superwell_inputs_recharge.shp") %>% st_make_valid()
+# df_in <- st_read("inputs/shapefiles/inputs.shp") #%>% st_make_valid()
+
 basin_mapping <- read_csv("inputs/basin_to_country_mapping.csv") %>%
   mutate(Basin_long_name = str_replace_all(Basin_long_name, ",", "_"))
 continent_mapping <- read_csv("inputs/continent_county_mapping.csv")
