@@ -17,7 +17,8 @@ The structure of [`superwell`](https://github.com/JGCRI/superwell.git) is:
 - spatially and temporally flexible (covers grid to global and hourly to centennial scales)  
 
 > _Key model documentation & primary citation:_ \
-Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2025). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://doi.org/10.5194/egusphere-2024-799). _Geoscientific Model Development_.
+Niazi, H., Ferencz, S. B., Graham, N. T., Yoon, J., Wild, T. B., Hejazi, M., Watson, D. J., & Vernon, C. R. (2025). [Long-term hydro-economic analysis tool for evaluating global groundwater cost and supply: Superwell v1.1](https://doi.org/10.5194/gmd-18-1737-2025). _Geoscientific Model Development, 18_(5), 1737-1767. 
+
 
 ## Getting Started  
 
@@ -88,41 +89,19 @@ Several high-impact publications and data products have utilized [`superwell`](h
 
 ### Papers
 
-- Niazi, H., Wild, T. B., Turner, S. W. D., Graham, N. T., Hejazi, M., Msangi, S., Kim, S., Lamontagne, J. R., & Zhao, M. (2024). Global peak water limit of future groundwater withdrawals. _Nature Sustainability, 7_(4), 413–422. <https://doi.org/10.1038/s41893-024-01306-w>
+- Niazi, H., Wild, T. B., Turner, S. W. D., Graham, N. T., Hejazi, M., Msangi, S., Kim, S., Lamontagne, J. R., & Zhao, M. (2024). [Global peak water limit of future groundwater withdrawals](https://doi.org/10.1038/s41893-024-01306-w). _Nature Sustainability, 7_(4), 413–422. 
 
-- Turner, S., Hejazi, M., Yonkofski, C., Kim, S., & Kyle, P. (2019). [Influence of Groundwater Extraction Costs and Resource Depletion Limits on Simulated Global Nonrenewable Water Withdrawals Over the Twenty-First Century](https://doi.org/10.1029/2018EF001105). _Earth's Future_, 7(2), 123-135.
+- Turner, S., Hejazi, M., Yonkofski, C., Kim, S., & Kyle, P. (2019). [Influence of Groundwater Extraction Costs and Resource Depletion Limits on Simulated Global Nonrenewable Water Withdrawals Over the Twenty-First Century](https://doi.org/10.1029/2018EF001105). _Earth's Future, 7_(2), 123-135.
 
 - Hejazi, M., Santos Da Silva, S. R., Miralles-Wilhelm, F., Kim, S., Kyle, P., Liu, Y., Vernon, C., Delgado, A., Edmonds, J., & Clarke, L. (2023). [Impacts of water scarcity on agricultural production and electricity generation in the Middle East and North Africa](https://doi.org/10.3389/fenvs.2023.1082930). _Frontiers in Environmental Science_, 11.
 
-- Yoon et al superwell-ABM in-prep
+- Yoon et al superwell-ABM in-review 
 
 ### Model documentation
 
-- Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2025). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://doi.org/10.5194/egusphere-2024-799). _Geoscientific Model Development_.
+- Niazi, H., Ferencz, S. B., Graham, N. T., Yoon, J., Wild, T. B., Hejazi, M., Watson, D. J., & Vernon, C. R. (2025). [Long-term hydro-economic analysis tool for evaluating global groundwater cost and supply: Superwell v1.1](https://doi.org/10.5194/gmd-18-1737-2025). _Geoscientific Model Development, 18_(5), 1737-1767. 
 
 - Niazi/Ferencz et al software documentation JoSS in-prep
-
-<!-- 
-### Data
-
-Input data: repo ; contains geo-processed GIS database of aquifer properties and post-processed input files in accessible `.csv` formats
-
-Output data: repo ; contains [`superwell`](https://github.com/JGCRI/superwell.git) outputs of six scenarios varying volume depletion limits (5%, 25%, 40%) and ponded depth targets (0.3m, 0.6m) -->
-
-<!-- 
-## Cite the model
-
-- model release citation
-  - github version DOI from zenodo
-
-- documentation citation
-  - model documentation: GMD
-  - software documentation: JoSS
-
-- data citation
-  - input data
-  - output data 
--->
 
 ## Contribute
 

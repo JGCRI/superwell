@@ -34,4 +34,4 @@ This script will process the input data and populate results in the [`outputs/`]
 ## Citation
 
 > _Key model documentation & primary citation:_ \
-Niazi, H., Ferencz, S., Graham, N., Yoon, J., Wild, T., Hejazi, M., Watson, D., & Vernon, C. (2024; In-prep). [Long-term Hydro-economic Analysis Tool for Evaluating Global Groundwater Cost and Supply: Superwell v1.0](https://gmd.copernicus.org/preprints/). _Geoscientific Model Development_.
+Niazi, H., Ferencz, S. B., Graham, N. T., Yoon, J., Wild, T. B., Hejazi, M., Watson, D. J., & Vernon, C. R. (2025). [Long-term hydro-economic analysis tool for evaluating global groundwater cost and supply: Superwell v1.1](https://doi.org/10.5194/gmd-18-1737-2025). _Geoscientific Model Development, 18_(5), 1737-1767. https://doi.org/10.5194/gmd-18-1737-2025
