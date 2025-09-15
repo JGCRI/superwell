@@ -1,12 +1,12 @@
 Package: superwell
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Superwell for Global Groundwater Cost and Supply
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Hassan Niazi and Stephen Ferencz
+Maintainer: hassan.niazi@pnnl.gov
+Description: A physics-based hydro-economic model for estimating groundwater cost and supply globally
+    Superwell is a physics-based hydro-economic model that estimates the production costs and availability of groundwater worldwide. It calculates how much groundwater can be extracted and at what cost, using detailed maps and data of the Earth's properties. Through these estimates, and by using them with other models, Superwell facilitates exploration of coupled human–environmental system challenges, such as future water supply sustainability or multi-sectoral energy–water–land feedbacks.
+License: MIT license
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
