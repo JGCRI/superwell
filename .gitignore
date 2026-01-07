@@ -23,6 +23,11 @@ outputs/outplots-diag/
 python/outputs_archive/
 processing/figures/
 
+docs/public/
+docs/resources/
+docs/.hugo_build.lock
+
+
 # Output files from R CMD build
 /*.tar.gz
 

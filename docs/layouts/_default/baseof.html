@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }} - {{ .Site.Params.subtitle }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+    <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
+</head>
+<body>
+    {{ if .IsHome }}
+    <!-- Homepage Layout with Sidebar -->
+    <div class="layout-home">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-link">Overview</a>
+                <a href="#installation" class="nav-link">Installation</a>
+                <a href="#dashboard" class="nav-link">Dashboard</a>
+                <a href="#documentation" class="nav-link">Documentation</a>
+                <a href="#publications" class="nav-link">Publications</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            {{ block "main" . }}{{ end }}
+        </main>
+    </div>
+    {{ else }}
+    <!-- Regular Pages Layout with Top Nav -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ .Site.BaseURL }}" class="logo">{{ .Site.Title }}</a>
+                <nav class="nav">
+                    <a href="{{ .Site.BaseURL }}" class="nav-item">Home</a>
+                    <a href="/docs/" class="nav-item">Documentation</a>
+                    <a href="/dashboard/" class="nav-item">Dashboard</a>
+                    <a href="/publications/" class="nav-item">Publications</a>
+                    <a href="https://github.com/JGCRI/superwell" class="nav-item">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        {{ block "main" . }}{{ end }}
+    </main>
+    {{ end }}
+    
+    <script src="{{ "/js/main.js" | relURL }}"></script>
+</body>
+</html>
