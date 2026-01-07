@@ -31,6 +31,57 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
       <p>Cost-supply relationships</p>
     </div>
   </div>
+  
+  <div class="concept-image-wrapper">
+    <div class="concept-image">
+      <img src="/concept.png" alt="Superwell Conceptual Framework" />
+      <div class="concept-overlay">
+        <div class="overlay-content">
+          <h3>Hydro-Economic Framework</h3>
+          <p>Superwell integrates hydrogeological physics with economic modeling to estimate groundwater extraction costs. The model combines aquifer properties, well hydraulics, and energy economics to provide spatially-explicit cost-supply relationships across global groundwater basins. Superwell calculates how much groundwater can be extracted and at what cost, using detailed maps and data of the Earth's properties. Through these estimates, and by using them with other models, Superwell facilitates exploration of coupled human–environmental system challenges, such as future water supply sustainability or multi-sectoral energy–water–land feedbacks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cta-section">
+    <div class="cta-card primary-cta" data-section="dashboard">
+      <div class="cta-icon">
+        <i class="fas fa-chart-area"></i>
+      </div>
+      <div class="cta-content">
+        <h3>Explore Dashboard</h3>
+        <p>Interactive visualizations and data analysis tools</p>
+      </div>
+      <div class="cta-arrow">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </div>
+    <div class="cta-card" data-external="https://doi.org/10.5194/gmd-18-1737-2025">
+      <div class="cta-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <div class="cta-content">
+        <h3>Read the Science</h3>
+        <p>Published in Geoscientific Model Development & Nature Sustainability</p>
+      </div>
+      <div class="cta-arrow">
+        <i class="fas fa-external-link-alt"></i>
+      </div>
+    </div>
+    <div class="cta-card" data-section="documentation">
+      <div class="cta-icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="cta-content">
+        <h3>View Documentation</h3>
+        <p>Installation guides, API reference, and examples</p>
+      </div>
+      <div class="cta-arrow">
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="dashboard" class="section-content active">
@@ -169,31 +220,26 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
   <div class="viz-layout">
     <div class="viz-sidebar">
       <h3>Configuration</h3>
-      
       <div class="viz-config-group">
         <label>X-Axis Variable</label>
         <select id="xAxisVar" class="select-input"></select>
       </div>
-      
       <div class="viz-config-group">
         <label>Y-Axis Variable</label>
         <select id="yAxisVar" class="select-input"></select>
       </div>
-      
       <div class="viz-config-group">
         <label>Color By</label>
         <select id="colorVar" class="select-input">
           <option value="none">None</option>
         </select>
       </div>
-      
       <div class="viz-config-group">
         <label>Size By</label>
         <select id="sizeVar" class="select-input">
           <option value="none">None</option>
         </select>
       </div>
-      
       <div class="viz-config-group">
         <label class="checkbox-label">
           <input type="checkbox" id="showGrid"> Show Grid
@@ -202,12 +248,10 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
           <input type="checkbox" id="logScale"> Log Scale
         </label>
       </div>
-      
       <button class="btn-primary full-width" id="generateViz">
         <i class="fas fa-chart-bar"></i> Generate
       </button>
     </div>
-    
     <div class="viz-main-area">
       <div id="customVisualization" class="custom-viz">
         <div class="viz-placeholder">
@@ -229,41 +273,59 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
       <div class="doc-icon"><i class="fas fa-rocket"></i></div>
       <h3>Quick Start</h3>
       <p>Get up and running with Superwell in minutes</p>
-      <pre><code>git clone https://github.com/JGCRI/superwell.git
-cd superwell/python
-pip install -r requirements.txt
-python superwell_deepening.py</code></pre>
+      <div class="code-block">
+        <div class="code-line">git clone https://github.com/JGCRI/superwell.git</div>
+        <div class="code-line">cd superwell/python</div>
+        <div class="code-line">pip install -r requirements.txt</div>
+        <div class="code-line">python superwell_deepening.py</div>
+      </div>
     </div>
-    
     <div class="doc-card">
       <div class="doc-icon"><i class="fas fa-cog"></i></div>
       <h3>Model Parameters</h3>
-      <ul class="doc-list">
-        <li><strong>Transmissivity (T)</strong> - Aquifer hydraulic conductivity</li>
-        <li><strong>Storativity (S)</strong> - Water storage coefficient</li>
-        <li><strong>Well Depth</strong> - Extraction depth and radius</li>
-        <li><strong>Recharge Rate</strong> - Natural aquifer replenishment</li>
-        <li><strong>Economic Factors</strong> - Discount rate, electricity cost</li>
-      </ul>
+      <div class="param-list">
+        <div class="param-item">
+          <strong>Transmissivity (T)</strong>
+          <span>Aquifer hydraulic conductivity</span>
+        </div>
+        <div class="param-item">
+          <strong>Storativity (S)</strong>
+          <span>Water storage coefficient</span>
+        </div>
+        <div class="param-item">
+          <strong>Well Depth</strong>
+          <span>Extraction depth and radius</span>
+        </div>
+        <div class="param-item">
+          <strong>Recharge Rate</strong>
+          <span>Natural aquifer replenishment</span>
+        </div>
+        <div class="param-item">
+          <strong>Economic Factors</strong>
+          <span>Discount rate, electricity cost</span>
+        </div>
+      </div>
     </div>
-    
     <div class="doc-card">
       <div class="doc-icon"><i class="fas fa-file-csv"></i></div>
       <h3>Data Format</h3>
       <p>Required CSV columns for model inputs:</p>
-      <ul class="doc-list">
-        <li>lat, lon - Geographic coordinates</li>
-        <li>transmissivity, storativity</li>
-        <li>recharge_rate, depth_to_water</li>
-        <li>electricity_rate, discount_rate</li>
-      </ul>
+      <div class="data-format-list">
+        <div class="format-item"><code>lat, lon</code> <span>Geographic coordinates</span></div>
+        <div class="format-item"><code>transmissivity, storativity</code> <span>Aquifer properties</span></div>
+        <div class="format-item"><code>recharge_rate, depth_to_water</code> <span>Water levels</span></div>
+        <div class="format-item"><code>electricity_rate, discount_rate</code> <span>Economic factors</span></div>
+      </div>
     </div>
-    
-    <div class="doc-card">
+    <div class="doc-card citation-card">
       <div class="doc-icon"><i class="fas fa-graduation-cap"></i></div>
       <h3>Citation</h3>
-      <p>Niazi, H., et al. (2025). <em>Long-term hydro-economic analysis tool for evaluating global groundwater cost and supply: Superwell v1.1.</em> Geoscientific Model Development, 18(5), 1737-1767.</p>
-      <a href="https://doi.org/10.5194/gmd-18-1737-2025" class="doc-link">
+      <div class="citation-text">
+        <p>Niazi, H., Ferencz, S. B., Graham, N. T., Yoon, J., Wild, T. B., Hejazi, M., Watson, D. J., & Vernon, C. R. (2025).</p>
+        <p><em>Long-term hydro-economic analysis tool for evaluating global groundwater cost and supply: Superwell v1.1.</em></p>
+        <p>Geoscientific Model Development, 18(5), 1737-1767.</p>
+      </div>
+      <a href="https://doi.org/10.5194/gmd-18-1737-2025" target="_blank" class="doc-link">
         <i class="fas fa-external-link-alt"></i> View Publication
       </a>
     </div>

@@ -19,15 +19,28 @@
                 <span class="subtitle">Groundwater Analytics Platform</span>
             </div>
             <div class="top-bar-right">
-                <button class="icon-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-                <button class="icon-btn" id="refreshData"><i class="fas fa-sync"></i></button>
-                <button class="icon-btn" id="downloadData"><i class="fas fa-download"></i></button>
-                <button class="icon-btn" id="settings"><i class="fas fa-cog"></i></button>
+                <a href="https://github.com/JGCRI/superwell" target="_blank" class="icon-btn" title="GitHub Repository">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://doi.org/10.5194/gmd-18-1737-2025" target="_blank" class="icon-btn paper-link" title="GMD">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="paper-label"></span>
+                </a>
+                <a href="https://doi.org/10.1038/s41893-024-01306-w" target="_blank" class="icon-btn paper-link" title="Nature Sustainability">
+                    <i class="fas fa-scroll"></i>
+                    <span class="paper-label"></span>
+                </a>
+                <button class="icon-btn" id="toggleSidebar" title="Toggle Sidebar"><i class="fas fa-bars"></i></button>
+                <button class="icon-btn" id="refreshData" title="Refresh Data"><i class="fas fa-sync"></i></button>
+                <button class="icon-btn" id="downloadData" title="Download Data"><i class="fas fa-download"></i></button>
             </div>
         </header>
         
         <div class="app-container">
             <aside class="sidebar collapsed" id="sidebar">
+                <div class="sidebar-toggle-simple" id="sidebarToggleBtn" title="Toggle Sidebar">
+                    <span>&raquo;</span>
+                </div>
                 <nav class="sidebar-nav">
                     <a href="#overview" class="nav-link" data-section="overview">
                         <i class="fas fa-home"></i><span>Overview</span>
@@ -51,6 +64,41 @@
                 {{ block "main" . }}{{ end }}
             </main>
         </div>
+        
+        <!-- Minimalist Terminal Bar - Only on Home -->
+        <div class="terminal-minimal" id="terminalBar">
+            <span class="terminal-label">Get Superwell</span>
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-cmd" id="cloneCommand">git clone https://github.com/JGCRI/superwell.git</span>
+            <button class="terminal-copy-btn" id="copyCommand" title="Copy command">
+                <i class="fas fa-copy"></i>
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>&copy; 2025 JGCRI | Superwell</p>
+                </div>
+                <div class="footer-center">
+                    <a href="https://doi.org/10.5194/gmd-18-1737-2025" target="_blank">Niazi & Ferencz et al. (2025) GMD</a>
+                    <span class="footer-sep">|</span>
+                    <a href="https://doi.org/10.1038/s41893-024-01306-w" target="_blank">Niazi et al. (2024) Nature Sust.</a>
+                </div>
+                <div class="footer-right">
+                    <a href="https://github.com/JGCRI/superwell" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://doi.org/10.5194/gmd-18-1737-2025" target="_blank" title="GMD Paper">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                    <a href="https://doi.org/10.1038/s41893-024-01306-w" target="_blank" title="Nature Sustainability">
+                        <i class="fas fa-scroll"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
     </div>
     {{ else }}
     <!-- Regular Pages Layout -->

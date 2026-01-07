@@ -5,9 +5,14 @@ title: Superwell
 params:
   subtitle: 'Groundwater Economic Modeling'
   description: 'Physics-based hydro-economic model for estimating groundwater cost and supply globally'
-  author: 'JGCRI'
+  author: 'Hassan Niazi | JGCRI'
 
 markup:
   goldmark:
     renderer:
       unsafe: true
+
+
+# begin: 
+# hugo --cleanDestinationDir --ignoreCache
+# hugo server --disableFastRender  

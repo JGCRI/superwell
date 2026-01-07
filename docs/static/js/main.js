@@ -37,10 +37,16 @@ function initializeDashboard() {
 
 // Setup Event Listeners
 function setupEventListeners() {
-  // Sidebar toggle
+  // Sidebar toggle from top bar
   const toggleBtn = document.getElementById('toggleSidebar');
   if (toggleBtn) {
     toggleBtn.addEventListener('click', toggleSidebar);
+  }
+  
+  // Sidebar toggle from sidebar button
+  const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+  if (sidebarToggleBtn) {
+    sidebarToggleBtn.addEventListener('click', toggleSidebar);
   }
   
   // Refresh data
@@ -55,10 +61,52 @@ function setupEventListeners() {
     downloadBtn.addEventListener('click', downloadData);
   }
   
+  // Terminal bar copy command
+  const copyCommand = document.getElementById('copyCommand');
+  if (copyCommand) {
+    copyCommand.addEventListener('click', () => {
+      const command = document.getElementById('cloneCommand').textContent;
+      navigator.clipboard.writeText(command).then(() => {
+        const icon = copyCommand.querySelector('i');
+        const originalClass = icon.className;
+        icon.className = 'fas fa-check';
+        setTimeout(() => {
+          icon.className = originalClass;
+        }, 2000);
+      });
+    });
+  }
+  
+  // CTA cards navigation
+  const ctaCards = document.querySelectorAll('.cta-card[data-section]');
+  ctaCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const section = this.getAttribute('data-section');
+      if (section) {
+        showSection(section);
+        const navLink = document.querySelector(`.nav-link[data-section="${section}"]`);
+        if (navLink) {
+          updateActiveNav(navLink);
+        }
+      }
+    });
+  });
+  
   // Navigation links
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     link.addEventListener('click', handleNavigation);
+  });
+    
+  // CTA cards with external links
+  const externalCtaCards = document.querySelectorAll('.cta-card[data-external]');
+  externalCtaCards.forEach(card => {
+    card.addEventListener('click', function() {
+      const url = this.getAttribute('data-external');
+      if (url) {
+        window.open(url, '_blank');
+      }
+    });
   });
   
   // Dashboard controls
@@ -132,6 +180,16 @@ function showSection(sectionId) {
   if (activeSection) {
     activeSection.classList.add('active');
     state.currentSection = sectionId;
+  }
+  
+  // Show/hide terminal bar - only show on overview page
+  const terminalBar = document.getElementById('terminalBar');
+  if (terminalBar) {
+    if (sectionId === 'overview') {
+      terminalBar.classList.remove('hidden');
+    } else {
+      terminalBar.classList.add('hidden');
+    }
   }
 }
 
