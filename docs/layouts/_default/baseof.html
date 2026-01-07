@@ -6,26 +6,54 @@
     <title>{{ if .IsHome }}{{ .Site.Title }} - {{ .Site.Params.subtitle }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ .Description | default .Site.Params.description }}">
     <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     {{ if .IsHome }}
-    <!-- Homepage Layout with Sidebar -->
-    <div class="layout-home">
-        <aside class="sidebar">
-            <nav class="sidebar-nav">
-                <a href="#overview" class="nav-link">Overview</a>
-                <a href="#installation" class="nav-link">Installation</a>
-                <a href="#dashboard" class="nav-link">Dashboard</a>
-                <a href="#documentation" class="nav-link">Documentation</a>
-                <a href="#publications" class="nav-link">Publications</a>
-            </nav>
-        </aside>
-        <main class="main-content">
-            {{ block "main" . }}{{ end }}
-        </main>
+    <!-- Compact Dashboard Layout -->
+    <div class="layout-dashboard">
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <h1 class="logo-title">Superwell</h1>
+                <span class="subtitle">Groundwater Analytics Platform</span>
+            </div>
+            <div class="top-bar-right">
+                <button class="icon-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+                <button class="icon-btn" id="refreshData"><i class="fas fa-sync"></i></button>
+                <button class="icon-btn" id="downloadData"><i class="fas fa-download"></i></button>
+                <button class="icon-btn" id="settings"><i class="fas fa-cog"></i></button>
+            </div>
+        </header>
+        
+        <div class="app-container">
+            <aside class="sidebar collapsed" id="sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#overview" class="nav-link" data-section="overview">
+                        <i class="fas fa-home"></i><span>Overview</span>
+                    </a>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-chart-line"></i><span>Dashboard</span>
+                    </a>
+                    <a href="#data-explorer" class="nav-link" data-section="data-explorer">
+                        <i class="fas fa-database"></i><span>Data Explorer</span>
+                    </a>
+                    <a href="#visualization" class="nav-link" data-section="visualization">
+                        <i class="fas fa-map"></i><span>Visualization</span>
+                    </a>
+                    <a href="#documentation" class="nav-link" data-section="documentation">
+                        <i class="fas fa-book"></i><span>Documentation</span>
+                    </a>
+                </nav>
+            </aside>
+            
+            <main class="main-content">
+                {{ block "main" . }}{{ end }}
+            </main>
+        </div>
     </div>
     {{ else }}
-    <!-- Regular Pages Layout with Top Nav -->
+    <!-- Regular Pages Layout -->
     <header class="header">
         <div class="container">
             <div class="header-content">
@@ -33,8 +61,6 @@
                 <nav class="nav">
                     <a href="{{ .Site.BaseURL }}" class="nav-item">Home</a>
                     <a href="/docs/" class="nav-item">Documentation</a>
-                    <a href="/dashboard/" class="nav-item">Dashboard</a>
-                    <a href="/publications/" class="nav-item">Publications</a>
                     <a href="https://github.com/JGCRI/superwell" class="nav-item">GitHub</a>
                 </nav>
             </div>
