@@ -2,7 +2,7 @@
 
 // Global State
 const state = {
-  currentSection: 'dashboard',
+  currentSection: 'overview',
   sidebarCollapsed: false,
   currentData: null,
   inputData: null,
@@ -28,11 +28,16 @@ function initializeDashboard() {
     state.sidebarCollapsed = true;
   }
   
-  // Show dashboard section by default
-  showSection('dashboard');
+  // Check URL hash and show appropriate section
+  const hash = window.location.hash.substring(1); // Remove # from hash
+  const initialSection = hash || 'overview';
+  showSection(initialSection);
   
   // Initialize navigation
   updateActiveNav();
+  
+  // Handle browser back/forward buttons
+  window.addEventListener('hashchange', handleHashChange);
 }
 
 // Setup Event Listeners
@@ -88,13 +93,21 @@ function setupEventListeners() {
         if (navLink) {
           updateActiveNav(navLink);
         }
+        // Update URL hash
+        window.history.pushState(null, null, `#${section}`);
       }
     });
   });
   
-  // Navigation links
+  // Navigation links (sidebar)
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
+    link.addEventListener('click', handleNavigation);
+  });
+  
+  // Top navigation links
+  const topNavLinks = document.querySelectorAll('.top-nav-link');
+  topNavLinks.forEach(link => {
     link.addEventListener('click', handleNavigation);
   });
     
@@ -166,6 +179,20 @@ function handleNavigation(e) {
   if (section) {
     showSection(section);
     updateActiveNav(this);
+    // Update URL hash
+    window.history.pushState(null, null, `#${section}`);
+  }
+}
+
+// Handle Hash Change (browser back/forward)
+function handleHashChange() {
+  const hash = window.location.hash.substring(1);
+  const section = hash || 'overview';
+  showSection(section);
+  // Find any nav link with this section
+  const anyNavLink = document.querySelector(`[data-section="${section}"]`);
+  if (anyNavLink) {
+    updateActiveNav(anyNavLink);
   }
 }
 
@@ -195,17 +222,27 @@ function showSection(sectionId) {
 
 // Update Active Navigation
 function updateActiveNav(activeLink) {
+  // Remove active class from all nav links (sidebar and top)
   const navLinks = document.querySelectorAll('.nav-link');
+  const topNavLinks = document.querySelectorAll('.top-nav-link');
   navLinks.forEach(link => link.classList.remove('active'));
+  topNavLinks.forEach(link => link.classList.remove('active'));
   
   if (activeLink) {
     activeLink.classList.add('active');
-  } else {
-    // Set default active
-    const defaultLink = document.querySelector('[data-section="dashboard"]');
-    if (defaultLink) {
-      defaultLink.classList.add('active');
+    // Also activate the corresponding link in the other nav
+    const section = activeLink.getAttribute('data-section');
+    if (section) {
+      const otherLinks = activeLink.classList.contains('nav-link') 
+        ? document.querySelectorAll(`.top-nav-link[data-section="${section}"]`)
+        : document.querySelectorAll(`.nav-link[data-section="${section}"]`);
+      otherLinks.forEach(link => link.classList.add('active'));
     }
+  } else {
+    // Set default active based on current section
+    const currentSection = state.currentSection || 'overview';
+    const defaultLinks = document.querySelectorAll(`[data-section="${currentSection}"]`);
+    defaultLinks.forEach(link => link.classList.add('active'));
   }
 }
 

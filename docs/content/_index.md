@@ -3,7 +3,7 @@ title: "Superwell"
 description: "Physics-based hydro-economic model for estimating groundwater cost and supply globally"
 ---
 
-<section id="overview" class="section-content">
+<section id="overview" class="section-content active">
   <div class="compact-header">
     <h1>Superwell <span class="version">v1.1</span></h1>
     <p class="tagline">Physics-based hydro-economic model for global groundwater cost and supply estimation</p>
@@ -34,7 +34,7 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
   
   <div class="concept-image-wrapper">
     <div class="concept-image">
-      <img src="/concept.png" alt="Superwell Conceptual Framework" />
+      <img src="./concept.png" alt="Superwell Conceptual Framework" />
       <div class="concept-overlay">
         <div class="overlay-content">
           <h3>Hydro-Economic Framework</h3>
@@ -84,7 +84,7 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
   </div>
 </section>
 
-<section id="dashboard" class="section-content active">
+<section id="dashboard" class="section-content">
   <div class="section-header">
     <h2><i class="fas fa-chart-line"></i> Interactive Dashboard</h2>
     <div class="header-actions">
@@ -328,6 +328,18 @@ description: "Physics-based hydro-economic model for estimating groundwater cost
       <a href="https://doi.org/10.5194/gmd-18-1737-2025" target="_blank" class="doc-link">
         <i class="fas fa-external-link-alt"></i> View Publication
       </a>
+    </div>
+  </div>
+  
+  <!-- Terminal Bar for Documentation -->
+  <div class="doc-terminal">
+    <div class="terminal-minimal">
+      <span class="terminal-label">Get Superwell</span>
+      <span class="terminal-prompt">$</span>
+      <span class="terminal-cmd">git clone https://github.com/JGCRI/superwell.git</span>
+      <button class="terminal-copy-btn" onclick="navigator.clipboard.writeText('git clone https://github.com/JGCRI/superwell.git')" title="Copy command">
+        <i class="fas fa-copy"></i>
+      </button>
     </div>
   </div>
 </section>

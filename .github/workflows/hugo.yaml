@@ -1,4 +1,4 @@
-name: Build and deploy
+name: build and deploy superwell analytics platform
 on:
   push:
     branches:
